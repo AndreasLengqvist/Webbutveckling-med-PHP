@@ -1,3 +1,0 @@
-<?php
-
-TEST SA EN HEST
