@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 
 require_once("../common/HTMLView.php");
 require_once("src/controller/LoginController.php");

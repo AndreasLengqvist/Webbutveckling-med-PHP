@@ -16,8 +16,20 @@ class LoginController{
 
 	public function doControll(){
 
+		// Hanterar indata.
+		if($this->view->didUserPressLogin()){
+			$checkLogin = $this->model->checkIfUserIsOk($this->view->getLoginData());
+
+			if($checkLogin === true){
+				echo "Inloggad";
+			}
+			else{
+				echo "Felaktigt användarnamn eller lösenord!";
+			}
+		}
+
+		// Generar utdata.
 		return $this->view->showLogin();
-	
 	}
 
 }
