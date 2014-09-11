@@ -1,5 +1,8 @@
 <?php
 
+require_once("src/model/LoginModel.php");
+require_once("src/view/LoginView.php");
+
 
 class LoginController{
 
@@ -13,6 +16,8 @@ class LoginController{
 
 	public function doControll(){
 
+		return $this->view->showLogin();
+	
 	}
 
 }
