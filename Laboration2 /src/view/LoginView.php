@@ -11,8 +11,8 @@ class LoginView{
 
 	public function __construct(LoginModel $model){
 		$this->model = $model;
-		$this->UserName = new CookieStorage();
-		$this->PassWord = new CookieStorage();
+		//$this->UserName = new CookieStorage();
+		//$this->PassWord = new CookieStorage();
 	}
 
 	public function didUserPressLogin()	{
@@ -58,7 +58,7 @@ class LoginView{
 
 		// (Extern validering i LoginModel) Om användaren tryckt på "Logga in" så visas felmeddelande, annars inget.
 		if($this->didUserPressLogin()){
-			$errormessage = $this->model->errorHandling($this->getUsername(), $this->getPassword());
+			//$errormessage = $this->model->errorHandling();
 		}
 		else{
 
@@ -81,7 +81,6 @@ class LoginView{
 				<fieldset>
 				<legend>Logga in här!</legend>
 
-				$errormessage
 
 				";
 		$ret .= "
@@ -93,14 +92,6 @@ class LoginView{
 				</form>
 				</fieldset>
 				";
-		}
-
-		// När användaren lyckats att logga in så visas rättmeddelande och knappen "Logga ut".
-		if($this->model->checkLogin($this->getUsername(), $this->getPassword()) === true){
-		$ret .= "
-					$errormessage
-					<input type='submit' value='Logga ut' name='logout'>
-				";		
 		}
 
 		return $ret;

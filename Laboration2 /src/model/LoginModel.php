@@ -2,35 +2,34 @@
 
 
 class LoginModel{
-	private $sessionUserName = "LoginModel::LoginUserName";
+	private $sessionLoginData = "LoginModel::LoggedInUserName";
 	private $username = "user";
 	private $password = "pass";
 
 	public function __construct(){
-		if(isset($_SESSION[$this->sessionUserName]) == false){
-			//return $_SESSION[$this->sessionUserName] = "";
+
+
+	}
+
+	public function userLoggedIn(){
+		// sessionsskit om att en användare är inloggad ska ligga här jao.
+		if(isset($_SESSION[$this->sessionLoginData])){
+			return true;
 		}
 		else{
-			//return $_SESSION[$this->sessionUserName];
+			return false;
 		}
 
 	}
 
 
-	public function errorHandling($username, $password){
+	public function messageHandling($errorcode){
 
 
-		if($username == null){
-			return "<p>Användarnamn saknas!</p>";
-		}
-
-		if($password == null){
-			return "<p>Lösenord saknas!</p>";
-		}
-		if ($username === $this->username && $password === $this->username) {
+		if ($errorcode === 1) {
 			return "<p>Inloggningen lyckades!</p>";
 		}
-		else{
+		if ($errorcode === 2) {
 			return "<p>Felaktigt användarnamn och/eller lösenord!</p>";
 		}
 	}	
@@ -39,11 +38,12 @@ class LoginModel{
 	public function checkLogin($clientUsername, $clientPassword){
 
 		if($clientUsername === $this->username &&  $clientPassword === $this->password ){
-			
+
+			// Sparar ner det inloggade användarnamnet till sessionen.
+			$_SESSION[$this->sessionLoginData] = $clientUsername;		
 			return true;
 		}
 		else{
-
 			return false;
 		}
 	}
