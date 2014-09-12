@@ -16,15 +16,20 @@ class LoginController{
 
 	public function doControll(){
 
-		// Hanterar indata.
-		if($this->view->didUserPressLogin()){
-			$checkLogin = $this->model->checkIfUserIsOk($this->view->getLoginData());
+		$clientUsername = $this->view->getUsername();
+		$clientPassword = $this->view->getPassword();
 
-			if($checkLogin === true){
-				echo "Inloggad";
-			}
-			else{
-				echo "Felaktigt användarnamn eller lösenord!";
+		// Hanterar indata.
+
+		// Om användaren tryckt på logga in.
+		if($this->view->didUserPressLogin()){
+
+			// Gör en kontroll på om användarnamn och lösenord stämmer.
+			$this->model->checkLogin($clientUsername, $clientPassword);
+
+			// Om checkboxen för att spara inloggningsuppgifterna är ikryssad och inloggningen lyckades.
+			if($this->view->checkboxFilled() && $this->model->checkLogin($clientUsername, $clientPassword) === true){
+				// Spara ner användarnamn och krypterat lösenord till kakor.
 			}
 		}
 
