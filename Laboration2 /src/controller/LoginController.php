@@ -21,6 +21,14 @@ class LoginController{
 
 	// Hanterar indata.
 
+		// Om användaren redan är inloggad.
+		if($this->model->userLoggedIn()){
+			if($this->userview->didUserPressLogout()){
+				$this->model->logOut();
+				$this->loginview->successfullLogOut();
+			}
+		}
+
 		// Om användaren tryckt på logga in.
 		if($this->loginview->didUserPressLogin()){
 
@@ -32,13 +40,13 @@ class LoginController{
 				// Testar att logga in med inmatat användarnamn och lösenord.
 				try { 
 					$this->model->checkLogin($clientUsername, $clientPassword);
-
+					$this->userview->successfullLogIn();
 				} catch (Exception $e) {
-					$this->loginview->showError($e->getMessage());
+					$this->loginview->showStatus($e->getMessage());
 				}
 
 			} catch (Exception $e) {
-				$this->loginview->showError($e->getMessage());
+				$this->loginview->showStatus($e->getMessage());
 			}
 
 

@@ -8,7 +8,7 @@ class LoginView{
 	private $model;
 	private $UserName;
 	private $PassWord;
-	private $errormessage;
+	private $message;
 
 	public function __construct(LoginModel $model){
 		$this->model = $model;
@@ -54,15 +54,35 @@ class LoginView{
 		}
 	}
 
+	public function getDateTime(){
+		setlocale(LC_ALL, 'sv_SE');
+		$weekday = ucfirst(utf8_encode(strftime("%A,")));
+		$date = strftime("den %d");
+		$month = strftime("%B");
+		$year = strftime("år %Y.");
+		$time = strftime("Klockan är [%H:%M:%S].");
+		return "$weekday $date $month  $year  $time";	
+	}
+
 	// Presenterar felmeddelandet vid inloggningsfel.
-	public function showError($e){
-		$this->errormessage = $e;
+	public function showStatus($message){
+		if (isset($message)) {
+			$this->message = $message;
+		}
+		else{
+			$this->message = "<p>" . $message . "</p>";
+		}
+	}
+
+	public function successfullLogOut(){
+		$this->showStatus("Du har nu loggat ut!");
 	}
 
 
 	// Presentation av utdata.
 	public function showLogin(){
 
+		$datetime = $this->getDateTime();
 
 		$ret = "<h1>Laboration 2 - Inloggning - al223bn</h1>";
 
@@ -73,17 +93,30 @@ class LoginView{
 				<fieldset>
 				<legend>Logga in här!</legend>";
 
-		$ret .= "<p>$this->errormessage</p>";
+		$ret .= "<p>$this->message";
 
 		$ret .= "
-				<form action='?login' method='post' >
-					Användarnamn: <input type='text' name='LoginView::username'>
+				<form action='?login' method='post' >";
+
+		// Om det inte finns något inmatat användarnamn så visa tom input.
+		if(empty($_POST["LoginView::username"])){
+			$ret .= "Användarnamn: <input type='text' name='LoginView::username'>";
+		}
+		// Annars visa det tidigare inmatade användarnamnet i input.
+		else{
+			$uservalue = $_POST["LoginView::username"];
+			$ret .= "Användarnamn: <input type='text' name='LoginView::username' value='$uservalue'>";
+		}
+
+		$ret .= "
 					Lösenord: <input type='text' name='LoginView::password'>
+					Håll mig inloggad: <input type='checkbox' name='LoginView::checked'>
 					<input type='submit' value='Logga in' name='LoginView::login'>
-					<input type='checkbox' name='LoginView::checked'>
 				</form>
 				</fieldset>
 				";
+
+		$ret .= "<p>$datetime</p>";
 
 		return $ret;
 	}

@@ -11,18 +11,23 @@ class LoginModel{
 
 	}
 
+	// Hämtar vem som är inloggad.
+	public function getLoggedInUser(){
+		return $_SESSION[$this->sessionLoginData];
+	}
+
+	// Kontrollerar om sessions-varibeln är satt vilket betyder att en användare är inloggad.
 	public function userLoggedIn(){
-		// sessionsskit om att en användare är inloggad ska ligga här jao.
+
 		if(isset($_SESSION[$this->sessionLoginData])){
 			return true;
 		}
 		else{
 			return false;
 		}
-
 	}
 
-
+	// Kontrollerar att inmatat användarnamn och lösenord stämmer.
 	public function checkLogin($clientUsername, $clientPassword){
 
 		if($clientUsername === $this->username && $clientPassword === $this->password ){
@@ -34,5 +39,9 @@ class LoginModel{
 		else{
 			throw new \Exception("Felaktigt användarnamn och/eller lösenord!");
 		}
+	}
+
+	public function logOut(){
+		unset($_SESSION[$this->sessionLoginData]);
 	}
 }
