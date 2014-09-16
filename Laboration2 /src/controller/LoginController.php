@@ -24,28 +24,31 @@ class LoginController{
 		// Om användaren tryckt på logga in.
 		if($this->loginview->didUserPressLogin()){
 
-			// Hämtar Användarnamn och Lösenord.
-			$clientUsername = $this->loginview->getUsername();
-			$clientPassword = $this->loginview->getPassword();
+			// Gör en kontroll på om användarnamn och lösenord är inmatade.
+			try {
+				$clientUsername = $this->loginview->getUsername();
+				$clientPassword = $this->loginview->getPassword();
 
-			// Gör en kontroll på om användarnamn och lösenord stämmer.
-			if($this->model->checkLogin($clientUsername, $clientPassword) === true){
+				// Testar att logga in med inmatat användarnamn och lösenord.
+				try { 
+					$this->model->checkLogin($clientUsername, $clientPassword);
 
-				// Om checkboxen för att spara inloggningsuppgifterna är ikryssad och inloggningen lyckades.
-				if($this->loginview->checkboxFilled() && $this->model->checkLogin($clientUsername, $clientPassword) === true){
-					
-					// Spara ner användarnamn och krypterat lösenord till resp. cookie.
+				} catch (Exception $e) {
+					$this->loginview->showError($e->getMessage());
 				}
 
-				//Slutligen sätt sessionsvariabeln till clientanvändarnamnet.
-
+			} catch (Exception $e) {
+				$this->loginview->showError($e->getMessage());
 			}
-		}
 
+
+
+					//Slutligen sätt sessionsvariabeln till clientanvändarnamnet.
+			}
 
 	// Generar utdata.
 
-		//Om inloggningen lyckades visa användarfönstret.
+		// Om inloggningen lyckades visa användarfönstret.
 		if($this->model->userLoggedIn()){
 			return $this->userview->showUser();
 		}

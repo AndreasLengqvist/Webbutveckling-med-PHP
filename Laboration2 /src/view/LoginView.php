@@ -8,6 +8,7 @@ class LoginView{
 	private $model;
 	private $UserName;
 	private $PassWord;
+	private $errormessage;
 
 	public function __construct(LoginModel $model){
 		$this->model = $model;
@@ -17,7 +18,7 @@ class LoginView{
 
 	public function didUserPressLogin()	{
 		if(isset($_POST["LoginView::login"])){
-			return true;
+			return $_POST["LoginView::login"];
 		}
 		else{
 			return false;
@@ -34,55 +35,46 @@ class LoginView{
 	// Hämtar Användarnamnet.
 	public function getUsername(){
 
-		if(isset($_POST["LoginView::username"])){
-			return $_POST["LoginView::username"];
+		if (empty($_POST["LoginView::username"])) {
+			throw new \Exception("Användarnamn saknas!");
 		}
-		else{
-			return false;
+		else {
+			return $_POST["LoginView::username"];	
 		}
 	}
 
-
+	// Hämtar lösenordet.
 	public function getPassword(){
 
-		if(isset($_POST["LoginView::password"])){
-			return $_POST["LoginView::password"];
+		if (empty($_POST["LoginView::password"])) {
+			throw new \Exception("Lösenord saknas!");	
 		}
-		else{
-			return false;
+		else {
+			return $_POST["LoginView::password"];	
 		}
 	}
 
+	// Presenterar felmeddelandet vid inloggningsfel.
+	public function showError($e){
+		$this->errormessage = $e;
+	}
 
+
+	// Presentation av utdata.
 	public function showLogin(){
 
-		// (Extern validering i LoginModel) Om användaren tryckt på "Logga in" så visas felmeddelande, annars inget.
-		if($this->didUserPressLogin()){
-			//$errormessage = $this->model->errorHandling();
-		}
-		else{
-
-			$errormessage = null;
-		}
 
 		$ret = "<h1>Laboration 2 - Inloggning - al223bn</h1>";
 
-		// Så länge användaren inte lyckats logga in korrekt visas "Ej inloggad!".
-		if($this->model->checkLogin($this->getUsername(), $this->getPassword()) === false){
+		$ret .= "<h2>Ej inloggad!</h2>";
 
-			$ret .= "<h2>Ej inloggad!</h2>";
-
-		}
-
-		// Så länge användaren inte lyckats logga in korrekt visas inloggningsformuläret.
-		if($this->model->checkLogin($this->getUsername(), $this->getPassword()) === false){
 		$ret .= 
 				"
 				<fieldset>
-				<legend>Logga in här!</legend>
+				<legend>Logga in här!</legend>";
 
+		$ret .= "<p>$this->errormessage</p>";
 
-				";
 		$ret .= "
 				<form action='?login' method='post' >
 					Användarnamn: <input type='text' name='LoginView::username'>
@@ -92,7 +84,6 @@ class LoginView{
 				</form>
 				</fieldset>
 				";
-		}
 
 		return $ret;
 	}

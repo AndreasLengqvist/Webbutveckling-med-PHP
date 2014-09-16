@@ -14,11 +14,11 @@ class UserView{
 
 	public function showUser(){
 	
-	
+	$user = $this->model->userLoggedIn();
 
 	$ret = "<h1>Laboration 2 - Inloggning - al223bn</h1>";
 
-	$ret .= "<h2> är nu inloggad!</h2>";
+	$ret .= "<h2>$user är nu inloggad!</h2>";
 	
 	$ret .= "<p>Inloggningen lyckades!</p>";
 

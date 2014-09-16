@@ -23,28 +23,16 @@ class LoginModel{
 	}
 
 
-	public function messageHandling($errorcode){
-
-
-		if ($errorcode === 1) {
-			return "<p>Inloggningen lyckades!</p>";
-		}
-		if ($errorcode === 2) {
-			return "<p>Felaktigt användarnamn och/eller lösenord!</p>";
-		}
-	}	
-
-
 	public function checkLogin($clientUsername, $clientPassword){
 
-		if($clientUsername === $this->username &&  $clientPassword === $this->password ){
+		if($clientUsername === $this->username && $clientPassword === $this->password ){
 
 			// Sparar ner det inloggade användarnamnet till sessionen.
 			$_SESSION[$this->sessionLoginData] = $clientUsername;		
 			return true;
 		}
 		else{
-			return false;
+			throw new \Exception("Felaktigt användarnamn och/eller lösenord!");
 		}
 	}
 }
