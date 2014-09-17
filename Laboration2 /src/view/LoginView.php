@@ -6,14 +6,14 @@ require_once("CookieStorage.php");
 class LoginView{
 	
 	private $model;
-	private $UserName;
-	private $PassWord;
+	private $cookieUsername;
+	private $cookiePassword;
 	private $message;
 
 	public function __construct(LoginModel $model){
 		$this->model = $model;
-		//$this->UserName = new CookieStorage();
-		//$this->PassWord = new CookieStorage();
+		$this->cookieUsername = new CookieStorage();
+		$this->cookiePassword = new CookieStorage();
 	}
 
 	public function didUserPressLogin()	{
@@ -25,11 +25,42 @@ class LoginView{
 		}
 	}
 
-
-	public function checkboxFilled(){
+	public function RememberMeIsFilled(){
 		if(isset($_POST["LoginView::checked"])){
 			return true;
 		}
+		else{
+			return false;
+		}
+	}
+
+	public function userIsRemembered(){
+		if ($this->cookieUsername->loadUsernameCookie() && $this->cookiePassword->loadPasswordCookie()) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	public function saveToCookies($username, $password){
+		$this->cookieUsername->saveUsernameCookie($username);
+		$this->cookiePassword->savePasswordCookie(crypt($password));
+	}
+
+	public function removeCookies(){
+		$this->cookieUsername->removeUsernameCookie();
+		$this->cookiePassword->removePasswordCookie();
+	}
+
+	// Hämtar användarnamnskakan.
+	public function getUsernameCookie(){
+		return $this->cookieUsername->loadUsernameCookie();
+	}
+
+	// Hämtar lösenordskakan.
+	public function getPasswordCookie(){
+		return $this->cookiePassword->loadPasswordCookie();
 	}
 
 	// Hämtar Användarnamnet.

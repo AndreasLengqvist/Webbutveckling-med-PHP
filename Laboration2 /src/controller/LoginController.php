@@ -21,38 +21,56 @@ class LoginController{
 
 	// Hanterar indata.
 
+
 		// Om användaren redan är inloggad.
 		if($this->model->userLoggedIn()){
 			if($this->userview->didUserPressLogout()){
 				$this->model->logOut();
+				$this->loginview->removeCookies();
 				$this->loginview->successfullLogOut();
 			}
 		}
 
-		// Om användaren tryckt på logga in.
-		if($this->loginview->didUserPressLogin()){
-
-			// Gör en kontroll på om användarnamn och lösenord är inmatade.
+		// Om det finns kakor lagrade och användaren inte redan är inloggad.
+		if($this->loginview->userIsRemembered()){
+			echo"dasasd";
 			try {
-				$clientUsername = $this->loginview->getUsername();
-				$clientPassword = $this->loginview->getPassword();
-
-				// Testar att logga in med inmatat användarnamn och lösenord.
-				try { 
-					$this->model->checkLogin($clientUsername, $clientPassword);
-					$this->userview->successfullLogIn();
-				} catch (Exception $e) {
-					$this->loginview->showStatus($e->getMessage());
-				}
-
+				// Hämtar de lagrade kakorna, kontrollerar och jämför dem med sparad data.
+				$this->model->checkLogin($this->loginview->getUsernameCookie(), $this->loginview->getPasswordCookie());
+				$this->userview->successfullLogInWithCookiesLoad();						
 			} catch (Exception $e) {
 				$this->loginview->showStatus($e->getMessage());
 			}
+		}
 
+		// Annars om det inte finns kakor lagrade.
+		else{
+			// Om användaren tryckt på logga in.
+			if($this->loginview->didUserPressLogin()){
 
+				try {
+					// Hämtar användarnamn och lösenord.
+					$clientUsername = $this->loginview->getUsername();
+					$clientPassword = $this->loginview->getPassword();		
+						
+						// Kontrollerar om användarnamn och lösenord överensstämmer med sparad data.
+						$this->model->checkLogin($clientUsername, $clientPassword);
 
-					//Slutligen sätt sessionsvariabeln till clientanvändarnamnet.
+						// Om Håll mig inloggad är ikryssad spara i cookies.
+						if ($this->loginview->RememberMeIsFilled()) {
+							$this->loginview->saveToCookies($clientUsername, $clientPassword);
+							$this->userview->successfullLogInWithCookiesSaved();
+						}	
+						else{
+							$this->userview->successfullLogIn();						
+						}
+
+				} catch (Exception $e) {
+					$this->loginview->showStatus($e->getMessage());
+				}
 			}
+		}
+
 
 	// Generar utdata.
 

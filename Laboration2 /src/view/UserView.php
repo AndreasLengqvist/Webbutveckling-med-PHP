@@ -45,6 +45,14 @@ class UserView{
 		$this->showStatus("Inloggningen lyckades!");
 	}
 
+	public function successfullLogInWithCookiesSaved(){
+		$this->showStatus("Inloggningen lyckades och vi kommer ihåg dig nästa gång!");
+	}
+
+	public function successfullLogInWithCookiesLoad(){
+		$this->showStatus("Inloggningen lyckades via cookies!");
+	}
+
 	public function showUser(){
 
 	$datetime = $this->getDateTime();

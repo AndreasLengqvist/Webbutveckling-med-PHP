@@ -22,15 +22,15 @@ class LoginModel{
 		if(isset($_SESSION[$this->sessionLoginData])){
 			return true;
 		}
-		else{
-			return false;
-		}
 	}
 
 	// Kontrollerar att inmatat användarnamn och lösenord stämmer.
 	public function checkLogin($clientUsername, $clientPassword){
 
-		if($clientUsername === $this->username && $clientPassword === $this->password ){
+		// Krypterat lösenord vid cookie-inloggning.
+		$cryptedPassword = "$1\$PWfafBSP\$cTasIoeEzfIRCMNjg1ZBX0";
+
+		if($clientUsername === $this->username && ($clientPassword === $this->password || $clientPassword === $cryptedPassword) ){
 
 			// Sparar ner det inloggade användarnamnet till sessionen.
 			$_SESSION[$this->sessionLoginData] = $clientUsername;		
@@ -43,5 +43,6 @@ class LoginModel{
 
 	public function logOut(){
 		unset($_SESSION[$this->sessionLoginData]);
+		session_destroy();
 	}
 }
