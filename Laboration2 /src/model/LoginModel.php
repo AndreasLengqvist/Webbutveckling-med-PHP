@@ -22,6 +22,9 @@ class LoginModel{
 		if(isset($_SESSION[$this->sessionLoginData])){
 			return true;
 		}
+		else{
+			return false;
+		}
 	}
 
 	// Kontrollerar att inmatat användarnamn och lösenord stämmer.

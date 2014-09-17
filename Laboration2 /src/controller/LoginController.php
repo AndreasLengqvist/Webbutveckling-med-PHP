@@ -21,7 +21,6 @@ class LoginController{
 
 	// Hanterar indata.
 
-
 		// Om användaren redan är inloggad.
 		if($this->model->userLoggedIn()){
 			if($this->userview->didUserPressLogout()){
@@ -32,8 +31,8 @@ class LoginController{
 		}
 
 		// Om det finns kakor lagrade och användaren inte redan är inloggad.
-		if($this->loginview->userIsRemembered()){
-			echo"dasasd";
+		if($this->loginview->userIsRemembered() and $this->model->userLoggedIn() === false){
+			echo"adadsdsa";
 			try {
 				// Hämtar de lagrade kakorna, kontrollerar och jämför dem med sparad data.
 				$this->model->checkLogin($this->loginview->getUsernameCookie(), $this->loginview->getPasswordCookie());
@@ -43,8 +42,6 @@ class LoginController{
 			}
 		}
 
-		// Annars om det inte finns kakor lagrade.
-		else{
 			// Om användaren tryckt på logga in.
 			if($this->loginview->didUserPressLogin()){
 
@@ -56,7 +53,7 @@ class LoginController{
 						// Kontrollerar om användarnamn och lösenord överensstämmer med sparad data.
 						$this->model->checkLogin($clientUsername, $clientPassword);
 
-						// Om Håll mig inloggad är ikryssad spara i cookies.
+						// Om "Håll mig inloggad" är ikryssad, spara i cookies.
 						if ($this->loginview->RememberMeIsFilled()) {
 							$this->loginview->saveToCookies($clientUsername, $clientPassword);
 							$this->userview->successfullLogInWithCookiesSaved();
@@ -69,7 +66,6 @@ class LoginController{
 					$this->loginview->showStatus($e->getMessage());
 				}
 			}
-		}
 
 
 	// Generar utdata.
