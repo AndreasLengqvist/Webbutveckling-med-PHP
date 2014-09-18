@@ -1,11 +1,15 @@
 <?php
 
 
-class CookieStorage{
 
-	// Sparar kakan.
+class CookieService{
+	private $cookieTime;
+
+	// Sparar kakan, samtidigt sparas förfallotiden som returneras.
 	public function saveCookie($name, $string){
-		setcookie($name, $string, strtotime('+1 minutes'));
+		$cookieTime = strtotime('+1 minutes');
+		setcookie($name, $string, $cookieTime);
+		return $cookieTime;
 	}
 
 	// Laddar kakan.

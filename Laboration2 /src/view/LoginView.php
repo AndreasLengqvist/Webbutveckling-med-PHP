@@ -1,7 +1,6 @@
 <?php
 
-require_once("CookieStorage.php");
-
+require_once("CookieService.php");
 
 class LoginView{
 	
@@ -16,8 +15,8 @@ class LoginView{
 
 		// Struktur för MVC.
 		$this->model = $model;
-		$this->cookieUsername = new CookieStorage();
-		$this->cookiePassword = new CookieStorage();
+		$this->cookieUsername = new CookieService();
+		$this->cookiePassword = new CookieService();
 	}
 
 	// Kontrollerar om användare tryckt på Logga in.
@@ -50,10 +49,10 @@ class LoginView{
 		}
 	}
 
-	// Funktion för att spara kakor.
+	// Funktion för att spara kakor (och spara ner förfallotid).
 	public function saveToCookies($username, $password){
 		$this->cookieUsername->saveCookie($this->username, $username);
-		$this->cookiePassword->saveCookie($this->password, md5($password));
+		$this->model->saveCookieTime($this->cookiePassword->saveCookie($this->password, md5($password)));
 	}
 
 	// Funktion för att radera sparade kakor.

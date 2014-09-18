@@ -26,7 +26,7 @@ class LoginModel{
 	// Kontrollerar att inmatat användarnamn och lösenord stämmer vid eventuell inloggning.
 	public function checkLogin($clientUsername, $clientPassword){
 
-		if($clientUsername === $this->username && ($clientPassword === $this->password || $clientPassword === md5($this->password)) ){
+		if($clientUsername === $this->username && ($clientPassword === $this->password) ){
 
 			// Sparar ner den inloggad användaren till sessionen.
 			$_SESSION[$this->sessionLoginData] = $clientUsername;		
@@ -36,6 +36,31 @@ class LoginModel{
 			throw new \Exception("Felaktigt användarnamn och/eller lösenord!");
 		}
 	}
+
+	// Kontrollerar att inmatat användarnamn och lösenord stämmer vid eventuell inloggning + (med kakor och förfallodatumskontroll).
+	public function checkLoginWithCookies($clientUsername, $clientPassword){
+		$time = $this->loadCookieTime();
+		if($clientUsername === $this->username &&  $clientPassword === md5($this->password) && $time > time()){
+
+			// Sparar ner den inloggad användaren till sessionen.
+			$_SESSION[$this->sessionLoginData] = $clientUsername;		
+			return true;
+		}
+		else{
+			throw new \Exception("Felaktigt information i kakan!");
+		}
+	}
+
+	// Hjälpfunktion för att spara till fil.
+	public function saveCookieTime($value){
+		file_put_contents("CookieTime", $value);
+	}
+
+	// Hjälpfunktion för att ladda från fil.
+	public function loadCookieTime(){
+		return file_get_contents("CookieTime");
+	}
+
 
 	// Unsettar sessionsvariabeln och dödar sessionen vid eventuell utloggning.
 	public function logOut(){

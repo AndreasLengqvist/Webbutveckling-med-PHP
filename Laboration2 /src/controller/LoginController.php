@@ -28,9 +28,10 @@ class LoginController{
 		if($this->loginview->userIsRemembered() and !$this->model->userLoggedIn()){
 			try {
 				// Hämtar de lagrade kakorna, kontrollerar och jämför dem med sparad data.
-				$this->model->checkLogin($this->loginview->getUsernameCookie(), $this->loginview->getPasswordCookie());
+				$this->model->checkLoginWithCookies($this->loginview->getUsernameCookie(), $this->loginview->getPasswordCookie());
 				$this->userview->successfullLogInWithCookiesLoad();						
 			} catch (Exception $e) {
+				$this->loginview->forgetRememberedUser();
 				$this->loginview->showStatus($e->getMessage());
 			}
 		}
