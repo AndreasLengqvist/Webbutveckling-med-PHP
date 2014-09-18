@@ -33,7 +33,7 @@ class LoginController{
 		if($this->loginview->userIsRemembered() and !$this->model->userLoggedIn($userAgent)){
 			try {
 				// Hämtar de lagrade kakorna, kontrollerar och jämför dem med sparad data.
-				$this->model->checkLoginWithCookies($this->loginview->getUsernameCookie(), $this->loginview->getPasswordCookie(), $this->userAgent);
+				$this->model->checkLoginWithCookies($this->loginview->getUsernameCookie(), $this->loginview->getPasswordCookie(), $userAgent);
 				$this->userview->successfullLogInWithCookiesLoad();						
 			} catch (Exception $e) {
 				$this->loginview->forgetRememberedUser();
