@@ -60,7 +60,6 @@ class UserView{
 
 	// Slutlig presentation av utdata.
 	public function showUser(){
-
 	$datetime = $this->getDateTime();
 	$user = $this->model->getLoggedInUser();
 

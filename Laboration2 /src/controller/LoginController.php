@@ -3,10 +3,12 @@
 require_once("src/model/LoginModel.php");
 require_once("src/view/LoginView.php");
 require_once("src/view/UserView.php");
+require_once("./common/Helpers.php");
 
 
 class LoginController{
 
+	private $helpers;
 	private $loginview;
 	private $userview;
 	private $model;
@@ -17,18 +19,21 @@ class LoginController{
 		$this->model = new LoginModel();
 		$this->loginview = new LoginView($this->model);
 		$this->userview = new UserView($this->model);
+		$this->helpers = new Helpers();
 	}
 
 	public function doControll(){
 
 	// Hanterar indata.
 
+	// Hämtar information som webbläsaren användaren sitter i.
+	$userAgent = $this->helpers->getUserAgent();
 
 		// Om det finns kakor lagrade och användaren inte redan är inloggad.
-		if($this->loginview->userIsRemembered() and !$this->model->userLoggedIn()){
+		if($this->loginview->userIsRemembered() and !$this->model->userLoggedIn($userAgent)){
 			try {
 				// Hämtar de lagrade kakorna, kontrollerar och jämför dem med sparad data.
-				$this->model->checkLoginWithCookies($this->loginview->getUsernameCookie(), $this->loginview->getPasswordCookie());
+				$this->model->checkLoginWithCookies($this->loginview->getUsernameCookie(), $this->loginview->getPasswordCookie(), $this->userAgent);
 				$this->userview->successfullLogInWithCookiesLoad();						
 			} catch (Exception $e) {
 				$this->loginview->forgetRememberedUser();
@@ -52,7 +57,7 @@ class LoginController{
 				$clientPassword = $this->loginview->getPassword();		
 					
 					// Kontrollerar om användarnamn och lösenord överensstämmer med sparad data.
-					$this->model->checkLogin($clientUsername, $clientPassword);
+					$this->model->checkLogin($clientUsername, $clientPassword, $userAgent);
 
 					// Om "Håll mig inloggad" är ikryssad, spara i cookies.
 					if ($this->loginview->RememberMeIsFilled()) {
@@ -73,7 +78,7 @@ class LoginController{
 	// Generar utdata.
 
 		// Om inloggningen lyckades visa användarfönstret.
-		if($this->model->userLoggedIn()){
+		if($this->model->userLoggedIn($userAgent)){
 			return $this->userview->showUser();
 		}
 		// Annars visa inloggningsfönstret.
