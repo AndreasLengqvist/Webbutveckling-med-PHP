@@ -3,40 +3,24 @@
 
 class CookieStorage{
 
-	private static $cookieUsername = "LoginView::Username";
-	private static $cookiePassword = "LoginView::Password";
-
-	public function saveUsernameCookie($string){
-		setcookie(self::$cookieUsername, $string, strtotime('+1 minutes'));
+	// Sparar kakan.
+	public function saveCookie($name, $string){
+		setcookie($name, $string, strtotime('+1 minutes'));
 	}
 
-	public function savePasswordCookie($string){
-		setcookie(self::$cookiePassword, $string, strtotime('+1 minutes'));
-	}
-
-	public function loadUsernameCookie(){
-		if (isset($_COOKIE[self::$cookieUsername])) {
-			return $_COOKIE[self::$cookieUsername];
+	// Laddar kakan.
+	public function loadCookie($name){
+		if (isset($_COOKIE[$name])) {
+			return $_COOKIE[$name];
 		}
 		else{
 			return false;
 		}
 	}
 
-	public function loadPasswordCookie(){
-		if (isset($_COOKIE[self::$cookiePassword])) {
-			return $_COOKIE[self::$cookiePassword];
-		}
-		else{
-			return false;
-		}	}
-
-	public function removeUsernameCookie(){
-		setcookie (self::$cookieUsername, "", time() - 3600);
-	}
-
-	public function removePasswordCookie(){
-		setcookie (self::$cookiePassword, "", time() - 3600);
+	// Tar bort kakan.
+	public function removeCookie($name){
+		setcookie ($name, "", time() - 3600);
 	}
 
 }

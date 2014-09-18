@@ -22,6 +22,7 @@ class UserView{
 		}
 	}
 
+	// Datum och tid-funktion. Kan brytas ut till en hjälpfunktion.
 	public function getDateTime(){
 		setlocale(LC_ALL, "sv_SE");
 		$weekday = ucfirst(utf8_encode(strftime("%A,")));

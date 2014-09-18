@@ -21,18 +21,9 @@ class LoginController{
 
 	// Hanterar indata.
 
-		// Om användaren redan är inloggad.
-		if($this->model->userLoggedIn()){
-			if($this->userview->didUserPressLogout()){
-				$this->model->logOut();
-				$this->loginview->removeCookies();
-				$this->loginview->successfullLogOut();
-			}
-		}
 
 		// Om det finns kakor lagrade och användaren inte redan är inloggad.
-		if($this->loginview->userIsRemembered() and $this->model->userLoggedIn() === false){
-			echo"adadsdsa";
+		if($this->loginview->userIsRemembered() and !$this->model->userLoggedIn()){
 			try {
 				// Hämtar de lagrade kakorna, kontrollerar och jämför dem med sparad data.
 				$this->model->checkLogin($this->loginview->getUsernameCookie(), $this->loginview->getPasswordCookie());
@@ -42,30 +33,37 @@ class LoginController{
 			}
 		}
 
-			// Om användaren tryckt på logga in.
-			if($this->loginview->didUserPressLogin()){
+		// Om användaren redan är inloggad.
+		if($this->userview->didUserPressLogout()){
+			$this->loginview->forgetRememberedUser();
+			$this->model->logOut();
+			$this->loginview->successfullLogOut();
+		}
 
-				try {
-					// Hämtar användarnamn och lösenord.
-					$clientUsername = $this->loginview->getUsername();
-					$clientPassword = $this->loginview->getPassword();		
-						
-						// Kontrollerar om användarnamn och lösenord överensstämmer med sparad data.
-						$this->model->checkLogin($clientUsername, $clientPassword);
+		// Om användaren tryckt på logga in.
+		if($this->loginview->didUserPressLogin()){
 
-						// Om "Håll mig inloggad" är ikryssad, spara i cookies.
-						if ($this->loginview->RememberMeIsFilled()) {
-							$this->loginview->saveToCookies($clientUsername, $clientPassword);
-							$this->userview->successfullLogInWithCookiesSaved();
-						}	
-						else{
-							$this->userview->successfullLogIn();						
-						}
+			try {
+				// Hämtar användarnamn och lösenord.
+				$clientUsername = $this->loginview->getUsername();
+				$clientPassword = $this->loginview->getPassword();		
+					
+					// Kontrollerar om användarnamn och lösenord överensstämmer med sparad data.
+					$this->model->checkLogin($clientUsername, $clientPassword);
 
-				} catch (Exception $e) {
-					$this->loginview->showStatus($e->getMessage());
-				}
+					// Om "Håll mig inloggad" är ikryssad, spara i cookies.
+					if ($this->loginview->RememberMeIsFilled()) {
+						$this->loginview->saveToCookies($clientUsername, $clientPassword);
+						$this->userview->successfullLogInWithCookiesSaved();
+					}	
+					else{
+						$this->userview->successfullLogIn();						
+					}
+
+			} catch (Exception $e) {
+				$this->loginview->showStatus($e->getMessage());
 			}
+		}
 
 
 	// Generar utdata.

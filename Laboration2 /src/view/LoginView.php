@@ -6,9 +6,11 @@ require_once("CookieStorage.php");
 class LoginView{
 	
 	private $model;
-	private $cookieUsername;
-	private $cookiePassword;
-	private $message;
+	private $cookieUsername;						// Instans av CookieStorage för att lagra användarnamn.
+	private $cookiePassword;						// Instans av CookieStorage för att lagra lösenord.
+	private $username = "LoginView::Username";		// Användarnamnets kakas namn.
+	private $password = "LoginView::Password";		// Lösenordets kakas namn.
+	private $message;								// Privat variabel för att visa fel/rättmeddelanden.
 
 	public function __construct(LoginModel $model){
 		$this->model = $model;
@@ -35,7 +37,7 @@ class LoginView{
 	}
 
 	public function userIsRemembered(){
-		if ($this->cookieUsername->loadUsernameCookie() && $this->cookiePassword->loadPasswordCookie()) {
+		if ($this->cookieUsername->loadCookie($this->username) && $this->cookiePassword->loadCookie($this->password)) {
 			return true;
 		}
 		else{
@@ -44,44 +46,44 @@ class LoginView{
 	}
 
 	public function saveToCookies($username, $password){
-		$this->cookieUsername->saveUsernameCookie($username);
-		$this->cookiePassword->savePasswordCookie(crypt($password));
+		$this->cookieUsername->saveCookie($this->username, $username);
+		$this->cookiePassword->saveCookie($this->password, md5($password));
 	}
 
-	public function removeCookies(){
-		$this->cookieUsername->removeUsernameCookie();
-		$this->cookiePassword->removePasswordCookie();
+	public function forgetRememberedUser(){
+		$this->cookieUsername->removeCookie($this->username);
+		$this->cookiePassword->removeCookie($this->password);
 	}
 
 	// Hämtar användarnamnskakan.
 	public function getUsernameCookie(){
-		return $this->cookieUsername->loadUsernameCookie();
+		return $this->cookieUsername->loadCookie($this->username);
 	}
 
 	// Hämtar lösenordskakan.
 	public function getPasswordCookie(){
-		return $this->cookiePassword->loadPasswordCookie();
+		return $this->cookiePassword->loadCookie($this->password);
 	}
 
 	// Hämtar Användarnamnet.
 	public function getUsername(){
 
-		if (empty($_POST["LoginView::username"])) {
+		if (empty($_POST["$this->username"])) {
 			throw new \Exception("Användarnamn saknas!");
 		}
 		else {
-			return $_POST["LoginView::username"];	
+			return $_POST["$this->username"];	
 		}
 	}
 
 	// Hämtar lösenordet.
 	public function getPassword(){
 
-		if (empty($_POST["LoginView::password"])) {
+		if (empty($_POST["$this->password"])) {
 			throw new \Exception("Lösenord saknas!");	
 		}
 		else {
-			return $_POST["LoginView::password"];	
+			return $_POST["$this->password"];	
 		}
 	}
 
@@ -130,17 +132,17 @@ class LoginView{
 				<form action='?login' method='post' >";
 
 		// Om det inte finns något inmatat användarnamn så visa tom input.
-		if(empty($_POST["LoginView::username"])){
-			$ret .= "Användarnamn: <input type='text' name='LoginView::username'>";
+		if(empty($_POST[$this->username])){
+			$ret .= "Användarnamn: <input type='text' name='$this->username'>";
 		}
 		// Annars visa det tidigare inmatade användarnamnet i input.
 		else{
-			$uservalue = $_POST["LoginView::username"];
-			$ret .= "Användarnamn: <input type='text' name='LoginView::username' value='$uservalue'>";
+			$uservalue = $_POST[$this->username];
+			$ret .= "Användarnamn: <input type='text' name='$this->username' value='$uservalue'>";
 		}
 
 		$ret .= "
-					Lösenord: <input type='text' name='LoginView::password'>
+					Lösenord: <input type='text' name='$this->password'>
 					Håll mig inloggad: <input type='checkbox' name='LoginView::checked'>
 					<input type='submit' value='Logga in' name='LoginView::login'>
 				</form>

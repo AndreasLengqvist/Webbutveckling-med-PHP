@@ -3,8 +3,8 @@
 
 class LoginModel{
 	private $sessionLoginData = "LoginModel::LoggedInUserName";
-	private $username = "user";
-	private $password = "pass";
+	private $username = "Admin";
+	private $password = "Password";
 
 	public function __construct(){
 
@@ -30,10 +30,7 @@ class LoginModel{
 	// Kontrollerar att inmatat användarnamn och lösenord stämmer.
 	public function checkLogin($clientUsername, $clientPassword){
 
-		// Krypterat lösenord vid cookie-inloggning.
-		$cryptedPassword = "$1\$PWfafBSP\$cTasIoeEzfIRCMNjg1ZBX0";
-
-		if($clientUsername === $this->username && ($clientPassword === $this->password || $clientPassword === $cryptedPassword) ){
+		if($clientUsername === $this->username && ($clientPassword === $this->password || $clientPassword === md5($this->password)) ){
 
 			// Sparar ner det inloggade användarnamnet till sessionen.
 			$_SESSION[$this->sessionLoginData] = $clientUsername;		
