@@ -13,11 +13,14 @@ class LoginView{
 	private $message;								// Privat variabel för att visa fel/rättmeddelanden.
 
 	public function __construct(LoginModel $model){
+
+		// Struktur för MVC.
 		$this->model = $model;
 		$this->cookieUsername = new CookieStorage();
 		$this->cookiePassword = new CookieStorage();
 	}
 
+	// Kontrollerar om användare tryckt på Logga in.
 	public function didUserPressLogin()	{
 		if(isset($_POST["LoginView::login"])){
 			return $_POST["LoginView::login"];
@@ -27,6 +30,7 @@ class LoginView{
 		}
 	}
 
+	// Kontrollerar användare checkat i Håll mig inloggad.
 	public function RememberMeIsFilled(){
 		if(isset($_POST["LoginView::checked"])){
 			return true;
@@ -36,6 +40,7 @@ class LoginView{
 		}
 	}
 
+	// Funktion för att hämta sparade kakor.
 	public function userIsRemembered(){
 		if ($this->cookieUsername->loadCookie($this->username) && $this->cookiePassword->loadCookie($this->password)) {
 			return true;
@@ -45,27 +50,29 @@ class LoginView{
 		}
 	}
 
+	// Funktion för att spara kakor.
 	public function saveToCookies($username, $password){
 		$this->cookieUsername->saveCookie($this->username, $username);
 		$this->cookiePassword->saveCookie($this->password, md5($password));
 	}
 
+	// Funktion för att radera sparade kakor.
 	public function forgetRememberedUser(){
 		$this->cookieUsername->removeCookie($this->username);
 		$this->cookiePassword->removeCookie($this->password);
 	}
 
-	// Hämtar användarnamnskakan.
+	// Hämtar användarnamn från kakan.
 	public function getUsernameCookie(){
 		return $this->cookieUsername->loadCookie($this->username);
 	}
 
-	// Hämtar lösenordskakan.
+	// Hämtar lösenord från kakan.
 	public function getPasswordCookie(){
 		return $this->cookiePassword->loadCookie($this->password);
 	}
 
-	// Hämtar Användarnamnet.
+	// Hämtar Användarnamnet vid rätt input.
 	public function getUsername(){
 
 		if (empty($_POST["$this->username"])) {
@@ -76,7 +83,7 @@ class LoginView{
 		}
 	}
 
-	// Hämtar lösenordet.
+	// Hämtar lösenordet vid rätt input.
 	public function getPassword(){
 
 		if (empty($_POST["$this->password"])) {
@@ -87,6 +94,7 @@ class LoginView{
 		}
 	}
 
+	// Datum och tid-funktion. (Kan brytas ut till en hjälpfunktion.)
 	public function getDateTime(){
 		setlocale(LC_ALL, 'sv_SE');
 		$weekday = ucfirst(utf8_encode(strftime("%A,")));
@@ -97,7 +105,7 @@ class LoginView{
 		return "$weekday $date $month  $year  $time";	
 	}
 
-	// Presenterar felmeddelandet vid inloggningsfel.
+	// Visar fel/rättmeddelanden.
 	public function showStatus($message){
 		if (isset($message)) {
 			$this->message = $message;
@@ -107,12 +115,13 @@ class LoginView{
 		}
 	}
 
+	// Skickar rättmeddelandet till showStatus.
 	public function successfullLogOut(){
 		$this->showStatus("Du har nu loggat ut!");
 	}
 
 
-	// Presentation av utdata.
+	// Slutlig presentation av utdata.
 	public function showLogin(){
 
 		$datetime = $this->getDateTime();

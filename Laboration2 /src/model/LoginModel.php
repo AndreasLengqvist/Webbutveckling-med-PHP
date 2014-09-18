@@ -6,15 +6,6 @@ class LoginModel{
 	private $username = "Admin";
 	private $password = "Password";
 
-	public function __construct(){
-
-
-	}
-
-	// Hämtar vem som är inloggad.
-	public function getLoggedInUser(){
-		return $_SESSION[$this->sessionLoginData];
-	}
 
 	// Kontrollerar om sessions-varibeln är satt vilket betyder att en användare är inloggad.
 	public function userLoggedIn(){
@@ -27,12 +18,17 @@ class LoginModel{
 		}
 	}
 
-	// Kontrollerar att inmatat användarnamn och lösenord stämmer.
+	// Hämtar vilken användare som är inloggad.
+	public function getLoggedInUser(){
+		return $_SESSION[$this->sessionLoginData];
+	}
+
+	// Kontrollerar att inmatat användarnamn och lösenord stämmer vid eventuell inloggning.
 	public function checkLogin($clientUsername, $clientPassword){
 
 		if($clientUsername === $this->username && ($clientPassword === $this->password || $clientPassword === md5($this->password)) ){
 
-			// Sparar ner det inloggade användarnamnet till sessionen.
+			// Sparar ner den inloggad användaren till sessionen.
 			$_SESSION[$this->sessionLoginData] = $clientUsername;		
 			return true;
 		}
@@ -41,6 +37,7 @@ class LoginModel{
 		}
 	}
 
+	// Unsettar sessionsvariabeln och dödar sessionen vid eventuell utloggning.
 	public function logOut(){
 		unset($_SESSION[$this->sessionLoginData]);
 		session_destroy();

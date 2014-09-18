@@ -12,7 +12,7 @@ class UserView{
 		$this->model = $model;
 	}
 
-
+	// Kontrollerar om användaren tryckt på Logga ut.
 	public function didUserPressLogout(){
 		if(isset($_POST["UserView::logout"])){
 			return $_POST["UserView::logout"];
@@ -22,7 +22,7 @@ class UserView{
 		}
 	}
 
-	// Datum och tid-funktion. Kan brytas ut till en hjälpfunktion.
+	// Datum och tid-funktion. (Kan brytas ut till en hjälpfunktion.)
 	public function getDateTime(){
 		setlocale(LC_ALL, "sv_SE");
 		$weekday = ucfirst(utf8_encode(strftime("%A,")));
@@ -33,6 +33,7 @@ class UserView{
 		return "$weekday $date $month  $year  $time";
 	}
 
+	// Visar fel/rättmeddelanden.
 	public function showStatus($message){
 		if (isset($message)) {
 			$this->message = $message;
@@ -42,18 +43,22 @@ class UserView{
 		}
 	}
 
+	// Skickar rättmeddelandet till showStatus.
 	public function successfullLogIn(){
 		$this->showStatus("Inloggningen lyckades!");
 	}
 
+	// Skickar rättmeddelandet till showStatus.
 	public function successfullLogInWithCookiesSaved(){
 		$this->showStatus("Inloggningen lyckades och vi kommer ihåg dig nästa gång!");
 	}
 
+	// Skickar rättmeddelandet till showStatus.
 	public function successfullLogInWithCookiesLoad(){
 		$this->showStatus("Inloggningen lyckades via cookies!");
 	}
 
+	// Slutlig presentation av utdata.
 	public function showUser(){
 
 	$datetime = $this->getDateTime();

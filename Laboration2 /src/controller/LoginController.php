@@ -12,6 +12,8 @@ class LoginController{
 	private $model;
 
 	public function __construct(){
+
+		// Struktur för att få till MVC.
 		$this->model = new LoginModel();
 		$this->loginview = new LoginView($this->model);
 		$this->userview = new UserView($this->model);
@@ -40,7 +42,7 @@ class LoginController{
 			$this->loginview->successfullLogOut();
 		}
 
-		// Om användaren tryckt på logga in.
+		// Om användaren inte är inloggad och tryckt på Logga in.
 		if($this->loginview->didUserPressLogin()){
 
 			try {
@@ -55,11 +57,12 @@ class LoginController{
 					if ($this->loginview->RememberMeIsFilled()) {
 						$this->loginview->saveToCookies($clientUsername, $clientPassword);
 						$this->userview->successfullLogInWithCookiesSaved();
-					}	
+					}
 					else{
 						$this->userview->successfullLogIn();						
 					}
 
+			// Felmeddelande vid eventuella fel i try-satsen.
 			} catch (Exception $e) {
 				$this->loginview->showStatus($e->getMessage());
 			}
