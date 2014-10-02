@@ -1,8 +1,7 @@
 <?php
 
 
-
-class UserView{
+class LoggedInView{
 	
 	private $model;
 	private $message;

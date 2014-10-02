@@ -1,5 +1,6 @@
 <?php
 
+
 require_once("CookieService.php");
 
 class LoginView{
@@ -21,22 +22,12 @@ class LoginView{
 
 	// Kontrollerar om användare tryckt på Logga in.
 	public function didUserPressLogin()	{
-		if(isset($_POST["LoginView::login"])){
-			return $_POST["LoginView::login"];
-		}
-		else{
-			return false;
-		}
+		return isset($_POST["LoginView::login"]);
 	}
 
 	// Kontrollerar användare checkat i Håll mig inloggad.
 	public function RememberMeIsFilled(){
-		if(isset($_POST["LoginView::checked"])){
-			return true;
-		}
-		else{
-			return false;
-		}
+		return isset($_POST["LoginView::checked"]);
 	}
 
 	// Funktion för att hämta sparade kakor.
@@ -93,18 +84,6 @@ class LoginView{
 		}
 	}
 
-	// Datum och tid-funktion. (Kan brytas ut till en hjälpfunktion.)
-	public function getDateTime(){
-		date_default_timezone_set('Europe/Stockholm');
-		setlocale(LC_ALL, 'sv_SE');
-		$weekday = ucfirst(utf8_encode(strftime("%A,")));
-		$date = strftime("den %d");
-		$month = strftime("%B");
-		$year = strftime("år %Y.");
-		$time = strftime("Klockan är [%H:%M:%S].");
-		return "$weekday $date $month  $year  $time";	
-	}
-
 	// Visar fel/rättmeddelanden.
 	public function showStatus($message){
 		if (isset($message)) {
@@ -121,6 +100,24 @@ class LoginView{
 	}
 
 
+	// Datum och tid-funktion. (Kan brytas ut till en hjälpfunktion.)
+	public function getDateTime(){
+		date_default_timezone_set('Europe/Stockholm');
+		setlocale(LC_ALL, 'sv_SE');
+		$weekday = ucfirst(utf8_encode(strftime("%A,")));
+		$date = strftime("den %d");
+		$month = strftime("%B");
+		$year = strftime("år %Y.");
+		$time = strftime("Klockan är [%H:%M:%S].");
+		return "$weekday $date $month  $year  $time";	
+	}
+
+
+	public function registerClick(){
+		return isset($_GET["register"]);
+	}
+
+
 	// Slutlig presentation av utdata.
 	public function showLogin(){
 
@@ -130,6 +127,8 @@ class LoginView{
 
 		$ret .= "<h2>Ej inloggad!</h2>";
 
+		$ret .= "<p><a href='?register'>Registrera ny användare</a></p>";
+
 		$ret .= 
 				"
 				<fieldset>
@@ -138,17 +137,17 @@ class LoginView{
 		$ret .= "<p>$this->message";
 
 		$ret .= "
-				<form action='?login' method='post' >";
+				<form action='?login' method='post'>";
 
-		// Om det inte finns något inmatat användarnamn så visa tom input.
-		if(empty($_POST[$this->username])){
-			$ret .= "Användarnamn: <input type='text' name='$this->username'>";
-		}
-		// Annars visa det tidigare inmatade användarnamnet i input.
-		else{
-			$uservalue = $_POST[$this->username];
-			$ret .= "Användarnamn: <input type='text' name='$this->username' value='$uservalue'>";
-		}
+					// Om det inte finns något inmatat användarnamn så visa tom input.
+					if(empty($_POST[$this->username])){
+						$ret .= "Användarnamn: <input type='text' name='$this->username'>";
+					}
+					// Annars visa det tidigare inmatade användarnamnet i input.
+					else{
+						$uservalue = $_POST[$this->username];
+						$ret .= "Användarnamn: <input type='text' name='$this->username' value='$uservalue'>";
+					}
 
 		$ret .= "
 					Lösenord: <input type='text' name='$this->password'>
