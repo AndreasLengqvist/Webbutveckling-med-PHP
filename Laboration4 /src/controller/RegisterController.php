@@ -1,9 +1,9 @@
 <?php
 
 
-require_once("src/model/LoginModel.php");
+require_once("src/model/RegisterModel.php");
 require_once("src/view/RegisterView.php");
-require_once("./common/Helpers.php");
+require_once("src/view/DateTimeView.php");
 
 
 class RegisterController{
@@ -18,8 +18,8 @@ class RegisterController{
 
 		// Struktur för att få till MVC.
 		$this->model = new RegisterModel();
-		$this->loginview = new LoginView($this->model);
 		$this->registerview = new RegisterView($this->model);
+		$this->datetimeview = new DateTimeView();
 		$this->controller = new LoginController();
 	}
 
@@ -27,9 +27,21 @@ class RegisterController{
 
 	// Hanterar indata.
 
-	
+		// Om användaren tryckt på Registera.
+		if($this->registerview->didUserPressRegister()){
+			// Hämtar validerat användarnamn och lösenord.
+				$clientUsername = $this->registerview->getUsername();			
+				$clientPassword = $this->registerview->getPassword();
+				
+			try{
+				
+			} catch (Exception $e) {
+				// exception
+			}
+		}
 
 	// Generar utdata.
-		return $this->registerview->showRegister();
+		return $this->registerview->showRegister() . $this->datetimeview->show();
+;
 	}
 }

@@ -2,9 +2,10 @@
 
 require_once("src/model/LoginModel.php");
 require_once("src/view/LoginView.php");
-require_once("src/view/LoggedInView.php");
+require_once("src/view/UserView.php");
 require_once("src/view/RegisterView.php");
-require_once("./common/Helpers.php");
+require_once("src/view/DateTimeView.php");
+require_once("./common/Agent.php");
 
 class LoginController{
 
@@ -18,8 +19,9 @@ class LoginController{
 		// Struktur för att få till MVC.
 		$this->model = new LoginModel();
 		$this->loginview = new LoginView($this->model);
-		$this->userview = new LoggedInView($this->model);
-		$this->helpers = new Helpers();
+		$this->userview = new UserView($this->model);
+		$this->datetimeview = new DateTimeView();
+		$this->helpers = new Agent();
 	}
 
 	public function doControll(){
@@ -79,11 +81,11 @@ class LoginController{
 
 		// Om inloggningen lyckades visa användarfönstret.
 		if($this->model->userLoggedIn($userAgent)){
-			return $this->userview->showUser();
+			return $this->userview->showUser() . $this->datetimeview->show();
 		}
 		// Annars visa inloggningsfönstret.
 		else{
-			return $this->loginview->showLogin();
+			return $this->loginview->showLogin() . $this->datetimeview->show();
 		}
 	}
 }

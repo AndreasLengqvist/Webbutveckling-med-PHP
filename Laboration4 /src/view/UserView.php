@@ -1,7 +1,7 @@
 <?php
 
 
-class LoggedInView{
+class UserView{
 	
 	private $model;
 	private $message;
@@ -19,18 +19,6 @@ class LoggedInView{
 		else{
 			return false;
 		}
-	}
-
-	// Datum och tid-funktion. (Kan brytas ut till en hjälpfunktion.)
-	public function getDateTime(){
-		date_default_timezone_set('Europe/Stockholm');
-		setlocale(LC_ALL, "sv_SE");
-		$weekday = ucfirst(utf8_encode(strftime("%A,")));
-		$date = strftime("den %d");
-		$month = strftime("%B");
-		$year = strftime("år %Y.");
-		$time = strftime("Klockan är [%H:%M:%S].");
-		return "$weekday $date $month  $year  $time";
 	}
 
 	// Visar fel/rättmeddelanden.
@@ -60,22 +48,17 @@ class LoggedInView{
 
 	// Slutlig presentation av utdata.
 	public function showUser(){
-	$datetime = $this->getDateTime();
 	$user = $this->model->getLoggedInUser();
 
-	$ret = "<h1>Laboration 2 - Inloggning - al223bn</h1>";
+	$ret = "<h1>Laboration 2 - Inloggning - al223bn</h1>
+			<h2>$user är nu inloggad!</h2>
 
-	$ret .= "<h2>$user är nu inloggad!</h2>";
-	
-	$ret .= "$this->message";
+			$this->message
 
-	$ret .= "
-				<form action='?logout' method='post' >
-				<input type='submit' value='Logga ut' name='UserView::logout'>
-				</form>
+			<form action='?logout' method='post' >
+			<p><input type='submit' value='Logga ut' name='UserView::logout'></p>
+			</form>
 			";		
-
-	$ret .= "<p>$datetime</p>";
 
 	return $ret;
 }

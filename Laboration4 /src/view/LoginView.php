@@ -99,44 +99,21 @@ class LoginView{
 		$this->showStatus("Du har nu loggat ut!");
 	}
 
-
-	// Datum och tid-funktion. (Kan brytas ut till en hjälpfunktion.)
-	public function getDateTime(){
-		date_default_timezone_set('Europe/Stockholm');
-		setlocale(LC_ALL, 'sv_SE');
-		$weekday = ucfirst(utf8_encode(strftime("%A,")));
-		$date = strftime("den %d");
-		$month = strftime("%B");
-		$year = strftime("år %Y.");
-		$time = strftime("Klockan är [%H:%M:%S].");
-		return "$weekday $date $month  $year  $time";	
-	}
-
-
 	public function registerClick(){
 		return isset($_GET["register"]);
 	}
 
-
 	// Slutlig presentation av utdata.
 	public function showLogin(){
 
-		$datetime = $this->getDateTime();
-
-		$ret = "<h1>Laboration 2 - Inloggning - al223bn</h1>";
-
-		$ret .= "<h2>Ej inloggad!</h2>";
-
-		$ret .= "<p><a href='?register'>Registrera ny användare</a></p>";
-
-		$ret .= 
-				"
+		$ret = "<h1>Laboration 2 - Inloggning - al223bn</h1>
+			   	<h2>Ej inloggad</h2>
+				<p><a href='?register'>Registrera ny användare</a></p>
 				<fieldset>
-				<legend>Logga in här!</legend>";
+				<legend>Logga in här!</legend>
 
-		$ret .= "<p>$this->message";
+				<p>$this->message
 
-		$ret .= "
 				<form action='?login' method='post'>";
 
 					// Om det inte finns något inmatat användarnamn så visa tom input.
@@ -150,14 +127,12 @@ class LoginView{
 					}
 
 		$ret .= "
-					Lösenord: <input type='text' name='$this->password'>
+					Lösenord: <input type='password' name='$this->password'>
 					Håll mig inloggad: <input type='checkbox' name='LoginView::checked'>
 					<input type='submit' value='Logga in' name='LoginView::login'>
 				</form>
 				</fieldset>
 				";
-
-		$ret .= "<p>$datetime</p>";
 
 		return $ret;
 	}

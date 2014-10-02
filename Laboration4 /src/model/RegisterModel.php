@@ -1,73 +1,36 @@
 <?php
 
+require_once("./common/CustomExceptions.php");
+
 
 class RegisterModel{
-	private $sessionLoginData = "LoginModel::LoggedInUserName";
-	private $sessionUserAgent;
-	private $username = "Admin";
-	private $password = "Password";
+
+	const regEx = '/[^a-z0-9\-_\.]/i';
+	const minUsername = 3;
+	const minPassword = 6;
 
 
-	// Kontrollerar om sessions-varibeln är satt vilket betyder att en användare är inloggad.
-	public function userLoggedIn($userAgent){
+	public function setUsername($username){
 
-		if(isset($_SESSION[$this->sessionLoginData]) && $_SESSION[$this->sessionUserAgent] === $userAgent){
-			return true;
+		// Om användarnamnet är för kort (mindre än 3).
+		if(mb_strlen($username) < self::minUsername){
+			throw new \TooShortException(3);		
 		}
-		else{
-			return false;
+		// Om användarnamnet innehåller ogiltiga tecken.
+		if(preg_match(self::regEx, $username)){
+			$username = preg_replace(self::regEx, "", $username);
+			throw new \InvalidCharException($username);	
 		}
+		// Om alla tester går igenom.
+		return $username;
 	}
 
-	// Hämtar vilken användare som är inloggad.
-	public function getLoggedInUser(){
-		return $_SESSION[$this->sessionLoginData];
-	}
-
-	// Kontrollerar att inmatat användarnamn och lösenord stämmer vid eventuell inloggning.
-	public function checkLogin($clientUsername, $clientPassword, $userAgent){
-
-		if($clientUsername === $this->username && ($clientPassword === $this->password) ){
-
-			// Sparar ner den inloggad användaren till sessionen.
-			$_SESSION[$this->sessionUserAgent] = $userAgent;
-			$_SESSION[$this->sessionLoginData] = $clientUsername;		
-			return true;
+	public function setPassword($password){
+		// Om lösenordet är för kort (mindre än 6).
+		if(mb_strlen($password) < self::minPassword){
+			throw new \TooShortException(6);		
 		}
-		else{
-			throw new \Exception("Felaktigt användarnamn och/eller lösenord!");
-		}
-	}
-
-	// Kontrollerar att inmatat användarnamn och lösenord stämmer vid eventuell inloggning + (med kakor och förfallodatumskontroll).
-	public function checkLoginWithCookies($clientUsername, $clientPassword, $userAgent){
-		$time = $this->loadCookieTime();
-		if($clientUsername === $this->username &&  $clientPassword === md5($this->password) && $time > time()){
-
-			// Sparar ner den inloggad användaren till sessionen.
-			$_SESSION[$this->sessionUserAgent] = $userAgent;
-			$_SESSION[$this->sessionLoginData] = $clientUsername;		
-			return true;
-		}
-		else{
-			throw new \Exception("Felaktigt information i kakan!");
-		}
-	}
-
-	// Hjälpfunktion för att spara till fil.
-	public function saveCookieTime($value){
-		file_put_contents("CookieTime", $value);
-	}
-
-	// Hjälpfunktion för att ladda från fil.
-	public function loadCookieTime(){
-		return file_get_contents("CookieTime");
-	}
-
-
-	// Unsettar sessionsvariabeln och dödar sessionen vid eventuell utloggning.
-	public function logOut(){
-		unset($_SESSION[$this->sessionLoginData]);
-		session_destroy();
+		// Om alla tester går igenom.
+		return $password;
 	}
 }

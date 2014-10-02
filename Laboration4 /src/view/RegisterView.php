@@ -1,14 +1,14 @@
 <?php
 
-require_once("CookieService.php");
+require_once("./common/CustomExceptions.php");
 
 class RegisterView{
 	
 	private $model;
-	private $username = "RegisterView::Username";				// Användarnamnet.
-	private $password = "RegisterView::Password";				// Lösenordet.
-	private $repeatpassword = "RegisterView::RepeatPassword";	// Repeterat lösenord.
-	private $message;											// Privat variabel för att visa fel/rättmeddelanden.
+	private $username = "RegisterView::Username";				//
+	private $password = "RegisterView::Password";				//
+	private $rpassword = "RegisterView::RepeatedPassword";		//
+	private $messages = [];											// Privat variabel för att visa fel/rättmeddelanden.
 
 	public function __construct(RegisterModel $model){
 
@@ -16,87 +16,67 @@ class RegisterView{
 		$this->model = $model;
 	}
 
-	// Kontrollerar om användare tryckt på Logga in.
+	// Kontrollerar om användare tryckt på Registrera.
 	public function didUserPressRegister()	{
 		return isset($_POST["RegisterView::register"]);
 	}
 
-	// Hämtar Användarnamnet vid rätt input.
+	// Hämtar användarnamnet för registrering.
 	public function getUsername(){
-
-		if (empty($_POST["$this->username"])) {
-			throw new \Exception("Användarnamn saknas!");
+		try {
+			return $this->model->setUsername($_POST[$this->username]);
+		} 
+		catch (TooShortException $e) {
+			$this->messages[] = "Användarnamnet är för kort. Minst " . $e->getMessage() . " tecken.";
 		}
-		else {
-			return $_POST["$this->username"];	
+		catch (InvalidCharException $e) {
+			$_POST[$this->username] = $e->getMessage();
+			$this->messages[] = "Användarnamnet är ogiltigt.";
 		}
 	}
 
-	// Hämtar lösenordet vid rätt input.
+	// Hämtar lösenordet för registrering.
 	public function getPassword(){
-
-		if (empty($_POST["$this->password"])) {
-			throw new \Exception("Lösenord saknas!");	
+		try {
+			// Fungerade inte att göra denna valideringen i modellen av någon anledning. Kolla upp!
+			if($_POST[$this->password] !== $_POST[$this->rpassword]){
+				throw new \NoMatchException();		
+			}
+			return $this->model->setPassword($_POST[$this->password]);
+		} 
+		catch (NoMatchException $e) {
+			$this->messages[] = "Lösenorden matchar inte varandra.";
 		}
-		else {
-			return $_POST["$this->password"];	
-		}
-	}
-
-	// Hämtar repeterat lösenord vid rätt input.
-	public function getRepeatPassword(){
-
-		if (empty($_POST["$this->repeatpassword"])) {
-			throw new \Exception("Repeterat lösenord saknas!");	
-		}
-		else {
-			return $_POST["$this->repeatpassword"];	
+		catch (TooShortException $e) {
+			$this->messages[] = "Lösenorden är för korta. Minst " . $e->getMessage() . " tecken.";
 		}
 	}
 
-	// Datum och tid-funktion. (Kan brytas ut till en hjälpfunktion.)
-	public function getDateTime(){
-		date_default_timezone_set('Europe/Stockholm');
-		setlocale(LC_ALL, 'sv_SE');
-		$weekday = ucfirst(utf8_encode(strftime("%A,")));
-		$date = strftime("den %d");
-		$month = strftime("%B");
-		$year = strftime("år %Y.");
-		$time = strftime("Klockan är [%H:%M:%S].");
-		return "$weekday $date $month  $year  $time";	
-	}
-
-	// Visar fel/rättmeddelanden.
-	public function showStatus($message){
-		if (isset($message)) {
-			$this->message = $message;
+	// Visar meddelanden.
+	public function renderStatus(){
+		$ret = "";
+        if(is_array($this->messages )){
+        	foreach ($this->messages as $message) {
+        		$ret .= "<p>" . $message . "</p>";
+        	}
 		}
-		else{
-			$this->message = "<p>" . $message . "</p>";
-		}
+		return $ret;
 	}
-
 
 	// Slutlig presentation av utdata.
 	public function showRegister(){
 
-		$datetime = $this->getDateTime();
+		$status = $this->renderStatus();
 
-		$ret = "<h1>Laboration 4 - Inloggning - al223bn</h1>";
-
-		$ret .= "<h2>Ej inloggad -> Registrera användare</h2>";
-
-		$ret .= "<p><a href='?'>Tillbaka</a></p>";
-
-		$ret .= 
-				"
+		$ret = "<h1>Laboration 4 - Inloggning - al223bn</h1>
+				<h2>Ej inloggad -> Registrera användare</h2>
+				<p><a href='?'>Tillbaka</a></p>
 				<fieldset>
-				<legend>Skriv in inloggningsuppgifterna här! </legend>";
+				<legend>Skriv in inloggningsuppgifterna här! </legend>
 
-		$ret .= "<p>$this->message";
+				$status
 
-		$ret .= "
-				<form action='?register' method='post' >
+				<form method='post' >
 					<label for='username'>Användarnamn</label>";
 	
 					if(empty($_POST[$this->username])){
@@ -109,15 +89,13 @@ class RegisterView{
 					}
 		$ret .= "
                     <label for='pass'>Lösenord</label>
-                    <input type='password' id='pass' name='password'>
-                    <label for='repeatpass'>Repetera lösenord</label>
-                    <input type='password' id='repeatpass' name='repeatpass'>
-                    <input type='submit' value='Registrera' name='submit'>
+                    <input type='password' id='pass' name='$this->password'>
+                    <label for='repeatedpass'>Repetera lösenord</label>
+                    <input type='password' id='repeatedpass' name='$this->rpassword'>
+                    <input type='submit' value='Registrera' name='RegisterView::register'>
 				</form>
 				</fieldset>
 				";
-
-		$ret .= "<p>$datetime</p>";
 
 		return $ret;
 	}
