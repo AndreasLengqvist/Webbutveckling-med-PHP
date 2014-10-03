@@ -13,3 +13,7 @@ class TooShortException  extends \Exception{
 // Kastar ett undantag när två strängar inte överensstämmer.
 class NoMatchException  extends \Exception{
 } 
+
+// Kastar ett undantag när två strängar inte överensstämmer.
+class AllTooShortException  extends \Exception{
+} 

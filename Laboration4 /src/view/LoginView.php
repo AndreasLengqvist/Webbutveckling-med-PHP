@@ -1,7 +1,8 @@
 <?php
 
+namespace view;
 
-require_once("CookieService.php");
+require_once("./common/CookieService.php");
 
 class LoginView{
 	
@@ -12,12 +13,12 @@ class LoginView{
 	private $password = "LoginView::Password";		// Lösenordets kakas namn.
 	private $message;								// Privat variabel för att visa fel/rättmeddelanden.
 
-	public function __construct(LoginModel $model){
+	public function __construct(\model\LoginModel $model){
 
 		// Struktur för MVC.
 		$this->model = $model;
-		$this->cookieUsername = new CookieService();
-		$this->cookiePassword = new CookieService();
+		$this->cookieUsername = new \CookieService();
+		$this->cookiePassword = new \CookieService();
 	}
 
 	// Kontrollerar om användare tryckt på Logga in.
@@ -94,9 +95,14 @@ class LoginView{
 		}
 	}
 
-	// Skickar rättmeddelandet till showStatus.
+	// Lyckad utloggning.
 	public function successfullLogOut(){
 		$this->showStatus("Du har nu loggat ut!");
+	}
+
+	// Lyckad registrering av användare.
+	public function successfullRegister(){
+		$this->showStatus("Registrering av ny användare lyckades!");
 	}
 
 	public function registerClick(){

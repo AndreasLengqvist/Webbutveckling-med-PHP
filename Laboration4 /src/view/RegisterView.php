@@ -1,5 +1,7 @@
 <?php
 
+namespace view;
+
 require_once("./common/CustomExceptions.php");
 
 class RegisterView{
@@ -10,45 +12,45 @@ class RegisterView{
 	private $rpassword = "RegisterView::RepeatedPassword";		//
 	private $messages = [];											// Privat variabel för att visa fel/rättmeddelanden.
 
-	public function __construct(RegisterModel $model){
-
-		// Struktur för MVC.
-		$this->model = $model;
-	}
 
 	// Kontrollerar om användare tryckt på Registrera.
-	public function didUserPressRegister()	{
+	public function didUserPressRegister(){
 		return isset($_POST["RegisterView::register"]);
 	}
 
 	// Hämtar användarnamnet för registrering.
 	public function getUsername(){
-		try {
-			return $this->model->setUsername($_POST[$this->username]);
-		} 
-		catch (TooShortException $e) {
-			$this->messages[] = "Användarnamnet är för kort. Minst " . $e->getMessage() . " tecken.";
-		}
-		catch (InvalidCharException $e) {
-			$_POST[$this->username] = $e->getMessage();
-			$this->messages[] = "Användarnamnet är ogiltigt.";
-		}
+		return $_POST[$this->username];
 	}
 
 	// Hämtar lösenordet för registrering.
 	public function getPassword(){
-		try {
-			// Fungerade inte att göra denna valideringen i modellen av någon anledning. Kolla upp!
-			if($_POST[$this->password] !== $_POST[$this->rpassword]){
-				throw new \NoMatchException();		
-			}
-			return $this->model->setPassword($_POST[$this->password]);
-		} 
-		catch (NoMatchException $e) {
-			$this->messages[] = "Lösenorden matchar inte varandra.";
+			return $_POST[$this->password];
+	}
+	
+	// Hämtar lösenordet för registrering.
+	public function getRepeatedPassword(){
+			return $_POST[$this->rpassword];
+	}
+
+	// Sätter de olika meddelandena som kommer in under valideringen.
+	public function setMessage($e, $c){
+		if($c == 202){
+			$this->messages[] = "Användarnamnet är för kort. Minst 3 tecken.<br>
+								 Lösenorden är för korta. Minst 6 tecken.";
 		}
-		catch (TooShortException $e) {
-			$this->messages[] = "Lösenorden är för korta. Minst " . $e->getMessage() . " tecken.";
+		if($c == 204){		
+			$this->messages[] = "Användarnamnet innehöll ogiltiga tecken.";
+			$_POST[$this->username] = $e;
+		}
+		if($c == 203){		
+			$this->messages[] = "Användarnamnet är för kort. Minst 3 tecken.";
+		}
+		if($c == 206){		
+			$this->messages[] = "Lösenorden är för korta. Minst 6 tecken.";
+		}
+		if($c == 201){		
+			$this->messages[] = "Lösenorden är olika varandra.";
 		}
 	}
 

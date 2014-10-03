@@ -9,10 +9,10 @@ require_once("src/model/LoginModel.php");
 require_once("src/view/LoginView.php");
 
 $output = new  HTMLView();
-$loginController = new LoginController();
-$registerController = new RegisterController();
-$loginmodel = new LoginModel();
-$loginview = new LoginView($loginmodel);
+$loginController = new \controller\LoginController();
+$registerController = new \controller\RegisterController();
+$loginmodel = new \model\LoginModel();
+$loginview = new \view\LoginView($loginmodel);
 
 
 // Kollar ifall användaren tryck på "Registrera ny användare".

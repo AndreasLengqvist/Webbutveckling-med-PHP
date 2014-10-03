@@ -1,5 +1,7 @@
 <?php
 
+namespace controller;
+
 require_once("src/model/LoginModel.php");
 require_once("src/view/LoginView.php");
 require_once("src/view/UserView.php");
@@ -17,11 +19,11 @@ class LoginController{
 	public function __construct(){
 
 		// Struktur för att få till MVC.
-		$this->model = new LoginModel();
-		$this->loginview = new LoginView($this->model);
-		$this->userview = new UserView($this->model);
-		$this->datetimeview = new DateTimeView();
-		$this->helpers = new Agent();
+		$this->model = new \model\LoginModel();
+		$this->loginview = new \view\LoginView($this->model);
+		$this->userview = new \view\UserView($this->model);
+		$this->datetimeview = new \view\DateTimeView();
+		$this->helpers = new \Agent();
 	}
 
 	public function doControll(){
@@ -71,7 +73,7 @@ class LoginController{
 					}
 
 			// Felmeddelande vid eventuella fel i try-satsen.
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				$this->loginview->showStatus($e->getMessage());
 			}
 		}

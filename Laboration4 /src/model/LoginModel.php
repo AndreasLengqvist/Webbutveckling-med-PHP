@@ -1,5 +1,6 @@
 <?php
 
+namespace model;
 
 class LoginModel{
 	private $sessionLoginData = "LoginModel::LoggedInUserName";
