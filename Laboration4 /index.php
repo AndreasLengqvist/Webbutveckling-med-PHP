@@ -17,7 +17,6 @@ $loginmodel = new \model\LoginModel();
 $loginview = new \view\LoginView($loginmodel);
 $registerview = new \view\RegisterView();
 
-var_dump($loginview->registerClick());
 // Kollar ifall användaren tryck på "Registrera ny användare".
 if($loginview->registerClick() === true){
 	$htmlBody = $registerController->doControll();

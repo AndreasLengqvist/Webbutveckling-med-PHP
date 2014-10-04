@@ -22,39 +22,45 @@ class UserView{
 		}
 	}
 
-	// Visar fel/rättmeddelanden.
-	public function showStatus($message){
-		if (isset($message)) {
-			$this->message = $message;
-		}
-		else{
-			$this->message = "<p>" . $message . "</p>";
-		}
-	}
-
 	// Skickar rättmeddelandet till showStatus.
 	public function successfullLogIn(){
-		$this->showStatus("Inloggningen lyckades!");
+		$this->setMessage("Inloggningen lyckades!");
 	}
 
 	// Skickar rättmeddelandet till showStatus.
 	public function successfullLogInWithCookiesSaved(){
-		$this->showStatus("Inloggningen lyckades och vi kommer ihåg dig nästa gång!");
+		$this->setMessage("Inloggningen lyckades och vi kommer ihåg dig nästa gång!");
 	}
 
 	// Skickar rättmeddelandet till showStatus.
 	public function successfullLogInWithCookiesLoad(){
-		$this->showStatus("Inloggningen lyckades via cookies!");
+		$this->setMessage("Inloggningen lyckades via cookies!");
+	}
+
+	// Sätter de olika meddelandena som kommer in under valideringen.
+	public function setMessage($message){
+		$this->message = $message;
+	}
+
+	// Hämtar de olika meddelandena.
+	public function getMessage(){
+		return "<p>" . $this->message . "</p>";
 	}
 
 	// Slutlig presentation av utdata.
 	public function showUser(){
+				
+	$status = "";
+	if(isset($this->message)){
+		$status = $this->getMessage();
+	}
+
 	$user = $this->model->getLoggedInUser();
 
 	$ret = "<h1>Laboration 2 - Inloggning - al223bn</h1>
 			<h2>$user är nu inloggad!</h2>
 
-			$this->message
+			$status
 
 			<form action='?logout' method='post' >
 			<p><input type='submit' value='Logga ut' name='UserView::logout'></p>

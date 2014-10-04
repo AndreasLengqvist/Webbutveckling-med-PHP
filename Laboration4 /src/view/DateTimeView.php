@@ -9,11 +9,11 @@ class DateTimeView{
 	public function show(){
 		date_default_timezone_set('Europe/Stockholm');
 		setlocale(LC_ALL, 'sv_SE');
-		$weekday = ucfirst(utf8_encode(strftime("%A,")));
-		$date = strftime("den %d");
+		$weekday = ucfirst(strftime("%A"));
+		$date = strftime("%d");
 		$month = strftime("%B");
-		$year = strftime("år %Y.");
-		$time = strftime("Klockan är [%H:%M:%S].");
-		return "<p>$weekday $date $month  $year  $time</p>";	
+		$year = strftime("%Y");
+		$time = strftime("[%H:%M:%S]");
+		return "<p>" . $weekday . ", den " . $date . " " . $month . " år " . $year . ". Klockan är " . $time . "</p>";	
 	}
 }

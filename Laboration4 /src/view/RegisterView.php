@@ -7,11 +7,10 @@ require_once("./common/CustomExceptions.php");
 
 class RegisterView{
 	
-	private $model;
 	private $username = "RegisterView::Username";				//
 	private $password = "RegisterView::Password";				//
 	private $rpassword = "RegisterView::RepeatedPassword";		//
-	private $messages = [];										// Privat variabel för att visa fel/rättmeddelanden.
+	private $message;										// Privat variabel för att visa fel/rättmeddelanden.
 
 
 	// Kontrollerar om användare tryckt på Registrera.
@@ -26,53 +25,54 @@ class RegisterView{
 
 	// Hämtar lösenordet för registrering.
 	public function getPassword(){
-			return $_POST[$this->password];
+		return $_POST[$this->password];
 	}
 	
 	// Hämtar lösenordet för registrering.
 	public function getRepeatedPassword(){
-			return $_POST[$this->rpassword];
+		return $_POST[$this->rpassword];
+	}
+
+	public function backToLogin(){
+		header("Location:?");
 	}
 
 	// Sätter de olika meddelandena som kommer in under valideringen.
 	public function setMessage($e, $c){
 		if($c == 201){
-			$this->messages[] = "Användarnamnet finns redan registrerat i databasen.";
+			$this->message = "Användarnamnet finns redan registrerat i databasen.";
 		}
 		if($c == 202){
-			$this->messages[] = "Användarnamnet är för kort. Minst 3 tecken.<br>
-								 Lösenorden är för korta. Minst 6 tecken.";
+			$this->message = "Användarnamnet är för kort. Minst 3 tecken.</p>
+								 <p>Lösenorden är för korta. Minst 6 tecken.";
 		}
 		if($c == 204){		
-			$this->messages[] = "Användarnamnet innehöll ogiltiga tecken.";
+			$this->message = "Användarnamnet innehöll ogiltiga tecken.";
 			$_POST[$this->username] = $e;
 		}
 		if($c == 203){		
-			$this->messages[] = "Användarnamnet är för kort. Minst 3 tecken.";
+			$this->message = "Användarnamnet är för kort. Minst 3 tecken.";
 		}
 		if($c == 206){		
-			$this->messages[] = "Lösenorden är för korta. Minst 6 tecken.";
+			$this->message = "Lösenorden är för korta. Minst 6 tecken.";
 		}
 		if($c == 205){		
-			$this->messages[] = "Lösenorden är olika varandra.";
+			$this->message = "Lösenorden är olika varandra.";
 		}
 	}
 
-	// Visar meddelanden.
-	public function renderStatus(){
-		$ret = "";
-        if(is_array($this->messages )){
-        	foreach ($this->messages as $message) {
-        		$ret .= "<p>" . $message . "</p>";
-        	}
-		}
-		return $ret;
+	// Hämtar de olika meddelandena.
+	public function getMessage(){
+		return "<p>" . $this->message . "</p>";
 	}
 
 	// Slutlig presentation av utdata.
 	public function showRegister(){
-
-		$status = $this->renderStatus();
+		
+		$status = "";
+		if(isset($this->message)){
+			$status = $this->getMessage();
+		}
 
 		$ret = "<h1>Laboration 4 - Inloggning - al223bn</h1>
 				<h2>Ej inloggad -> Registrera användare</h2>

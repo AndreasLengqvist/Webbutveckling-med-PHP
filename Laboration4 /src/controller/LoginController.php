@@ -33,6 +33,11 @@ class LoginController{
 	// Hämtar information som webbläsaren användaren sitter i.
 	$userAgent = $this->helpers->getUserAgent();
 
+		// Kollar ifall en registrering gjorts.
+		if($this->model->checkRegistered()){
+	    	$this->loginview->successfullRegister();
+		}
+
 		// Om det finns kakor lagrade och användaren inte redan är inloggad.
 		if($this->loginview->userIsRemembered() and !$this->model->userLoggedIn($userAgent)){
 			try {
@@ -74,7 +79,7 @@ class LoginController{
 
 			// Felmeddelande vid eventuella fel i try-satsen.
 			} catch (\Exception $e) {
-				$this->loginview->showStatus($e->getMessage());
+				$this->loginview->setMessage($e->getMessage());
 			}
 		}
 

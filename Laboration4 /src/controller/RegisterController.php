@@ -18,6 +18,7 @@ class RegisterController{
 	public function __construct(){
 
 		// Struktur för att få till MVC.
+		$this->loginmodel = new \model\LoginModel();
 		$this->registerrepository = new \model\RegisterRepository();
 		$this->registerview = new \view\RegisterView();
 		$this->datetimeview = new \view\DateTimeView();
@@ -34,13 +35,15 @@ class RegisterController{
 				// Hämtar den inmatade datan.
 				$registerData = new \model\User($this->registerview->getUsername(), $this->registerview->getPassword(), $this->registerview->getRepeatedPassword());
 				
-				// Kollar ifal användarnamnet redan existerar i databasen.
+				// Kollar ifall användarnamnet redan existerar i databasen.
 				if ($this->registerrepository->usernameExists($this->registerview->getUsername())) {
 		            throw new \AlreadyExistsException("Errorcode: ", 201);
 				}
 				
 				// Skapar ny användare med den inmatade datan.
 				$this->registerrepository->create($registerData);
+				$this->loginmodel->setSession("success");
+				$this->registerview->backToLogin();	
 			}
 			// Exceptions som skickar vidare de olika felkoderna.
 			catch (\TooShortException $e) {

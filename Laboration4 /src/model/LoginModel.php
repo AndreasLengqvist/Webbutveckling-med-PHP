@@ -71,4 +71,17 @@ class LoginModel{
 		unset($_SESSION[$this->sessionLoginData]);
 		session_destroy();
 	}
+
+
+	public function checkRegistered(){
+		return isset($_SESSION['session']);
+	}
+
+	public function setSession($input){
+		$_SESSION['session'] = $input;
+	}
+
+	public function unSetSession(){
+		unset($_SESSION['session']);
+	}
 }

@@ -66,7 +66,6 @@ class LoginView{
 
 	// Hämtar Användarnamnet vid rätt input.
 	public function getUsername(){
-
 		if (empty($_POST["$this->username"])) {
 			throw new \Exception("Användarnamn saknas!");
 		}
@@ -77,7 +76,6 @@ class LoginView{
 
 	// Hämtar lösenordet vid rätt input.
 	public function getPassword(){
-
 		if (empty($_POST["$this->password"])) {
 			throw new \Exception("Lösenord saknas!");	
 		}
@@ -86,32 +84,38 @@ class LoginView{
 		}
 	}
 
-	// Visar fel/rättmeddelanden.
-	public function showStatus($message){
-		if (isset($message)) {
-			$this->message = $message;
-		}
-		else{
-			$this->message = "<p>" . $message . "</p>";
-		}
-	}
-
 	// Lyckad utloggning.
 	public function successfullLogOut(){
-		$this->showStatus("Du har nu loggat ut!");
+		$this->setMessage("Du har nu loggat ut!");
 	}
 
 	// Lyckad registrering av användare.
 	public function successfullRegister(){
-		$this->showStatus("Registrering av ny användare lyckades!");
+		$this->setMessage("Registrering av ny användare lyckades!");
+		$this->model->unSetSession();
 	}
 
 	public function registerClick(){
 		return isset($_GET["register"]);
 	}
 
+	// Sätter de olika meddelandena som kommer in under valideringen.
+	public function setMessage($message){
+		$this->message = $message;
+	}
+
+	// Hämtar de olika meddelandena.
+	public function getMessage(){
+		return "<p>" . $this->message . "</p>";
+	}
+
 	// Slutlig presentation av utdata.
 	public function showLogin(){
+
+		$status = "";
+		if(isset($this->message)){
+			$status = $this->getMessage();
+		}
 
 		$ret = "<h1>Laboration 2 - Inloggning - al223bn</h1>
 			   	<h2>Ej inloggad</h2>
@@ -119,7 +123,7 @@ class LoginView{
 				<fieldset>
 				<legend>Logga in här!</legend>
 
-				<p>$this->message
+				$status
 
 				<form action='?login' method='post'>";
 
