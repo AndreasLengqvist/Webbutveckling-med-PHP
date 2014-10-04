@@ -4,13 +4,14 @@ namespace view;
 
 require_once("./common/CustomExceptions.php");
 
+
 class RegisterView{
 	
 	private $model;
 	private $username = "RegisterView::Username";				//
 	private $password = "RegisterView::Password";				//
 	private $rpassword = "RegisterView::RepeatedPassword";		//
-	private $messages = [];											// Privat variabel för att visa fel/rättmeddelanden.
+	private $messages = [];										// Privat variabel för att visa fel/rättmeddelanden.
 
 
 	// Kontrollerar om användare tryckt på Registrera.
@@ -35,6 +36,9 @@ class RegisterView{
 
 	// Sätter de olika meddelandena som kommer in under valideringen.
 	public function setMessage($e, $c){
+		if($c == 201){
+			$this->messages[] = "Användarnamnet finns redan registrerat i databasen.";
+		}
 		if($c == 202){
 			$this->messages[] = "Användarnamnet är för kort. Minst 3 tecken.<br>
 								 Lösenorden är för korta. Minst 6 tecken.";
@@ -49,7 +53,7 @@ class RegisterView{
 		if($c == 206){		
 			$this->messages[] = "Lösenorden är för korta. Minst 6 tecken.";
 		}
-		if($c == 201){		
+		if($c == 205){		
 			$this->messages[] = "Lösenorden är olika varandra.";
 		}
 	}

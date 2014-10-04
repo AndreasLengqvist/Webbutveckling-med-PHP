@@ -17,3 +17,7 @@ class NoMatchException  extends \Exception{
 // Kastar ett undantag när två strängar inte överensstämmer.
 class AllTooShortException  extends \Exception{
 } 
+
+// Kastar ett undantag när strängen redan finns i databasen.
+class AlreadyExistsException  extends \Exception{
+} 

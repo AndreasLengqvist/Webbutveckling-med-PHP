@@ -8,10 +8,11 @@ require_once("./common/CustomExceptions.php");
 class User{
 
 	/*
-	Errocodes
-		201 - AllTooShortException
-		202 - InvalidCharException
+	Errocodes:
+		202 - AllTooShortException
 		203 - UsernameTooShortException
+		204 - InvalidCharException
+		205 - NoMatchException
 		206 - PasswordTooShortException
 	*/
 
@@ -45,16 +46,12 @@ class User{
 		}
 		// Om lösenorden är olika.
         if($password !== $rpassword){
-            throw new \NoMatchException("Errorcode: ", 201);
+            throw new \NoMatchException("Errorcode: ", 205);
         }
 
 		$this->username = $username;
-		$this->password = $password;
 
-	}
-
-	public function isValid(){
-		return !empty($this->username) && !empty($this->password);
+		$this->password = $this->cryptPassword($password);
 	}
 
 	public function getUsername(){
@@ -65,13 +62,8 @@ class User{
 		return $this->password;
 	}
 
-	public function setPassword($password){
-
-		// Om lösenordet är för kort (mindre än 6).
-		if(mb_strlen($password) < self::minPassword){
-			throw new \TooShortException(self::minPassword);		
-		}
-
-		$this->password = $password;
+	public function cryptPassword($password){
+		$salt = "al321";
+		return sha1($salt . $password);
 	}
 }

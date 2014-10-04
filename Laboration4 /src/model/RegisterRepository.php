@@ -18,22 +18,44 @@ class RegisterRepository extends Repository{
 	}
 
 	public function create(User $registerData){
-		// Här kollas även om användarnamnet redan är reggat, if-sats innan.
-			try{
-				$db = $this->connection();
+		try{
+			$db = $this->connection();
 
-            	$sql = "INSERT INTO $this->dbTable (" . self::$username . ", " . self::$password . ") VALUES (?, ?)";
+        	$sql = "INSERT INTO $this->dbTable (" . self::$username . ", " . self::$password . ") VALUES (?, ?)";
 
-				$params = array($registerData->getUsername(), $registerData->getPassword());
+			$params = array($registerData->getUsername(), $registerData->getPassword());
 
-				$query = $db->prepare($sql);
-			
-				$query->execute($params);
+			$query = $db->prepare($sql);
+		
+			$query->execute($params);
 
-			} catch (\Exception $e) {
-				var_dump($e);
-				die("An error occured in the database when creating user!");
+		} catch (\Exception $e) {
+			var_dump($e);
+			die("An error occured in the database!");
+		}
+	}
+
+	public function usernameExists($clientUsername){
+		try{
+			$db = $this->connection();
+
+        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::$username . " = ?";
+
+			$params = array($clientUsername);
+
+			$query = $db->prepare($sql);
+
+			$query->execute($params);
+
+			$result = $query->fetch();
+
+			if ($result[self::$username] === $clientUsername) {
+				return true;
 			}
+
+		} catch (\Exception $e) {
+			die("An error occured in the database!");
+		}
 	}
 
 }

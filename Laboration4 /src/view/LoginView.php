@@ -4,6 +4,7 @@ namespace view;
 
 require_once("./common/CookieService.php");
 
+
 class LoginView{
 	
 	private $model;

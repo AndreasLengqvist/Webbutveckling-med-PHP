@@ -2,7 +2,6 @@
 
 namespace controller;
 
-require_once("src/model/RegisterModel.php");
 require_once("src/model/RegisterRepository.php");
 require_once("src/model/User.php");
 require_once("src/view/RegisterView.php");
@@ -30,27 +29,35 @@ class RegisterController{
 
 		// Om användaren tryckt på Registera.
 		if($this->registerview->didUserPressRegister()){
-				try{
+			try{
 
-					$registerData = new \model\User($this->registerview->getUsername(), $this->registerview->getPassword(), $this->registerview->getRepeatedPassword());
-					
-					if($registerData->isValid()){
-						$this->registerrepository->create($registerData);
-					}
-				} 
-				catch (\TooShortException $e) {
-					$this->registerview->setMessage($e->getMessage(), $e->getCode());
+				// Hämtar den inmatade datan.
+				$registerData = new \model\User($this->registerview->getUsername(), $this->registerview->getPassword(), $this->registerview->getRepeatedPassword());
+				
+				// Kollar ifal användarnamnet redan existerar i databasen.
+				if ($this->registerrepository->usernameExists($this->registerview->getUsername())) {
+		            throw new \AlreadyExistsException("Errorcode: ", 201);
 				}
-				catch (\InvalidCharException $e) {
-					$this->registerview->setMessage($e->getMessage(), $e->getCode());
-				}
-				catch (\NoMatchException $e) {
-					$this->registerview->setMessage($e->getMessage(), $e->getCode());
-				}
-				catch (\Exception $e) {
-					$this->registerview->setMessage($e->getMessage(), $e->getCode());
-				}
-			// }
+				
+				// Skapar ny användare med den inmatade datan.
+				$this->registerrepository->create($registerData);
+			}
+			// Exceptions som skickar vidare de olika felkoderna.
+			catch (\TooShortException $e) {
+				$this->registerview->setMessage($e->getMessage(), $e->getCode());
+			}
+			catch (\InvalidCharException $e) {
+				$this->registerview->setMessage($e->getMessage(), $e->getCode());
+			}
+			catch (\NoMatchException $e) {
+				$this->registerview->setMessage($e->getMessage(), $e->getCode());
+			}
+			catch (\AlreadyExistsException $e) {
+				$this->registerview->setMessage($e->getMessage(), $e->getCode());
+			}
+			catch (\Exception $e) {
+				$this->registerview->setMessage($e->getMessage(), $e->getCode());
+			}
 		}
 
 	// Generar utdata.
