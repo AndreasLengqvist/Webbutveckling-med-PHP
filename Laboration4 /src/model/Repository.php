@@ -4,12 +4,11 @@
 namespace model;
 
 
-
 // Kodstruktur snodd av Emil Carlsson, föreläsning 6 - Webbutveckling med PHP.
 abstract class Repository {
-	protected $dbUsername = 'al223bn';
-	protected $dbPassword = 'lenkan88';
-	protected $dbConnstring = 'mysql:host=localhost;dbname=login';
+	protected $dbUsername = 'alengqvist_com';
+	protected $dbPassword = 'al223bn';
+	protected $dbConnstring = 'mysql:host=localhost;dbname=alengqvist_com';
 	protected $dbConnection;
 	protected $dbTable;
 	

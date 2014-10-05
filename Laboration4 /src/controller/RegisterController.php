@@ -45,7 +45,7 @@ class RegisterController{
 				$this->loginmodel->setSession("success");
 				$this->registerview->backToLogin();	
 			}
-			// Exceptions som skickar vidare de olika felkoderna.
+			// Exceptions som skickar vidare de olika felkoderna till vyn.
 			catch (\TooShortException $e) {
 				$this->registerview->setMessage($e->getMessage(), $e->getCode());
 			}

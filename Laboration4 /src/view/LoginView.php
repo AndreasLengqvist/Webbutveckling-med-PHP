@@ -125,20 +125,22 @@ class LoginView{
 
 				$status
 
-				<form action='?login' method='post'>";
+				<form action='?login' method='post'>
+					<label for='username'>Användarnamn</label>";
 
 					// Om det inte finns något inmatat användarnamn så visa tom input.
 					if(empty($_POST[$this->username])){
-						$ret .= "Användarnamn: <input type='text' name='$this->username'>";
+						$ret .= "<input id='username' type='text' name='$this->username'>";
 					}
 					// Annars visa det tidigare inmatade användarnamnet i input.
 					else{
 						$uservalue = $_POST[$this->username];
-						$ret .= "Användarnamn: <input type='text' name='$this->username' value='$uservalue'>";
+						$ret .= "<input id='username' type='text' name='$this->username' value='$uservalue'>";
 					}
 
 		$ret .= "
-					Lösenord: <input type='password' name='$this->password'>
+                    <label for='pass'>Lösenord</label>
+					<input id='pass' type='password' name='$this->password'>
 					Håll mig inloggad: <input type='checkbox' name='LoginView::checked'>
 					<input type='submit' value='Logga in' name='LoginView::login'>
 				</form>

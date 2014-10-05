@@ -14,12 +14,7 @@ class UserView{
 
 	// Kontrollerar om användaren tryckt på Logga ut.
 	public function didUserPressLogout(){
-		if(isset($_POST["UserView::logout"])){
-			return $_POST["UserView::logout"];
-		}
-		else{
-			return false;
-		}
+		return isset($_POST["UserView::logout"]);
 	}
 
 	// Skickar rättmeddelandet till showStatus.

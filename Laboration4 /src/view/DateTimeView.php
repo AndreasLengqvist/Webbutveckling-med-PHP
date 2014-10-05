@@ -2,14 +2,14 @@
 
 namespace view;
 
-class DateTimeView{
 
+class DateTimeView{
 
 	// Datum och tid-funktion. (Kan brytas ut till en hjälpfunktion.)
 	public function show(){
 		date_default_timezone_set('Europe/Stockholm');
 		setlocale(LC_ALL, 'sv_SE');
-		$weekday = ucfirst(strftime("%A"));
+		$weekday = ucfirst(utf8_encode(strftime("%A")));
 		$date = strftime("%d");
 		$month = strftime("%B");
 		$year = strftime("%Y");

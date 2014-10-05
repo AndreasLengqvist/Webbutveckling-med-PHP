@@ -79,13 +79,11 @@ class LoginModel{
 		return file_get_contents("CookieTime");
 	}
 
-
 	// Unsettar sessionsvariabeln och dödar sessionen vid eventuell utloggning.
 	public function logOut(){
 		unset($_SESSION[$this->sessionLoginData]);
 		session_destroy();
 	}
-
 
 	public function checkRegistered(){
 		return isset($_SESSION['session']);
