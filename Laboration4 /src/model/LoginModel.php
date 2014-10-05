@@ -56,7 +56,7 @@ class LoginModel{
 		$time = $this->loadCookieTime();
 
 		$user = $this->loginrepository->getUserByUsername($clientUsername);
-		var_dump($this->cryptPassword($clientPassword));
+
 		if($clientPassword === $user[self::$password] and $time > time()){
 
 			// Sparar ner den inloggad användaren till sessionen.
