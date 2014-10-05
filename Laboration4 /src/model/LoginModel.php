@@ -2,11 +2,20 @@
 
 namespace model;
 
+require_once("src/model/LoginRepository.php");
+
 class LoginModel{
+
+	private $loginrepository;
 	private $sessionLoginData = "LoginModel::LoggedInUserName";
 	private $sessionUserAgent;
-	private $username = "Admin";
-	private $password = "Password";
+	private static $username = "username";
+	private static $password = "password";
+
+
+	public function __construct(){
+		$this->loginrepository = new \model\LoginRepository();
+	}
 
 
 	// Kontrollerar om sessions-varibeln är satt vilket betyder att en användare är inloggad.
@@ -28,11 +37,13 @@ class LoginModel{
 	// Kontrollerar att inmatat användarnamn och lösenord stämmer vid eventuell inloggning.
 	public function checkLogin($clientUsername, $clientPassword, $userAgent){
 
-		if($clientUsername === $this->username && ($clientPassword === $this->password) ){
-
+		$user = $this->loginrepository->getUserByUsername($clientUsername);
+		
+		if(strtolower($clientUsername) === strtolower($user[self::$username]) and $this->cryptPassword($clientPassword) === $user[self::$password]){
+			
 			// Sparar ner den inloggad användaren till sessionen.
 			$_SESSION[$this->sessionUserAgent] = $userAgent;
-			$_SESSION[$this->sessionLoginData] = $clientUsername;		
+			$_SESSION[$this->sessionLoginData] = $user[self::$username];		
 			return true;
 		}
 		else{
@@ -43,7 +54,10 @@ class LoginModel{
 	// Kontrollerar att inmatat användarnamn och lösenord stämmer vid eventuell inloggning + (med kakor och förfallodatumskontroll).
 	public function checkLoginWithCookies($clientUsername, $clientPassword, $userAgent){
 		$time = $this->loadCookieTime();
-		if($clientUsername === $this->username &&  $clientPassword === md5($this->password) && $time > time()){
+
+		$user = $this->loginrepository->getUserByUsername($clientUsername);
+		var_dump($this->cryptPassword($clientPassword));
+		if($clientPassword === $user[self::$password] and $time > time()){
 
 			// Sparar ner den inloggad användaren till sessionen.
 			$_SESSION[$this->sessionUserAgent] = $userAgent;
@@ -83,5 +97,10 @@ class LoginModel{
 
 	public function unSetSession(){
 		unset($_SESSION['session']);
+	}
+
+	public function cryptPassword($password){
+		$salt = "al321";
+		return sha1($salt . $password);
 	}
 }

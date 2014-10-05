@@ -45,7 +45,7 @@ class LoginView{
 	// Funktion för att spara kakor (och spara ner förfallotid).
 	public function saveToCookies($username, $password){
 		$this->cookieUsername->saveCookie($this->username, $username);
-		$this->model->saveCookieTime($this->cookiePassword->saveCookie($this->password, md5($password)));
+		$this->model->saveCookieTime($this->cookiePassword->saveCookie($this->password, $this->model->cryptPassword($password)));
 	}
 
 	// Funktion för att radera sparade kakor.

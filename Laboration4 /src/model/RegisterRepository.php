@@ -8,7 +8,6 @@ require_once("Repository.php");
 class RegisterRepository extends Repository{
 
 	private $db;
-	private static $id = "id";
 	private static $username = "username";
 	private static $password = "password";
 
@@ -30,7 +29,6 @@ class RegisterRepository extends Repository{
 			$query->execute($params);
 
 		} catch (\Exception $e) {
-			var_dump($e);
 			die("An error occured in the database!");
 		}
 	}
@@ -49,7 +47,7 @@ class RegisterRepository extends Repository{
 
 			$result = $query->fetch();
 
-			if ($result[self::$username] === $clientUsername) {
+			if (strtolower($result[self::$username]) === strtolower($clientUsername)) {
 				return true;
 			}
 

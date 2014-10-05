@@ -30,10 +30,10 @@ class LoginController{
 
 	// Hanterar indata.
 
-	// Hämtar information som webbläsaren användaren sitter i.
+	// Hämtar information om webbläsaren användaren sitter i.
 	$userAgent = $this->helpers->getUserAgent();
 
-		// Kollar ifall en registrering gjorts.
+		// Kollar ifall en registrering lyckats.
 		if($this->model->checkRegistered()){
 	    	$this->loginview->successfullRegister();
 		}
