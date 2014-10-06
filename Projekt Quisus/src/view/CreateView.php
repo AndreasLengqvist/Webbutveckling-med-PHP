@@ -2,12 +2,16 @@
 
 namespace view;
 
+require_once("src/model/Quiz.php");
+
 
 class CreateView{
 
+	private $i;
+
 	private $render;
 
-	public function submitQuestions(){
+	public function submitQuestion(){
 		return isset($_POST['submit']);
 	}
 
@@ -24,6 +28,7 @@ class CreateView{
 	}
 
 	public function addQuestion(){
+
 		$this->render = "
 							<label>Fråga 1</label><br>
 					        <textarea id='questionbox' rows='4' cols='50' name='question'></textarea><br>
@@ -54,7 +59,9 @@ class CreateView{
 					<a id='navbutton' href='?'>Tillbaka!</a>
 
 					<form method='post'>";
+
         $ret .= "      $this->render";
+
 	    $ret .= "      <input type='submit' value='Lägg till fråga' name='add'>
 	    			   <input type='submit' value='Klar!' name='submit'>
 					</form>

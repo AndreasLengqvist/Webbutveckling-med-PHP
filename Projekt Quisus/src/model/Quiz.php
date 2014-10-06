@@ -3,7 +3,7 @@
 namespace model;
 
 
-class Quiz{
+class Question{
 
 
 	private $question;
@@ -14,7 +14,7 @@ class Quiz{
 
 		// Om både användarnamn och båda lösenorden är för korta.
         if(empty($question)){
-        	throw new \Exception("Inga frågor skrivna!");
+        	throw new \Exception("Ingen fråga skriven!");
         }
 
 		$this->question = $question;
