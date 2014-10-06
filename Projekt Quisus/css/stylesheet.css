@@ -1,0 +1,42 @@
+body{
+	background:white;
+	text-align:center;
+	font-family: monospace;
+}
+
+#navbutton {
+	display: block;
+	width: 120px;
+	height: 26px;
+	background: #86A8C2;
+	padding: 10px;
+	border: 1 ridge;
+	border-color:#5E809A;
+	border-radius: 7px;	
+	-webkit-border-radius: 7px;
+	font-size:1.5em;
+	text-decoration: none;
+}
+
+#navbutton:link { /* Essentially means a[href], or that the link actually goes somewhere */
+  color: black;
+}
+#navbutton:visited {
+  color: black;
+}
+#navbutton:hover {
+  color: black;
+}
+#navbutton:active {
+  color: black;
+}
+
+label{
+	margin-bottom:100px;
+}
+
+#questionbox{
+	resize:none;
+	padding:5px;
+	border-radius: 5px;
+}
