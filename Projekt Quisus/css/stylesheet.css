@@ -1,20 +1,26 @@
-body{
+body {
 	background:white;
-	text-align:center;
 	font-family: monospace;
+}
+
+#center_wrap {
+    position:absolute;
+    top:180px;
+    margin-left:280px;
+    text-align: center;
 }
 
 #navbutton {
 	display: block;
-	width: 120px;
-	height: 26px;
+	width: 150px;
+	height: 43px;
 	background: #86A8C2;
 	padding: 10px;
 	border: 1 ridge;
 	border-color:#5E809A;
 	border-radius: 7px;	
 	-webkit-border-radius: 7px;
-	font-size:1.5em;
+	font-size:2.5em;
 	text-decoration: none;
 }
 
@@ -31,11 +37,12 @@ body{
   color: black;
 }
 
-label{
-	margin-bottom:100px;
+h1 {
+	font-size:5em;
+	margin-left:25px;
 }
 
-#questionbox{
+#questionbox {
 	resize:none;
 	padding:5px;
 	border-radius: 5px;

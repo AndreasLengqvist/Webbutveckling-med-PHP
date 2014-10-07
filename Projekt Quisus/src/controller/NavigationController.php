@@ -9,19 +9,25 @@ require_once('src/controller/CreateController.php');
 class NavigationController{
 
 
-	public function __construct(){
-		$this->navigationview = new\view\NavigationView();
-		$this->createcontroller = new CreateController();
-	}
 
 	public function doNavigation(){
 
-		if($this->navigationview->createPressed()){
-			return $this->createcontroller->doCreate();
+		
 
-		}
-		else{
-			return $this->navigationview->show();
+		try {
+
+			switch (\view\NavigationView::getUrlAction()){
+				case \view\NavigationView::$actionCreate:
+						$controller = new CreateController();
+						return $controller->doCreate();
+					break;
+				default:
+					return \view\NavigationView::showStart();
+					break;
+			}
+
+		} catch (Exception $e) {
+			echo"Fel";
 		}
 	}
 }

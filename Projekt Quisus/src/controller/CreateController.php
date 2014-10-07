@@ -26,7 +26,6 @@ class CreateController{
 		$this->session->setUniqSession();
 	}
 
-	var_dump($_SESSION['SessionToken']);
 	if($this->createview->newQuestion()){		
 		$this->createview->addQuestion();
 	}

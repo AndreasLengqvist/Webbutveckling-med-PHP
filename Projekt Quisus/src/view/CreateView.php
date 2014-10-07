@@ -3,13 +3,14 @@
 namespace view;
 
 require_once("src/model/Quiz.php");
+require_once("NavigationView.php");
 
 
 class CreateView{
 
-	private $i;
+	private static $title = 'title';
 
-	private $render;
+
 
 	public function submitQuestion(){
 		return isset($_POST['submit']);
@@ -27,7 +28,9 @@ class CreateView{
 		return $_POST['answer'];
 	}
 
-	public function addQuestion(){
+
+
+	/*public function addQuestion(){
 
 		$this->render = "
 							<label>Fråga 1</label><br>
@@ -50,20 +53,19 @@ class CreateView{
 				";
 
 		return $ret;
+	}*/
+	public function getTitle(){
+		return $_POST[CreateView::$title];
 	}
 
 	public function show(){
-		$adder = "";
 
 		$ret = "
-					<a id='navbutton' href='?'>Tillbaka!</a>
-
-					<form method='post'>";
-
-        $ret .= "      $this->render";
-
-	    $ret .= "      <input type='submit' value='Lägg till fråga' name='add'>
-	    			   <input type='submit' value='Klar!' name='submit'>
+					<a id='navbutton' href='?" . NavigationView::$action . "=" . NavigationView::$actionHome . "'>Tillbaka!</a>
+					<form method='post'>
+						<label id='title_label' for='title'>Vad heter quizet?</label><br>
+						<input id='title' type='text' name='title'><br>
+						<input id='title_button' type='submit' value='Skapa!' name='submit'>
 					</form>
 				";
 
