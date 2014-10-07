@@ -6,31 +6,19 @@ require_once("src/model/Quiz.php");
 require_once("NavigationView.php");
 
 
-class CreateView{
+class TitleView{
 
 	private static $title = 'title';
+	private static $submit = 'submit';
 
 
-
-	public function submitQuestion(){
+	public function submitTitle(){
 		return isset($_POST['submit']);
 	}
 
-	public function newQuestion(){
-		return isset($_POST['add']);
-	}
 
-	public function getQuestion(){
-		return $_POST['question'];
-	}
-
-	public function getAnswer(){
-		return $_POST['answer'];
-	}
-
-
-
-	/*public function addQuestion(){
+	/*
+	public function renderCRUD(){
 
 		$this->render = "
 							<label>Fråga 1</label><br>
@@ -54,19 +42,29 @@ class CreateView{
 
 		return $ret;
 	}*/
+
+
 	public function getTitle(){
-		return $_POST[CreateView::$title];
+		if(empty($_POST[TitleView::$title])){
+			throw new \Exception("Hörrö, ditt quiz måste heta något! ;)");
+		}
+		return new \model\Quiz($_POST[TitleView::$title]);
 	}
 
+
+// TODO - bryta ut menyn.
 	public function show(){
 
 		$ret = "
-					<a id='navbutton' href='?" . NavigationView::$action . "=" . NavigationView::$actionHome . "'>Tillbaka!</a>
-					<form method='post'>
-						<label id='title_label' for='title'>Vad heter quizet?</label><br>
-						<input id='title' type='text' name='title'><br>
-						<input id='title_button' type='submit' value='Skapa!' name='submit'>
-					</form>
+					<a id='backbutton' href='?" . NavigationView::$action . "=" . NavigationView::$actionHome . "'>Tillbaka!</a>
+					<h3>qisus.</h3>
+					<div id='title_wrap'>
+						<form method='post'>
+							<label id='title_label' for='title'>Vad ska quizet heta?</label><br>
+							<input id='title' type='text' name='" . TitleView::$title . "'><br>
+							<input id='title_button' type='submit' value='klar' name='" . TitleView::$submit . "'>
+						</form>
+					</div>
 				";
 
 		return $ret;

@@ -12,15 +12,15 @@ class NavigationController{
 
 	public function doNavigation(){
 
-		
-
 		try {
 
 			switch (\view\NavigationView::getUrlAction()){
+
 				case \view\NavigationView::$actionCreate:
 						$controller = new CreateController();
 						return $controller->doCreate();
 					break;
+					
 				default:
 					return \view\NavigationView::showStart();
 					break;

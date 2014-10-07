@@ -12,6 +12,8 @@ abstract class Repository {
 	protected $dbConnection;
 	protected $dbTable;
 	
+
+	
 	protected function connection() {
 		if ($this->dbConnection == NULL)
 			$this->dbConnection = new \PDO(\Config::$DB_CONNECTION, \Config::$DB_USERNAME, \Config::$DB_PASSWORD);
