@@ -2,8 +2,6 @@
 
 namespace model;
 
-require_once("QuizRepository.php");
-
 
 class Quiz{
 
@@ -14,13 +12,6 @@ class Quiz{
 
 	// Sätter titeln och slumpar fram ett unikt ID för quizet.
 	public function __construct($title){
-
-		$quizRepository = new QuizRepository();
-
-		if($quizRepository->quizExists($title)){
-			throw new \Exception("Aj då! Det här quizet fanns visst redan! :O");
-		}
-
 		$this->title = $title;
 		$this->quizId = sha1(uniqid($this->title, true));
 	}

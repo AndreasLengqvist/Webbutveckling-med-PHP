@@ -40,6 +40,25 @@ input[type='submit']:hover {
 	background:#D89BA7;
 }
 
+#question_newQuestion {
+    width: 120px;
+    background:#B36353;
+	font-size:1em;
+	-webkit-border-radius: 7px;
+	padding: 10px;
+}
+
+#question_finished {
+    width: 80px;
+	font-size:1em;
+	-webkit-border-radius: 7px;
+	padding: 10px;
+}
+
+#question_newQuestion:hover {
+	background:#D89BA7;
+}
+
 form {
 	text-align:center;
 }
@@ -59,6 +78,10 @@ input {
 	font-size:1.7em;
 }
 
+#question_label {
+	font-size:1.7em;
+}
+
 #navbutton:hover {
 	background:#D89BA7;
 }
@@ -75,8 +98,11 @@ h3 {
 	margin-top:10px;
 }
 
-#questionbox {
+textarea {
+	width:80%;
+	border-radius: 7px;
+	padding:10px;
+	font-size:1.3em;
+	margin:10px;
 	resize:none;
-	padding:5px;
-	border-radius: 5px;
 }

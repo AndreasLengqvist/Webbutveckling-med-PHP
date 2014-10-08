@@ -6,17 +6,21 @@ namespace model;
 class Session{
 
 
-	private $session = "SessionToken";
+	private $session = "QuizSession";
 
 
 
-	public function setUniqSession(){
-		$token = sha1(uniqid($salt, true));
-		$_SESSION[$this->session] = $token;		
+	public function sessionIsset(){
+		return isset($_SESSION[$this->session]);
 	}
 
 
-	public function getUniqSession(){
+	public function setSession($session){
+		$_SESSION[$this->session] = $session;		
+	}
+
+
+	public function getSession(){
 		return $_SESSION[$this->session];
 	}
 }
