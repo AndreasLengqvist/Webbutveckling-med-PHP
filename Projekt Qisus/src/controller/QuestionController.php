@@ -14,19 +14,19 @@ class QuestionController{
 
 	public function __construct(\model\Session $session){
 		$this->session = $session;
-		$this->questionView = new \view\QuestionView($this->session);
 		$this->quizRepository = new \model\QuizRepository();
+		$this->questionView = new \view\QuestionView($this->session->getSession(), $this->quizRepository);
 	}
 
 
 	public function doQuestion(){
 
-		//$this->quizRepository->getQuestions($quizSession);
+		$quizId = $this->session->getSession();
 
-		if($this->questionView->newQuestion()){
+		if($this->questionView->submitQuestion()){
 			try {
 
-					$newQuestion = $this->questionView->getQuestionObj($quizSession);
+					$newQuestion = $this->questionView->getQuestionObj();
 					$this->quizRepository->addQuestion($newQuestion);
 
 			} catch (\Exception $e) {
@@ -34,7 +34,7 @@ class QuestionController{
 			}
 		}
 		// Generar doQuestions utdata.
-		return $this->questionView->show();
+		return $this->questionView->show($this->quizRepository->getQuestionsById($quizId));
 			
 	}
 }

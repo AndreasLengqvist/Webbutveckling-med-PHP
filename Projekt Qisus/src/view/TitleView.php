@@ -27,7 +27,6 @@ class TitleView{
 	}
 
 
-// TODO - bryta ut menyn.
 	public function show(){
 
 		$ret = "

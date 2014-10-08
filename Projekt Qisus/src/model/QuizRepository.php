@@ -3,16 +3,22 @@
 namespace model;
 
 require_once("Repository.php");
+require_once("Question.php");
+require_once("Questions.php");
 
 
 class QuizRepository extends Repository{
 
 	private $db;
+	private $questions;
 	private static $quizId = "quizid";
 	private static $title = "title";
 	private static $question = "question";
 	private static $answer = "answer";
 
+	public function __construct(){
+		$this->questions = new Questions();
+	}
 
 
 	public function createQuiz(Quiz $newQuiz){
@@ -45,7 +51,7 @@ class QuizRepository extends Repository{
         	$sql = "INSERT INTO $this->dbTable (" . self::$quizId . ", " . self::$question . ", " . self::$answer . ") VALUES (?, ?, ?)";
 
 			$params = array($newQuestion->getQuizId(), $newQuestion->getQuestion(), $newQuestion->getAnswer());
-
+			var_dump($params);
 			$query = $db->prepare($sql);
 		
 			$query->execute($params);
@@ -57,34 +63,29 @@ class QuizRepository extends Repository{
 	}
 
 
-	/*public function quizExists($newTitle){
-		$this->dbTable = "quiz";
-
-		try{
+	public function getQuestionsById($id){
+		$this->dbTable = "question";
+		
+		try {
 			$db = $this->connection();
 
-        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::$title . " = ?";
-
-			$params = array($newTitle);
+			$sql = "SELECT * FROM $this->dbTable WHERE " . self::$quizId . " = ?";
+			$params = array($id);
 
 			$query = $db->prepare($sql);
-
 			$query->execute($params);
+			foreach ($query->fetchAll() as $q) {
+				$qu = $q[self::$question];
+				$a = $q[self::$answer];
 
-			$result = $query->fetch();
+				$question = new Question($id, $qu, $a);
 
-			if (strtolower(trim(($result[self::$title])) === strtolower($newTitle)) {
-				return true;
+				$this->questions->addQuestions($question);
 			}
-
-		} catch (\Exception $e) {
-			die("An error occured in the database!");
+			return $this->questions;
+		} catch (\PDOException $e) {
+			die('Error while connection to database.');
 		}
-	}*/
-
-
-	public function getQuestions(){
-
 	}
 
 

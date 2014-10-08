@@ -9,9 +9,14 @@ require_once('QuestionController.php');
 
 class NavigationController{
 
+	private $session;
+
+
+
 	public function __construct(){
 		$this->session = new \model\Session();
 	}
+
 
 	public function doNavigation(){
 
