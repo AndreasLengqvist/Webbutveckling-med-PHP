@@ -44,7 +44,7 @@ class QuestionView{
 		if(empty(trim(($_POST[self::$question])))){
 			throw new \Exception("Hörrö, du har glömt att skriva en fråga ju! ;)");
 		}
-		return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer]);
+		return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer], NULL);
 	}
 
 
@@ -64,8 +64,13 @@ class QuestionView{
 		return isset($_POST[self::$delete_question]);
 	}
 
-	public function getDeleteQuestion(){
+	public function getQuestionToDelete(){
 		return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer], $_POST[self::$questionId]);		
+	}
+
+
+	public function getQuizToDelete(){
+		return new \model\Quiz($this->quizId, $this->getTitle());		
 	}
 
 
@@ -95,10 +100,7 @@ class QuestionView{
 					</form>
 				</div>
 				";
-	/*	$ret .= "
-			<a id='restartbutton' href='?".NavigationView::$action.'='.NavigationView::$actionAddTitle."'><- Börja om</a>
-			<a id='finishbutton' href='?".NavigationView::$action.'='.NavigationView::$actionAddTitle."'>Färdig -></a>
-		";*/
+
 		foreach ($questions->getQuestions() as $question) {
 			$this->i++;
 

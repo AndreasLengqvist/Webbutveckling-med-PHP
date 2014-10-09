@@ -43,6 +43,27 @@ class QuizRepository extends Repository{
 	}
 
 
+	public function deleteQuiz(Quiz $quiz) {
+		$this->dbTable = "quiz";
+				
+		try{
+			$db = $this -> connection();
+
+			$sql = "DELETE FROM $this->dbTable
+					WHERE " . self::$quizId . " = ?";
+			$params = array($quiz -> getQuizId());
+
+			$query = $db -> prepare($sql);
+			$query -> execute($params);
+
+		} catch (\Exception $e) {
+			echo $e;
+			die("An error occured in the database!");
+		}
+	}
+
+
+
 	public function addQuestion(Question $newQuestion){
 		$this->dbTable = "question";
 

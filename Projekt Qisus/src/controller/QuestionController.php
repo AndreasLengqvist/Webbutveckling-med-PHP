@@ -24,10 +24,13 @@ class QuestionController{
 
 
 		// Restart
-		if($this->questionView->restart()){
-			$this->session->unSetSession();
-			\view\NavigationView::RedirectHome();
-		}
+		/*if($this->questionView->restart()){
+			if ($this->) {
+				$this->quizRepository->deleteQuiz($this->questionView->getQuizToDelete());
+				$this->session->unSetSession();
+				\view\NavigationView::RedirectHome();
+			}
+		}*/
 
 		try {
 
@@ -40,7 +43,7 @@ class QuestionController{
 
 			// Ta bort fråga.
 			if($this->questionView->deleteQuestion()){
-				$deleteQuestion = $this->questionView->getDeleteQuestion();
+				$deleteQuestion = $this->questionView->getQuestionToDelete();
 
 				$this->quizRepository->deleteQuestion($deleteQuestion);
 			}

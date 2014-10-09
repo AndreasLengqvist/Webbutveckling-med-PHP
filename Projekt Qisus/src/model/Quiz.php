@@ -11,9 +11,10 @@ class Quiz{
 
 
 	// Sätter titeln och slumpar fram ett unikt ID för quizet.
-	public function __construct($title){
+	public function __construct($quizId = NULL, $title){
 		$this->title = $title;
-		$this->quizId = sha1(uniqid($this->title, true));
+		$this->quizId = ($quizId == NULL) ? sha1(uniqid($this->title, true)) : $quizId;
+
 	}
 
 

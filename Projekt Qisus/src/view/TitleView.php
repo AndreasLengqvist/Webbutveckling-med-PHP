@@ -23,7 +23,7 @@ class TitleView{
 		if(empty(trim($_POST[self::$title]))){
 			throw new \Exception("Hörrö, ditt quiz måste heta något! ;)");
 		}
-		return new \model\Quiz($_POST[self::$title]);
+		return new \model\Quiz(NULL, $_POST[self::$title]);
 	}
 
 
