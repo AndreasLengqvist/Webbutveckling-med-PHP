@@ -25,6 +25,24 @@ body {
 	text-decoration: none;
 }
 
+#new_question_div {
+	margin-bottom:50px;
+}
+
+.old_question_div label {
+	font-size:1.1em;
+}
+
+.old_question_div textarea {
+	font-family:monospace;
+	width:50%;
+	border-radius:10px;
+	padding:10px;
+	font-size:1em;
+	margin:10px;
+	resize:none;
+}
+
 input[type='submit'] {
     background: #86A8C2;
     border: none;
@@ -40,22 +58,34 @@ input[type='submit']:hover {
 	background:#D89BA7;
 }
 
-#question_newQuestion {
-    width: 120px;
-    background:#B36353;
-	font-size:1em;
+input[type='submit'].question_addQuestion {
+    width: 150px;
+    background:#EBC744;
+	font-size:0.9em;
 	-webkit-border-radius: 7px;
-	padding: 10px;
+	padding: 8px;
 }
 
-#question_finished {
+input[type='submit'].delete_question {
+    width: 120px;
+    background:#B36353;
+	font-size:0.9em;
+	-webkit-border-radius: 7px;
+	padding: 8px;
+}
+
+input[type='submit'].question_finished {
     width: 80px;
 	font-size:1em;
 	-webkit-border-radius: 7px;
 	padding: 10px;
 }
 
-#question_newQuestion:hover {
+input[type='submit'].delete_question:hover {
+	background:#D89BA7;
+}
+
+input[type='submit'].question_addQuestion:hover {
 	background:#D89BA7;
 }
 
@@ -64,7 +94,8 @@ form {
 }
 
 input {
-	border-radius: 7px;
+	font-family:monospace;
+	border-radius:10px;
 	padding:5px;
 	font-size:1.3em;
 	margin:10px;
@@ -98,9 +129,17 @@ h3 {
 	margin-top:10px;
 }
 
+h4 {
+	font-size:4em;
+	margin-left:55px;
+	margin-right:55px;
+	margin-top:10px;
+}
+
 textarea {
+	font-family:monospace;
 	width:80%;
-	border-radius: 7px;
+	border-radius:10px;
 	padding:10px;
 	font-size:1.3em;
 	margin:10px;

@@ -21,6 +21,8 @@ class Session{
 
 
 	public function getSession(){
-		return $_SESSION[$this->session];
+		if ($this->sessionIsset()) {
+			return $_SESSION[$this->session];
+		}
 	}
 }

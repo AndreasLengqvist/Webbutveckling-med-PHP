@@ -20,8 +20,13 @@ class QuestionController{
 
 
 	public function doQuestion(){
-
 		$quizId = $this->session->getSession();
+
+		if($this->questionView->deleteQuestion()){
+			$deleteQuestion = $this->questionView->getDeleteQuestion();
+
+			$this->quizRepository->deleteQuestion($deleteQuestion);
+		}
 
 		if($this->questionView->submitQuestion()){
 			try {

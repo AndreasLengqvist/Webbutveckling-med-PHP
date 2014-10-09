@@ -22,6 +22,6 @@ class Questions{
 
 
 	public function addQuestions(Question $question){
-		array_unshift($this->questions, $question);
+		$this->questions[] = $question;
 	}
 }

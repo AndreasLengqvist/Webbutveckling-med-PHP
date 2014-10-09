@@ -13,6 +13,7 @@ class QuizRepository extends Repository{
 	private $questions;
 	private static $quizId = "quizid";
 	private static $title = "title";
+	private static $questionId = "questionId";
 	private static $question = "question";
 	private static $answer = "answer";
 
@@ -48,13 +49,31 @@ class QuizRepository extends Repository{
 		try{
 			$db = $this->connection();
 
-        	$sql = "INSERT INTO $this->dbTable (" . self::$quizId . ", " . self::$question . ", " . self::$answer . ") VALUES (?, ?, ?)";
+        	$sql = "INSERT INTO $this->dbTable (" . self::$quizId . ", " . self::$question .", " . self::$answer . ", " . self::$questionId . ") VALUES (?, ?, ?, ?)";
 
-			$params = array($newQuestion->getQuizId(), $newQuestion->getQuestion(), $newQuestion->getAnswer());
-			var_dump($params);
+			$params = array($newQuestion->getQuizId(), $newQuestion->getQuestion(), $newQuestion->getAnswer(), $newQuestion->getQuestionId());
 			$query = $db->prepare($sql);
 		
 			$query->execute($params);
+
+		} catch (\Exception $e) {
+			echo $e;
+			die("An error occured in the database!");
+		}
+	}
+
+
+	public function deleteQuestion(Question $question) {
+		$this->dbTable = "question";
+				
+		try{
+			$db = $this -> connection();
+
+			$sql = "DELETE FROM $this->dbTable WHERE " . self::$questionId . " = ?";
+			$params = array($question -> getQuestionId());
+
+			$query = $db -> prepare($sql);
+			$query -> execute($params);
 
 		} catch (\Exception $e) {
 			echo $e;
@@ -77,8 +96,9 @@ class QuizRepository extends Repository{
 			foreach ($query->fetchAll() as $q) {
 				$qu = $q[self::$question];
 				$a = $q[self::$answer];
+				$qId = $q[self::$questionId];
 
-				$question = new Question($id, $qu, $a);
+				$question = new Question($id, $qu, $a, $qId);
 
 				$this->questions->addQuestions($question);
 			}
