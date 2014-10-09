@@ -25,4 +25,9 @@ class Session{
 			return $_SESSION[$this->session];
 		}
 	}
+
+
+	public function unSetSession(){
+		unset($_SESSION[$this->session]);
+	}
 }

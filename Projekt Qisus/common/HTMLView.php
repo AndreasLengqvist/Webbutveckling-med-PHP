@@ -11,6 +11,7 @@ class HTMLView{
 			<html>
 			<head>
 				<meta charset='UTF-8'>
+				<link rel='stylesheet' type='text/css' href='css/reset_stylesheet.css'>
 				<link rel='stylesheet' type='text/css' href='css/stylesheet.css'>
 			</head>
 			<body>

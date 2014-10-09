@@ -22,21 +22,38 @@ class QuestionController{
 	public function doQuestion(){
 		$quizId = $this->session->getSession();
 
-		if($this->questionView->deleteQuestion()){
-			$deleteQuestion = $this->questionView->getDeleteQuestion();
 
-			$this->quizRepository->deleteQuestion($deleteQuestion);
+		// Restart
+		if($this->questionView->restart()){
+			$this->session->unSetSession();
+			\view\NavigationView::RedirectHome();
 		}
 
-		if($this->questionView->submitQuestion()){
-			try {
+		try {
 
-					$newQuestion = $this->questionView->getQuestionObj();
-					$this->quizRepository->addQuestion($newQuestion);
+			// Lägger till ny fråga.
+			if($this->questionView->submitQuestion()){
 
-			} catch (\Exception $e) {
-				echo $e->getMessage();
+						$newQuestion = $this->questionView->getQuestionObj();
+						$this->quizRepository->addQuestion($newQuestion);
 			}
+
+			// Ta bort fråga.
+			if($this->questionView->deleteQuestion()){
+				$deleteQuestion = $this->questionView->getDeleteQuestion();
+
+				$this->quizRepository->deleteQuestion($deleteQuestion);
+			}
+
+			// Uppdaterar fråga.
+			if($this->questionView->updateQuestion()){
+				$updatedQuestion = $this->questionView->getUpdatedQuestion();
+
+				$this->quizRepository->updateQuestion($updatedQuestion);
+			}
+
+		} catch (\Exception $e) {
+			echo $e->getMessage();
 		}
 		// Generar doQuestions utdata.
 		return $this->questionView->show($this->quizRepository->getQuestionsById($quizId));

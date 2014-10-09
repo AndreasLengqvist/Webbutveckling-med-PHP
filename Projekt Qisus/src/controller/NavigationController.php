@@ -26,6 +26,7 @@ class NavigationController{
 
 				case \view\NavigationView::$actionAddTitle:
 
+					// Om sessionen är satt. (Betyder i stort att användaren redan börjat skapa ett quiz)
 					if ($this->session->sessionIsset()) {
 						\view\NavigationView::RedirectToQuestionView();
 						return null;
@@ -37,16 +38,15 @@ class NavigationController{
 
 				case \view\NavigationView::$actionAddQuestions:
 
+					// Om sessionen inte är satt. (Betyder i stort att användaren precis restartat ett quiz)
+					if (!$this->session->sessionIsset()) {
+						\view\NavigationView::RedirectHome();
+					}
 						$controller = new QuestionController($this->session);
 						return $controller->doQuestion();
 					break;
 					
 				default:
-
-					if ($this->session->sessionIsset()) {
-						\view\NavigationView::RedirectToQuestionView();
-						return null;
-					}
 					
 					return \view\NavigationView::showStart();
 					break;

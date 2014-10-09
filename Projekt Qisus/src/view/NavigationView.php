@@ -25,6 +25,10 @@ class NavigationView{
 		return self::$actionHome;
 	}
 
+	public static function RedirectHome() {
+		header('Location:  /' . \Config::$ROOT_PATH . '/');
+	}
+
 
 	public static function RedirectToQuestionView() {
 		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionAddQuestions);

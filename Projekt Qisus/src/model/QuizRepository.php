@@ -63,13 +63,35 @@ class QuizRepository extends Repository{
 	}
 
 
+	public function updateQuestion(Question $question) {
+		$this->dbTable = "question";
+				
+
+		try{
+			$db = $this -> connection();
+
+			$sql = "UPDATE $this->dbTable SET " . self::$quizId . "=?, " . self::$question . "=?, " . self::$answer . "=? WHERE " . self::$questionId ."=?";
+
+			$params = array($question->getQuizId(), $question->getQuestion(), $question->getAnswer(), $question->getQuestionId());
+
+			$query = $db -> prepare($sql);
+			$query -> execute($params);
+
+		} catch (\Exception $e) {
+			echo $e;
+			die("An error occured in the database!");
+		}
+	}
+
+
 	public function deleteQuestion(Question $question) {
 		$this->dbTable = "question";
 				
 		try{
 			$db = $this -> connection();
 
-			$sql = "DELETE FROM $this->dbTable WHERE " . self::$questionId . " = ?";
+			$sql = "DELETE FROM $this->dbTable
+					WHERE " . self::$questionId . " = ?";
 			$params = array($question -> getQuestionId());
 
 			$query = $db -> prepare($sql);
