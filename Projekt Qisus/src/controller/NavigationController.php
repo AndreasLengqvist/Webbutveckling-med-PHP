@@ -5,6 +5,7 @@ namespace controller;
 require_once('src/view/NavigationView.php');
 require_once('TitleController.php');
 require_once('QuestionController.php');
+require_once('MailController.php');
 
 
 class NavigationController{
@@ -22,35 +23,42 @@ class NavigationController{
 
 		try {
 
-			switch (\view\NavigationView::getUrlAction($this->session)){
+			if ($this->session->sessionIsset()) {
 
-				case \view\NavigationView::$actionAddTitle:
+				switch (\view\NavigationView::getUrlAction($this->session)){
 
-					// Om sessionen är satt. (Betyder i stort att användaren redan börjat skapa ett quiz)
-					if ($this->session->sessionIsset()) {
-						\view\NavigationView::RedirectToQuestionView();
-						return null;
-					}
+					case \view\NavigationView::$actionAddPlayers:
+							$controller = new MailController($this->session);
+							return $controller->doMail();
+						break;
 
-						$controller = new TitleController($this->session);
-						return $controller->doTitle();
-					break;				
-
-				case \view\NavigationView::$actionAddQuestions:
-
-					// Om sessionen inte är satt. (Betyder i stort att användaren precis restartat ett quiz)
-					if (!$this->session->sessionIsset()) {
-						\view\NavigationView::RedirectHome();
-					}
-						$controller = new QuestionController($this->session);
-						return $controller->doQuestion();
-					break;
-					
-				default:
-					
-					return \view\NavigationView::showStart();
-					break;
+					default:
+						
+							$controller = new QuestionController($this->session);
+							return $controller->doQuestion();
+						break;
+				}
 			}
+
+				switch (\view\NavigationView::getUrlAction($this->session)){
+
+					case \view\NavigationView::$actionAddTitle:
+
+						// // Om sessionen är satt. (Betyder i stort att användaren redan börjat skapa ett quiz)
+						// if ($this->session->sessionIsset()) {
+						// 	\view\NavigationView::RedirectToQuestionView();
+						// 	return null;
+						// }
+
+							$controller = new TitleController($this->session);
+							return $controller->doTitle();
+						break;
+
+					default:
+						
+						return \view\NavigationView::showStart();
+						break;
+				}
 
 		} catch (Exception $e) {
 			echo"Fel";

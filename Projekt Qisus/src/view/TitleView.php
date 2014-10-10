@@ -20,7 +20,7 @@ class TitleView{
 
 
 	public function getTitle(){
-		if(empty(trim($_POST[self::$title]))){
+		if(empty($_POST[self::$title])){
 			throw new \Exception("Hörrö, ditt quiz måste heta något! ;)");
 		}
 		return new \model\Quiz(NULL, $_POST[self::$title]);
@@ -35,7 +35,7 @@ class TitleView{
 						<form action='?".NavigationView::$action."=".NavigationView::$actionAddTitle."' method='post'>
 							<label id='title_label' for='title'>Vad ska quizet heta?</label><br>
 							<input id='title' type='text' name='" . self::$title . "'><br>
-							<input id='title_button' type='submit' value='klar' name='" . self::$submit . "'>
+							<input id='finishbutton' type='submit' value='Fortsätt →' name='" . self::$submit . "'>
 						</form>
 					</div>
 				";

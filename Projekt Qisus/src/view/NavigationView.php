@@ -13,6 +13,7 @@ class NavigationView{
 	public static $actionHome = 'start';
 	public static $actionAddTitle = 'skapa';
 	public static $actionAddQuestions = 'skapa/frågor';
+	public static $actionAddPlayers = 'skapa/spelare';
 
 
 	// Kontrollerar vart användaren befinner sig genom att hämta aktuell action i URL:n.
@@ -35,11 +36,18 @@ class NavigationView{
 	}
 
 
+	public static function RedirectToMailView() {
+		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionAddPlayers);
+	}
+
+
 	public static function showStart(){
 		$ret = "
 				<h1>qisus.</h1>
 					<div id='center_wrap'>
-						<a id='navbutton' href='?".self::$action.'='.self::$actionAddTitle."'>Skapa!</a>
+						<h2 id='welcome'>Skapa quiz!</h2>
+						<h3 id='arrow'>↓</h3>
+						<a id='navbutton' href='?".self::$action.'='.self::$actionAddTitle."'>Start</a>
 					</div>
 				";
 

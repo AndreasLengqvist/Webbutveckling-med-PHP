@@ -22,17 +22,29 @@ class QuestionController{
 	public function doQuestion(){
 		$quizId = $this->session->getSession();
 
+		try {
 
-		// Restart
-		/*if($this->questionView->restart()){
-			if ($this->) {
+			// Lägger till ny fråga.
+			if($this->questionView->finished()){
+				\view\NavigationView::RedirectToMailView();
+			}
+
+			// Börjar om från början.
+			if($this->questionView->restart()){
+
+				$questions = $this->quizRepository->getQuestionsById($quizId);
+				$returnedQuestions = $questions->getQuestions();
+
+				// Om det finns frågor kvar för quizet i databasen.
+				if ($returnedQuestions) {
+					foreach ($returnedQuestions as $question) {
+						$this->quizRepository->deleteQuestion($question);
+					}
+				}
 				$this->quizRepository->deleteQuiz($this->questionView->getQuizToDelete());
 				$this->session->unSetSession();
 				\view\NavigationView::RedirectHome();
 			}
-		}*/
-
-		try {
 
 			// Lägger till ny fråga.
 			if($this->questionView->submitQuestion()){

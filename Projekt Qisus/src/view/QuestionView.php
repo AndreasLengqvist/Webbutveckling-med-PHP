@@ -29,7 +29,7 @@ class QuestionView{
 	}
 
 	public function finished(){
-		return isset($_POST[self::$question_addQuestion]);
+		return isset($_POST[self::$finishedSubmit]);
 	}
 
 	public function restart(){
@@ -41,7 +41,7 @@ class QuestionView{
 	}
 
 	public function getQuestionObj(){
-		if(empty(trim(($_POST[self::$question])))){
+		if(empty($_POST[self::$question])){
 			throw new \Exception("Hörrö, du har glömt att skriva en fråga ju! ;)");
 		}
 		return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer], NULL);
@@ -83,28 +83,37 @@ class QuestionView{
 
 
 		$ret = "
-					<h4>" . $this->getTitle() . "</h4>";
+					<h4>qisus.</h4>
+					<h5>" . $this->getTitle() . "</h5>";
 
 		$ret .= "
 				<div id='new_question_div'>
 					<form method='post'>
 						<label for='question_input' id='question_label'>Ny fråga?</label><br>
 				        <textarea id='question_input' rows='8' cols='50' name='" . self::$question . "'></textarea><br>
-						<label for='true'>Sant</label>
-						<Input id='true' type='radio' Name='" . self::$answer . "' value='true' checked>		        		
-						<label for='false'>Falskt</label>
-						<Input id='false' type='radio' Name='" . self::$answer . "' value='false'><br>
+			            <input type='radio' id='true' name='" . self::$answer . "' value='true' checked>
+					    <label for='true'>True</label>
+
+					    <input type='radio' id='false' name='" . self::$answer . "'value='false'>
+					    <label for='false'>False</label><br>
 	    				<input id='restartbutton' type='submit' value='↺ Börja om' name='" . self::$restart . "'>
 	    				<input class='question_addQuestion' type='submit' value='+ Lägg till fråga' name='" . self::$question_addQuestion . "'>
-	    				<input id='finishbutton' type='submit' value='Fortsätt →' name='" . self::$restart . "'>
-					</form>
-				</div>
 				";
+		if ($questions->getQuestions()) {
+		    $ret .= "
+		    		<input id='finishbutton' type='submit' value='Fortsätt →' name='" . self::$finishedSubmit . "'>
+						</form>
+					</div>
+					";		
+		}		
 
 		foreach ($questions->getQuestions() as $question) {
 			$this->i++;
 
 			$ret .= "
+
+
+
 					<div class='old_question_div'>
 					<h2>" . $this->i . "</h2>
 						<form method='post'>
@@ -114,18 +123,18 @@ class QuestionView{
 			        ";
 							if ($question->getAnswer() == "true") {
 								$ret .= "
-											<label for='true" . $this->i . "'>Sant</label>
-											<Input id='true" . $this->i . "' type='radio' Name='" . self::$answer . "' value='true' checked>		        		
-											<label for='false" . $this->i . "'>Falskt</label>
-											<Input id='false" . $this->i . "' type='radio' Name='" . self::$answer . "' value='false'><br>
+								            <input type='radio' id='true" . $this->i . "' name='" . self::$answer . "' value='true' checked>
+										    <label class='old' for='true" . $this->i . "'>True</label>
+										    <input type='radio' id='false" . $this->i . "' name='" . self::$answer . "'value='false'>
+										    <label class='old' for='false" . $this->i . "'>False</label><br>
 										";   							
 							}
 							else{
 								$ret .= "
-											<label for='true" . $this->i . "'>Sant</label>
-											<Input id='true" . $this->i . "' type='radio' Name='" . self::$answer . "' value='true'>		        		
-											<label for='false" . $this->i . "'>Falskt</label>
-											<Input id='false" . $this->i . "' type='radio' Name='" . self::$answer . "' value='false' checked><br>
+								            <input type='radio' id='true" . $this->i . "' name='" . self::$answer . "' value='true'>
+										    <label class='old' for='true" . $this->i . "'>True</label>
+										    <input type='radio' id='false" . $this->i . "' name='" . self::$answer . "'value='false' checked>
+										    <label class='old' for='false" . $this->i . "'>False</label><br>
 										";   
 							}	
 			$ret .= "     		

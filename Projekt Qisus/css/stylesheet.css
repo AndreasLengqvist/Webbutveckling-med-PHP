@@ -4,13 +4,33 @@ body {
 }
 
 #center_wrap {
-    position:absolute;
-    top:200px;
-    left:27%;
-    text-align: center;
+	position:absolute;
+	top:200px;
+	left:20%;
+	width:300px;
+	text-align: center}
+
+#welcome {	
+	position: relative;
+	right:10px;
+	font-size:3em;
+	margin-left:33px;
+	margin-top:20px;
+	color:#303030;
+}
+
+#arrow {
+	position: relative;
+	right:20px;
+	font-size:4em;
+	margin-left:33px;
+	margin-top:20px;
+	color:#303030;
 }
 
 #navbutton {
+	position: relative;
+	left:60px;
 	display: block;
 	width: 150px;
 	height: 43px;
@@ -19,9 +39,9 @@ body {
 	padding: 10px;
 	border: 1 ridge;
 	border-color:#5E809A;
-	border-radius: 15px;	
-	-webkit-border-radius: 7px;
-	font-size:2.5em;
+	border-radius: 8px;	
+	-webkit-border-radius: 8px;
+	font-size:3em;
 	text-decoration: none;
 }
 
@@ -42,9 +62,29 @@ body {
 	border-radius:10px;
 	padding:10px;
 	font-size:1em;
+	margin-top:20px;
+	margin-bottom:10px;
+	resize:none;
+}
+
+#mail_div label {
+	font-size:1.2em;
+}
+
+#mail_div {
+	margin-left:60px;
+	margin-right:60px;
+}
+
+#mail_div textarea {
+	font-family:monospace;
+	border-radius:10px;
+	padding:10px;
+	font-size:1em;
 	margin:10px;
 	resize:none;
 }
+
 input[type='submit'] {
     background: #86A8C2;
     border: none;
@@ -52,6 +92,15 @@ input[type='submit'] {
     -webkit-border-radius: 8px;
     color: #303030;
     cursor: pointer;
+}
+
+input[type='radio'] {
+	margin-top:10px;
+	margin-bottom:30px;
+}
+
+input[type='submit']{
+	-webkit-appearance: none;
 }
 
 input[type='submit'].question_addQuestion {
@@ -81,6 +130,7 @@ input[type='submit']#finishbutton {
     height:42px;
     background:#849A44;
 	font-size:1.2em;
+	margin-bottom:50px;
 }
 
 input[type='submit'].delete_question {
@@ -99,43 +149,30 @@ input[type='submit'].update_question {
 	padding: 8px;
 }
 
-input[type='submit'].delete_question:hover {
-	background:#FF6B67;
-}
-
-input[type='submit'].update_question:hover {
-	background:#FF6B67;
-}
-
 input[type='submit'].question_addQuestion:hover {
 	background:#FF6B67;
 }
-
-input[type='submit']#finishbutton:hover {
+input[type='submit'].title_button:hover {
 	background:#FF6B67;
 }
-
 input[type='submit']#restartbutton:hover {
 	background:#FF6B67;
 }
-
-input[type='submit']#title_button:hover {
+input[type='submit']#finishbutton:hover {
 	background:#FF6B67;
 }
-
-input[type='submit'].delete_question:active {
-	background:#C11B17;
+input[type='submit'].delete_question:hover {
+	background:#FF6B67;
 }
-
-input[type='submit'].update_question:active {
-	background:#C11B17;
+input[type='submit'].update_question:hover {
+	background:#FF6B67;
 }
 
 input[type='submit'].question_addQuestion:active {
 	background:#C11B17;
 }
 
-input[type='submit']#finishbutton:active {
+input[type='submit'].title_button:active {
 	background:#C11B17;
 }
 
@@ -143,7 +180,15 @@ input[type='submit']#restartbutton:active {
 	background:#C11B17;
 }
 
-input[type='submit']#title_button:active {
+input[type='submit']#finishbutton:active {
+	background:#C11B17;
+}
+
+input[type='submit'].delete_question:active {
+	background:#C11B17;
+}
+
+input[type='submit'].update_question:active {
 	background:#C11B17;
 }
 
@@ -175,10 +220,15 @@ input {
 	background:#D89BA7;
 }
 
+#navbutton:active {
+	background:#C11B17;
+}
+
 h1 {
+	color: #303030;
 	font-size:6em;
 	margin-left:33px;
-	margin-top:20px;
+	margin-top:23px;
 }
 
 h2 {
@@ -190,17 +240,30 @@ h2 {
 }
 
 h3 {
+	color: #303030;
 	font-size:5em;
 	margin-left:55px;
 	margin-top:10px;
 }
 
 h4 {
+	position:absolute;
+	right:0;
+	color: #303030;
+	font-size:2em;
+	padding:10px;
+}
+
+h5 {
+	word-wrap:break-word;
+	color: #303030;
 	font-size:4em;
 	margin-left:55px;
 	margin-right:55px;
-	margin-top:10px;
+	padding-top:50px;
+	margin-bottom:50px;
 }
+
 
 textarea {
 	font-family:monospace;
@@ -208,6 +271,32 @@ textarea {
 	border-radius:10px;
 	padding:10px;
 	font-size:1.3em;
-	margin:10px;
+	margin-top:20px;
+	margin-bottom:10px;
 	resize:none;
+}
+
+input[type=radio] {
+	display:none;
+}
+
+input[type=radio] + label {
+	display:inline-block;
+    margin:-2px;
+    margin-bottom:20px;
+    padding: 10px 20px;
+    background-color:white;
+    border-color: black;
+}
+
+input[type=radio] + label.old {
+    background-color:#FFF5EE;
+}
+
+input[type=radio]:checked + label { 
+	-moz-box-shadow: 	inset 0 0 7px black;
+	-webkit-box-shadow: inset 0 0 7px black;
+	box-shadow:         inset 0 0 7px black;
+	background-image: none;
+	background-color:#909090;
 }
