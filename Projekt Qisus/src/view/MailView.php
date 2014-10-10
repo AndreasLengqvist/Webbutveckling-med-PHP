@@ -22,7 +22,7 @@ class MailView{
 
 	public function show(){
 		$ret = "
-				<h4>qisus.</h4>
+				<h1 id='header'>qisus.</h1>
 				<h5>Maillista</h5>
 				<div id='mail_div'>
 					<form method='post'>

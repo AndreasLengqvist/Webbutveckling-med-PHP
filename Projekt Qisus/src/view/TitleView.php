@@ -9,8 +9,10 @@ require_once("NavigationView.php");
 class TitleView{
 
 	private $session;
+	private $errorMessage;
 	private static $title = 'title';
 	private static $submit = 'submit';
+	private static $back = 'back';
 
 
 
@@ -19,23 +21,37 @@ class TitleView{
 	}
 
 
-	public function getTitle(){
-		if(empty($_POST[self::$title])){
-			throw new \Exception("Hörrö, ditt quiz måste heta något! ;)");
+	public function getQuizData(){
+		if($this->submitTitle()){
+			$title = trim($_POST[self::$title]);
+			if (empty($title)) {
+				$this->errorMessage = "<p id='error'>Ditt quiz måste heta något! ;)</p>";
+				return null;
+			}
+			return new \model\Quiz(NULL, $title);
 		}
-		return new \model\Quiz(NULL, $_POST[self::$title]);
 	}
 
 
 	public function show(){
 
+		$errorMessage = $this->errorMessage;
+
+
 		$ret = "
-					<h3>qisus.</h3>
-					<div id='title_wrap'>
-						<form action='?".NavigationView::$action."=".NavigationView::$actionAddTitle."' method='post'>
-							<label id='title_label' for='title'>Vad ska quizet heta?</label><br>
-							<input id='title' type='text' name='" . self::$title . "'><br>
-							<input id='finishbutton' type='submit' value='Fortsätt →' name='" . self::$submit . "'>
+					<h1 id='big_header'>qisus.</h1>
+					<div id='center_wrap'>
+						<form method='post'>
+							<div>
+								<label id='title_label' for='title_input'>Vad ska quizet heta?</label>
+							</div>
+							<input id='title_input' type='text' name='" . self::$title . "'>
+
+								$errorMessage
+
+		    				<div id='title_buttons_div'>
+								<input id='finishbutton' type='submit' value='Fortsätt →' name='" . self::$submit . "'>
+							</div>
 						</form>
 					</div>
 				";

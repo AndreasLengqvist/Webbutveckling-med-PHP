@@ -26,6 +26,7 @@ class NavigationView{
 		return self::$actionHome;
 	}
 
+
 	public static function RedirectHome() {
 		header('Location:  /' . \Config::$ROOT_PATH . '/');
 	}
@@ -43,11 +44,13 @@ class NavigationView{
 
 	public static function showStart(){
 		$ret = "
-				<h1>qisus.</h1>
+				<h1 id='big_header'>qisus.</h1>
 					<div id='center_wrap'>
-						<h2 id='welcome'>Skapa quiz!</h2>
+						<h2 id='home_h2'>Skapa quiz!</h2>
 						<h3 id='arrow'>↓</h3>
 						<a id='navbutton' href='?".self::$action.'='.self::$actionAddTitle."'>Start</a>
+						<p class='info'>Välkommen till qisus.</p>
+						<p class='info'>Verktyget som gör det lekande lätt att skapa enkla quiz för just dina behov!</p>
 					</div>
 				";
 

@@ -68,7 +68,8 @@ class QuestionController{
 			}
 
 		} catch (\Exception $e) {
-			echo $e->getMessage();
+			echo $e;
+			die();
 		}
 		// Generar doQuestions utdata.
 		return $this->questionView->show($this->quizRepository->getQuestionsById($quizId));

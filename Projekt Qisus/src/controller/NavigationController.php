@@ -33,7 +33,6 @@ class NavigationController{
 						break;
 
 					default:
-						
 							$controller = new QuestionController($this->session);
 							return $controller->doQuestion();
 						break;
@@ -43,13 +42,6 @@ class NavigationController{
 				switch (\view\NavigationView::getUrlAction($this->session)){
 
 					case \view\NavigationView::$actionAddTitle:
-
-						// // Om sessionen är satt. (Betyder i stort att användaren redan börjat skapa ett quiz)
-						// if ($this->session->sessionIsset()) {
-						// 	\view\NavigationView::RedirectToQuestionView();
-						// 	return null;
-						// }
-
 							$controller = new TitleController($this->session);
 							return $controller->doTitle();
 						break;
@@ -61,7 +53,8 @@ class NavigationController{
 				}
 
 		} catch (Exception $e) {
-			echo"Fel";
+			echo $e;
+			die();
 		}
 	}
 }

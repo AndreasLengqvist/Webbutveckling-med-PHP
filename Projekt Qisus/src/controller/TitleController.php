@@ -14,7 +14,6 @@ class TitleController{
 
 	public function __construct(\model\Session $session){
 		$this->session = $session;
-		$questioncontroller = new QuestionController($this->session);
 		$this->titleView = new \view\TitleView();
 		$this->quizRepository = new \model\QuizRepository();
 	}
@@ -23,24 +22,26 @@ class TitleController{
 	public function doTitle(){
 
 	// Hanterar indata.
+	try {
+		
+		$quiz = $this->titleView->getQuizData();
 
-	// Om användaren tryckt på Klar med titel.
-	if($this->titleView->submitTitle()){
-		try {
+		// Om Quiz-objektet finns.
+		if($quiz and $quiz->isValid()){
 
-				// Hämtar ett Quiz-objekt och lägger till en titel.
-				$newQuiz = $this->titleView->getTitle();
-				$this->quizRepository->createQuiz($newQuiz);
+			// Hämta ett Quiz-objekt och lägg till en titel.
+			$this->quizRepository->createQuiz($quiz);
 
-				// Skickar användaren till frågeskaparen.
-				$this->session->setSession($newQuiz->getQuizId());
-				\view\NavigationView::RedirectToQuestionView();
-
-		} catch (\Exception $e) {
-			echo $e->getMessage();
+			// Sätt sessionen och skicka användaren till frågeskaparen.
+			$this->session->setSession($quiz->getQuizId());
+			\view\NavigationView::RedirectToQuestionView();
 		}
+	} catch (\Exception $e) {
+		echo $e;
+		die();
 	}
-	// Generar doTitle utdata.
+
+	// Generar utdata.
 	return $this->titleView->show();
 	}
 }

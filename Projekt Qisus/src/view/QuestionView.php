@@ -12,6 +12,7 @@ class QuestionView{
 	private $quizId;
 	private $i;
 	private $quizRepository;
+	private $errorMessage;
 	private static $question = 'question';
 	private static $questionId = 'questionId';
 	private static $answer = 'answer';
@@ -40,17 +41,26 @@ class QuestionView{
 		return isset($_POST[self::$question_addQuestion]);
 	}
 
-	public function getQuestionObj(){
-		if(empty($_POST[self::$question])){
-			throw new \Exception("Hörrö, du har glömt att skriva en fråga ju! ;)");
-		}
-		return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer], NULL);
-	}
-
-
 	public function updateQuestion(){
 		return isset($_POST[self::$update_question]);
 	}
+
+	public function deleteQuestion(){
+		return isset($_POST[self::$delete_question]);
+	}
+
+
+	public function getQuestionData(){
+		if($this->submitQuestion()){
+			$question = trim($_POST[self::$question]);
+			if (empty($question)) {
+				$this->errorMessage = "<p id='error'>Hörrö, du har glömt att skriva en fråga ju! ;)</p>";
+				return null;
+			}
+			return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer], NULL);
+		}
+	}
+
 
 	public function getUpdatedQuestion(){
 		if(empty($_POST[self::$question])){
@@ -59,10 +69,6 @@ class QuestionView{
 		return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer], $_POST[self::$questionId]);		
 	}
 
-
-	public function deleteQuestion(){
-		return isset($_POST[self::$delete_question]);
-	}
 
 	public function getQuestionToDelete(){
 		return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer], $_POST[self::$questionId]);		
@@ -81,31 +87,45 @@ class QuestionView{
 
 	public function show(\model\Questions $questions){
 
+		$errorMessage = $this->errorMessage;
 
 		$ret = "
-					<h4>qisus.</h4>
-					<h5>" . $this->getTitle() . "</h5>";
+					<h1 id='tiny_header'>qisus.</h1>
+					<h2 id='quiz_title'>" . $this->getTitle() . "</h2>";
 
-		$ret .= "
-				<div id='new_question_div'>
-					<form method='post'>
-						<label for='question_input' id='question_label'>Ny fråga?</label><br>
-				        <textarea id='question_input' rows='8' cols='50' name='" . self::$question . "'></textarea><br>
-			            <input type='radio' id='true' name='" . self::$answer . "' value='true' checked>
-					    <label for='true'>True</label>
+			$ret .= "
+						<div id='new_question_div'>
+							<form method='post'>
+								<div>
+									<label for='question_input' id='question_label'>Ny fråga?</label>
+						        </div>
+						        	<textarea id='question_input' rows='8' cols='50' name='" . self::$question . "'></textarea>
+					            <div>
+					            	<input type='radio' id='true' name='" . self::$answer . "' value='true' checked>
+								    <label for='true'>True</label>
 
-					    <input type='radio' id='false' name='" . self::$answer . "'value='false'>
-					    <label for='false'>False</label><br>
-	    				<input id='restartbutton' type='submit' value='↺ Börja om' name='" . self::$restart . "'>
-	    				<input class='question_addQuestion' type='submit' value='+ Lägg till fråga' name='" . self::$question_addQuestion . "'>
-				";
-		if ($questions->getQuestions()) {
-		    $ret .= "
-		    		<input id='finishbutton' type='submit' value='Fortsätt →' name='" . self::$finishedSubmit . "'>
-						</form>
-					</div>
-					";		
-		}		
+								    <input type='radio' id='false' name='" . self::$answer . "'value='false'>
+								    <label for='false'>False</label>
+								</div>
+								
+								$errorMessage
+
+								<div>
+			    					<input class='question_addQuestion' type='submit' value='+ Lägg till fråga' name='" . self::$question_addQuestion . "'>  				
+   								</div>";
+
+   				if ($questions->getQuestions()) {
+				    $ret .= "
+			    				<input id='finishbutton' type='submit' value='Fortsätt →' name='" . self::$finishedSubmit . "'>
+							";		
+				}	
+
+			$ret .= "
+								<input id='restartbutton' type='submit' value='↺ Börja om' name='" . self::$restart . "'>
+							</form>
+						</div>
+
+					";
 
 		foreach ($questions->getQuestions() as $question) {
 			$this->i++;
@@ -115,7 +135,7 @@ class QuestionView{
 
 
 					<div class='old_question_div'>
-					<h2>" . $this->i . "</h2>
+					<h3 class='question_number'>" . $this->i . "</h3>
 						<form method='post'>
 							<input type='hidden' name='" . self::$questionId . "' value='" . $question->getQuestionId() . "'><br>
 							<label for='question_input" . $this->i . "'>Fråga " . $this->i . "</label><br>

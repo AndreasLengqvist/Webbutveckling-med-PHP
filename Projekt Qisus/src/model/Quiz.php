@@ -26,4 +26,9 @@ class Quiz{
 	public function getQuizId(){
 		return $this->quizId;
 	}
+
+
+	public function isValid(){
+		return isset($this->title) and isset($this->quizId);
+	}
 }

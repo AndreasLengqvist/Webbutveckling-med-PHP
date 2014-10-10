@@ -35,7 +35,8 @@ class MailController{
 			}
 
 		} catch (\Exception $e) {
-			echo $e->getMessage();
+			echo $e;
+			die();
 		}
 
 	// Generar doTitle utdata.
