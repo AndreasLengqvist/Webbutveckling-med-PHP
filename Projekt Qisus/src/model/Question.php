@@ -41,4 +41,9 @@ class Question{
 	public function getAnswer(){
 		return $this->answer;
 	}
+
+
+	public function isValid(){
+		return isset($this->quizId) and isset($this->questionId) and isset($this->question) and isset($this->answer);
+	}
 }

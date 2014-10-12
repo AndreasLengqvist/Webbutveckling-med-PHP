@@ -25,7 +25,7 @@ class TitleView{
 		if($this->submitTitle()){
 			$title = trim($_POST[self::$title]);
 			if (empty($title)) {
-				$this->errorMessage = "<p id='error'>Ditt quiz måste heta något! ;)</p>";
+				$this->errorMessage = "<p id='error_title'>Ditt quiz måste heta något! ;)</p>";
 				return null;
 			}
 			return new \model\Quiz(NULL, $title);
@@ -39,18 +39,19 @@ class TitleView{
 
 
 		$ret = "
+					<h1 id='tiny_header'>qisus.</h1>
 					<h1 id='big_header'>qisus.</h1>
 					<div id='center_wrap'>
 						<form method='post'>
 							<div>
 								<label id='title_label' for='title_input'>Vad ska quizet heta?</label>
 							</div>
-							<input id='title_input' type='text' name='" . self::$title . "'>
+								<input id='title_input' type='text' name='" . self::$title . "'>
 
 								$errorMessage
 
 		    				<div id='title_buttons_div'>
-								<input id='finishbutton' type='submit' value='Fortsätt →' name='" . self::$submit . "'>
+								<input class='continueButton' type='submit' value='Fortsätt →' name='" . self::$submit . "'>
 							</div>
 						</form>
 					</div>

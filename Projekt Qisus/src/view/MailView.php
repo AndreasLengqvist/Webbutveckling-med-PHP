@@ -3,38 +3,87 @@
 namespace view;
 
 require_once("NavigationView.php");
-require_once("src/model/QuizRepository.php");
 
 
 class MailView{
 
+	private $session;
+	private $errorMessage;
+
+	private static $title = 'title';
 	private static $message = 'message';
-	private static $mailadresses = 'mailadresses';
-	private static $back = 'back';
 	private static $send = 'send';
+	private static $back = 'back';
 
 
 
-	public function backToQuestions(){
+	public function backToPlayers(){
 		return isset($_POST[self::$back]);
+	}
+
+	public function send(){
+		return isset($_POST['send']);
+	}
+
+
+	public function getMessage(){
+		if($this->send()){
+			$message = trim($_POST[self::$message]);
+			if (empty($message)) {
+				$this->errorMessage = "<p id='error_new_question'>Det kan vara bra för dina spelare att få veta vad det är du skickat dem :)</p>";
+				return null;
+			}
+			return $message;
+		}
+	}
+
+
+	public function getTitle(){
+		return $this->quizRepository->getTitleById($this->quizId);
+	}
+
+
+	public function renderMessage($quizId, $adressId, $clientMessage){
+		$ret = "
+				<html>
+					<body>
+						<p> $clientMessage </p>
+						<a href=" . \Config::$ROOT_PATH . '/?' . NavigationView::$action.'='.NavigationView::$actionPlay . '/' . $quizId . '&' . $adressId . "/>
+					</body>
+				</html>
+			   ";
+
+	   return $ret;
 	}
 
 
 	public function show(){
+
+		$errorMessage = $this->errorMessage;
+
+
 		$ret = "
-				<h1 id='header'>qisus.</h1>
-				<h5>Maillista</h5>
-				<div id='mail_div'>
-					<form method='post'>
-						<label for='message_input' id='message_label'>Här skriver du in det meddelande som dina spelare ska få i mailet...</label><br>
-				        <textarea id='message_input' rows='4' cols='50' name='" . self::$message . "'>Det kan kanske t ex. vara bra att berätta för dem vad det är för sorts quiz? :)</textarea><br>
-						<label for='addresses_input' id='message_label'>Här under matar du enkelt in de mailadresser som quizet ska skickas till...</label><br>
-				        <textarea id='addresses_input' rows='5' cols='50' name='" . self::$mailadresses . "'>spelare1@gmail.se, ← PS. glöm inte kommatecknet efter varje ny adress!</textarea><br>
-	    				<input id='restartbutton' type='submit' value='← Tillbaka' name='" . self::$back . "'>
-	    				<input id='finishbutton' type='submit' value='Skicka →' name='" . self::$send . "'>
-					</form>
-				</div>
+					<h1 id='tiny_header'>qisus.</h1>
+					<h2 id='title'>Skicka quizet!</h2>
+					<div id='center_wrap'>
+						<form method='post'>
+							<div>
+								<label for='question_input' id='question_label'>Skriv in ett litet meddelande till dina spelare..</label>
+					        </div>
+					        	<textarea id='question_input' rows='8' name='" . self::$message . "'>Hej! Här kommmer ett hejdundrande roligt quiz från qisus! :D</textarea>
+				            <div>
+
+							$errorMessage
+
+		    				<div id='title_buttons_div'>
+								<input class='backButton' type='submit' value='← Tillbaka' name='" . self::$back . "'>
+								<input class='sendButton' type='submit' value='Skicka!' name='" . self::$send . "'>
+							</div>
+							</div>
+						</form>
+					</div>
 				";
+
 		return $ret;
 	}
 }

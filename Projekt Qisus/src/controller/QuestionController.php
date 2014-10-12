@@ -24,21 +24,28 @@ class QuestionController{
 
 		try {
 
-			// Lägger till ny fråga.
+			// Fortsätter till MailView.
 			if($this->questionView->finished()){
-				\view\NavigationView::RedirectToMailView();
+				\view\NavigationView::RedirectToPlayerView();
 			}
+
 
 			// Börjar om från början.
 			if($this->questionView->restart()){
-
 				$questions = $this->quizRepository->getQuestionsById($quizId);
 				$returnedQuestions = $questions->getQuestions();
-
 				// Om det finns frågor kvar för quizet i databasen.
 				if ($returnedQuestions) {
 					foreach ($returnedQuestions as $question) {
 						$this->quizRepository->deleteQuestion($question);
+					}
+				}
+				$adresses = $this->quizRepository->getAdressesById($quizId);
+				$returnedAdresses = $adresses->getAdresses();
+				// Om det finns mailadresser kvar skapade för quizet i databasen.
+				if ($returnedAdresses) {
+					foreach ($returnedAdresses as $adress) {
+						$this->quizRepository->deleteAdress($adress);
 					}
 				}
 				$this->quizRepository->deleteQuiz($this->questionView->getQuizToDelete());
@@ -46,32 +53,31 @@ class QuestionController{
 				\view\NavigationView::RedirectHome();
 			}
 
-			// Lägger till ny fråga.
-			if($this->questionView->submitQuestion()){
 
-						$newQuestion = $this->questionView->getQuestionObj();
-						$this->quizRepository->addQuestion($newQuestion);
+			// LÄGGER TILL - Om Question-objektet finns för att lägga till ny fråga.
+			$newQuestion = $this->questionView->getQuestionData();
+			if($newQuestion and $newQuestion->isValid()){
+				$this->quizRepository->addQuestion($newQuestion);
 			}
 
-			// Ta bort fråga.
-			if($this->questionView->deleteQuestion()){
-				$deleteQuestion = $this->questionView->getQuestionToDelete();
 
-				$this->quizRepository->deleteQuestion($deleteQuestion);
-			}
+				// TA BORT fråga.
+				if($this->questionView->deleteQuestion()){
+					$deleteQuestion = $this->questionView->getQuestionToDelete();
+					$this->quizRepository->deleteQuestion($deleteQuestion);
+				}
 
-			// Uppdaterar fråga.
-			if($this->questionView->updateQuestion()){
-				$updatedQuestion = $this->questionView->getUpdatedQuestion();
-
-				$this->quizRepository->updateQuestion($updatedQuestion);
-			}
+				// UPPDATERA - Om Question-objektet finns för att lägga till uppdatera en fråga.
+				$updatedQuestion = $this->questionView->getUpdatedData();
+				if($updatedQuestion and $updatedQuestion->isValid()){
+					$this->quizRepository->updateQuestion($updatedQuestion);
+				}
 
 		} catch (\Exception $e) {
 			echo $e;
 			die();
 		}
-		// Generar doQuestions utdata.
+		// Generar utdata.
 		return $this->questionView->show($this->quizRepository->getQuestionsById($quizId));
 			
 	}

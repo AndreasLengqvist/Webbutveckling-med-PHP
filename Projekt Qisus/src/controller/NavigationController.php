@@ -2,9 +2,11 @@
 
 namespace controller;
 
+require_once("src/model/Session.php");
 require_once('src/view/NavigationView.php');
 require_once('TitleController.php');
 require_once('QuestionController.php');
+require_once('PlayerController.php');
 require_once('MailController.php');
 
 
@@ -28,6 +30,11 @@ class NavigationController{
 				switch (\view\NavigationView::getUrlAction($this->session)){
 
 					case \view\NavigationView::$actionAddPlayers:
+							$controller = new PlayerController($this->session);
+							return $controller->doPlayer();
+						break;
+
+					case \view\NavigationView::$actionMailQuiz:
 							$controller = new MailController($this->session);
 							return $controller->doMail();
 						break;
