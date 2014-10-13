@@ -12,39 +12,39 @@ class PlayerController{
 
 
 
-	public function __construct(\model\Session $session){
-		$this->session = $session;
+	public function __construct(\model\Session $createSession){
+		$this->createSession = $createSession;
 		$this->quizRepository = new \model\QuizRepository();
-		$this->playerView = new \view\PlayerView($this->session->getSession(), $this->quizRepository);
+		$this->playerView = new \view\PlayerView($this->createSession->getSession(), $this->quizRepository);
 	}
 
 
 	public function doPlayer(){
-		$quizId = $this->session->getSession();
+		$quizId = $this->createSession->getSession();
+		$questions = $this->quizRepository->getQuestionsById($quizId);
 
 	// Hanterar indata.
 		try {
 
-			// Ful-lösning för att användaren inte ska kunna ändra i URL:en.
-			$questions = $this->quizRepository->getQuestionsById($quizId);
+			// Om användaren försöker komma vidare genom att ändra i URL:en.
 			if(!$questions->getQuestions()){
 				\view\NavigationView::RedirectToQuestionView();
 			}
 
 
-			// Tillbaka till QuestionView.
+			// Tillbaks till QuestionView.
 			if($this->playerView->backToQuestions()){
 				\view\NavigationView::RedirectToQuestionView();
 			}
 
 
-			// Fortsätter till SendView.
+			// Fortsätt till SendView.
 			if($this->playerView->finished()){
 				\view\NavigationView::RedirectToMailView();
 			}
 
 
-			// LÄGGA TILL ADRESS - Om Adress-objektet finns för att lägga till ny fråga.
+			// LÄGG TILL ADRESS - Om Adress-objektet är validerat och satt.
 			$adress = $this->playerView->getAdressData();
 			if($adress and $adress->isValid()){
 				$this->quizRepository->addAdress($adress);
@@ -63,6 +63,6 @@ class PlayerController{
 		}
 
 	// Generar utdata.
-	return $this->playerView->show($this->quizRepository->getAdressesById($quizId));
+		return $this->playerView->show($this->quizRepository->getAdressesById($quizId));
 	}
 }

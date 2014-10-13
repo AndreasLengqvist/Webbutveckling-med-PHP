@@ -13,7 +13,7 @@ class Adress{
 
 
 
-	// Sätter frågan och svaret.
+	// Sätter adressen och slumpar fram ett unikt id för adressen.
 	public function __construct($quizId, $adress, $adressId = NULL){
 		$this->quizId = $quizId;
 		$this->adress = $adress;

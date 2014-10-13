@@ -6,7 +6,7 @@ namespace model;
 class Session{
 
 
-	private $session = "QuizSession";
+	private $session = "CreateSession";
 
 
 

@@ -10,7 +10,7 @@ class Adresses{
 	private $adresses;
 
 
-	// Sätter frågan och svaret.
+
 	public function __construct(){
 		$this->adresses = array();
 	}

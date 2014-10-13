@@ -14,8 +14,14 @@ class MailView{
 	private static $message = 'message';
 	private static $send = 'send';
 	private static $back = 'back';
+	private static $creator = 'creator';
 
 
+
+	public function __construct($quizId, \model\QuizRepository $quizRepository){
+		$this->quizId = $quizId;
+		$this->quizRepository = $quizRepository;
+	}
 
 	public function backToPlayers(){
 		return isset($_POST[self::$back]);
@@ -23,6 +29,11 @@ class MailView{
 
 	public function send(){
 		return isset($_POST['send']);
+	}
+
+
+	public function getTitle(){
+		return $this->quizRepository->getTitleById($this->quizId);
 	}
 
 
@@ -38,22 +49,21 @@ class MailView{
 	}
 
 
-	public function getTitle(){
-		return $this->quizRepository->getTitleById($this->quizId);
+	public function renderMessage($adressId){
+		$title = $this->getTitle();
+		$ret  ="		<html><body>";
+		$ret .="		<h2>" . $title . "</h2>";
+		$ret .="		<p>" . $this->getMessage() . "</p>";
+		$ret .="		<a href=http://alengqvist.com'/?'" . NavigationView::$game . '=' . $this->quizId . "&" . NavigationView::$player . "=" . $adressId . "/>Spela " . $title  . "</a>";
+	    $ret .="	</body></html>";
+	   	return $ret;
 	}
 
 
-	public function renderMessage($quizId, $adressId, $clientMessage){
-		$ret = "
-				<html>
-					<body>
-						<p> $clientMessage </p>
-						<a href=" . \Config::$ROOT_PATH . '/?' . NavigationView::$action.'='.NavigationView::$actionPlay . '/' . $quizId . '&' . $adressId . "/>
-					</body>
-				</html>
-			   ";
-
-	   return $ret;
+	public function renderHeader(){
+		$headers  = "MIME-Version: 1.0" . "\r\n";
+		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+	   	return $headers;
 	}
 
 

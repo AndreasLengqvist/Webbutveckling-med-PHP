@@ -3,6 +3,7 @@
 namespace controller;
 
 require_once('src/view/MailView.php');
+require_once('src/view/SentView.php');
 require_once("src/model/QuizRepository.php");
 
 
@@ -16,6 +17,7 @@ class MailController{
 		$this->session = $session;
 		$this->quizRepository = new \model\QuizRepository();
 		$this->mailView = new \view\MailView($this->session->getSession(), $this->quizRepository);
+		$this->sentView = new \view\SentView();
 	}
 
 
@@ -26,23 +28,31 @@ class MailController{
 	// Hanterar indata.
 		try {
 
-			// Ful-lösning för att användaren inte ska kunna ändra i URL:en.
+			// Om användaren försöker komma vidare genom att ändra i URL:en.
 			if(!$adresses->getAdresses()){
 				\view\NavigationView::RedirectToPlayerView();
 			}
 
 
-			// Tillbaka till QuestionView.
+			// Tillbaks till QuestionView.
 			if($this->mailView->backToPlayers()){
 				\view\NavigationView::RedirectToPlayerView();
 			}
 
+
+			// Skicka quizet!
 			if($this->mailView->send()){
 				foreach ($adresses->getAdresses() as $adress) {
-					$message = $this->mailView->renderMessage($quizId, $adress->getAdressId(), $this->mailView->getMessage());
-					mail($adress->getAdress(), $this->quizRepository->getTitleById($quizId), $message);
-					echo"Skickat!";
+
+					$to = $adress->getAdress();
+					$title = $this->mailView->getTitle();
+					$message = $this->mailView->renderMessage($adress->getAdressId());
+					$header = $this->mailView->renderHeader();
+					mail($to, $title, $message, $header);
+					
 				}
+				$this->session->unSetSession();
+				return $this->sentView->show();
 			}
 
 		} catch (\Exception $e) {
@@ -51,6 +61,6 @@ class MailController{
 		}
 
 	// Generar utdata.
-	return $this->mailView->show();
+		return $this->mailView->show();
 	}
 }

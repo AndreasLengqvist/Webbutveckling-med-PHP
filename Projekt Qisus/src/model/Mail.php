@@ -12,7 +12,6 @@ class Mail{
 
 
 
-	// Sätter frågan och svaret.
 	public function __construct($quizId, $message){
 		$this->quizId = $quizId;
 		$this->message = $message ;
@@ -27,6 +26,7 @@ class Mail{
 	public function getAdress(){
 		return $this->message;
 	}
+
 
 	public function isValid(){
 		return isset($this->quizId) and isset($this->adress) and isset($this->adressId);

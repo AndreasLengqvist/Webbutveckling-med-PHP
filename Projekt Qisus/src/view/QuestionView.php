@@ -56,7 +56,7 @@ class QuestionView{
 		if($this->submitQuestion()){
 			$question = trim($_POST[self::$question]);
 			if (empty($question)) {
-				$this->errorMessage = "<p id='error_new_question'>Du har glömt att skriva en fråga! ;)</p>";
+				$this->errorMessage = "<p id='error_message'>Du har glömt att skriva en fråga! ;)</p>";
 				return null;
 			}
 			return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer], NULL);

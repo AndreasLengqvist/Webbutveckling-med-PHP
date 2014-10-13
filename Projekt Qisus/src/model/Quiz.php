@@ -14,7 +14,6 @@ class Quiz{
 	public function __construct($quizId = NULL, $title){
 		$this->title = $title;
 		$this->quizId = ($quizId == NULL) ? sha1(uniqid($this->title, true)) : $quizId;
-
 	}
 
 

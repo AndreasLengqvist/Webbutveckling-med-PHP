@@ -20,6 +20,12 @@ body {
 		padding:10px;
 	}
 
+	h1#tiny_header_left {
+		float: left;
+		font-size:0.8em;
+		margin:7px;
+	}
+
 /* Visar titeln på Question och Mail */
 	h2#title {
 		word-wrap:break-word;
@@ -35,7 +41,7 @@ body {
 		font-size:2.5em;
 	}
 
-/* Nummer för varje fråga som lagts till */
+/* Sidonummer för varje fråga som lagts till */
 	h3.question_number {
 		position:absolute;
 		font-size:6em;
@@ -70,13 +76,16 @@ body {
 		font-size:4em;
 		margin-left:33px;
 		margin-top:20px;
-		color:#303030;
 	}
+
+/* Spelfråga */
+p#question_text {
+	padding:20px;
+	font-size:1.1em;
+}
 
 /* Information/hjälp/fel-texter */
 	p.info {
-		position:relative;
-		top:50px;
 		font-size:1.1em;
 		color:#303030;
 		margin:10px;
@@ -87,9 +96,11 @@ body {
 		font-weight: bolder;
 		color:#8C001A;
 	}
-	p#error_new_question {
+	p#error_message {
+		float:center;
 		font-weight: bolder;
 		color:#8C001A;
+		padding:10px;
 	}
 	/* -- Används inte för tillfället! --
 	p#error_old_question {
@@ -99,9 +110,12 @@ body {
 		color:#8C001A;
 	}
 	*/
+	#info_div {
+		margin:50px;
+	}
 
 /* Start-knapp */
-	a {
+	a{
 		position:relative;
 		top:10px;
 		display: inline-block;
@@ -123,6 +137,27 @@ body {
 		background:#C23717;
 	}
 
+/* Start-knapp */
+	#startButton{
+		position:relative;
+		top:10px;
+		display: inline-block;
+		background: #849A44;
+		color: #303030;
+		padding: 10px;
+		border: 1 ridge;
+		border-color:#5E809A;
+		border-radius: 8px;	
+		-webkit-border-radius: 8px;
+		font-size:3em;
+		text-decoration: none;
+	}
+	#startButton:hover {
+		background:#FF6B67;
+	}
+	#startButton:active {
+		background:#C23717;
+	}
 /* Allmänna input-inställningar */
 	input {
 		font-family:monospace;

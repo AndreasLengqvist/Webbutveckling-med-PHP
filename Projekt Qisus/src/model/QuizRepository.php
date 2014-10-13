@@ -14,6 +14,7 @@ class QuizRepository extends Repository{
 	private $db;
 	private $questions;
 	private $adresses;
+	
 	private static $quizId = "quizid";
 	private static $title = "title";
 	private static $questionId = "questionId";
@@ -186,6 +187,30 @@ class QuizRepository extends Repository{
 			$result = $query->fetch();
 
 			return $result[self::$title];
+
+		} catch (\Exception $e) {
+			die("An error occured in the database!");
+		}
+	}
+
+
+	public function getAdressById($id){
+		$this->dbTable = "mail";
+
+		try{
+			$db = $this->connection();
+
+        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::$adressId . " = ?";
+
+			$params = array($id);
+
+			$query = $db->prepare($sql);
+
+			$query->execute($params);
+
+			$result = $query->fetch();
+
+			return $result[self::$adress];
 
 		} catch (\Exception $e) {
 			die("An error occured in the database!");

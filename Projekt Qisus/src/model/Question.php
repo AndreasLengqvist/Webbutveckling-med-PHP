@@ -14,7 +14,7 @@ class Question{
 
 
 
-	// Sätter frågan och svaret.
+	// Sätter frågan och svaret och slumpar fram ett unikt ID för frågan.
 	public function __construct($quizId, $question, $answer, $questionId = NULL){
 		$this->quizId = $quizId;
 		$this->question = $question;
