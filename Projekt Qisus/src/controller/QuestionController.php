@@ -20,10 +20,11 @@ class QuestionController{
 
 
 	public function doQuestion(){
-		$quizId = $this->createSession->getCreateSession();
 		
 		// Hanterar indata.
 			try {
+
+				$quizId = $this->createSession->getCreateSession();
 
 				// Fortsätt till MailView.
 				if($this->questionView->finished()){
@@ -82,6 +83,6 @@ class QuestionController{
 			}
 
 	// Generar utdata.
-		return $this->questionView->show($this->quizRepository->getQuestionsById($quizId));
+		return $this->questionView->show();
 	}
 }

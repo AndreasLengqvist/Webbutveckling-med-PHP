@@ -6,7 +6,7 @@ require_once("src/model/QuizRepository.php");
 require_once("src/model/CreateSession.php");
 require_once("src/model/PlaySession.php");
 require_once('src/view/NavigationView.php');
-require_once('TitleController.php');
+require_once('CreateController.php');
 require_once('QuestionController.php');
 require_once('PlayerController.php');
 require_once('MailController.php');
@@ -17,7 +17,6 @@ class NavigationController{
 
 	private $createSession;
 	private $playSession;
-
 
 
 	public function __construct(){
@@ -32,7 +31,64 @@ class NavigationController{
 	// Hanterar navigering av alla kontrollrar.
 		try {
 
-			// Om en CreateSession är satt.
+			switch (\view\NavigationView::getUrlAction()) {
+
+				// SKAPA QUIZ
+				case \view\NavigationView::$actionCreate:
+					return \view\NavigationView::showStart();
+					
+						case \view\NavigationView::$actionCreateTitle:
+							if ($this->createSession->createSessionIsset()) {
+								\view\NavigationView::RedirectToCreateQuestions();
+							}
+							$controller = new CreateController($this->createSession);
+							return $controller->doTitle();
+						break;
+
+						case \view\NavigationView::$actionCreateCreator:
+							if(!$this->createSession->titleSessionIsset()){
+								\view\NavigationView::RedirectHome();
+							}
+							if ($this->createSession->createSessionIsset()) {
+								\view\NavigationView::RedirectToCreateQuestions();
+							}
+							$controller = new CreateController($this->createSession);
+							return $controller->doCreator();
+						break;
+
+						case \view\NavigationView::$actionCreateQuestions:
+							if (!$this->createSession->createSessionIsset()) {
+								\view\NavigationView::RedirectHome();
+							}
+							$controller = new QuestionController($this->createSession);
+							return $controller->doQuestion();
+						break;
+
+						case \view\NavigationView::$actionCreatePlayers:
+							$controller = new PlayerController($this->createSession);
+							return $controller->doPlayer();
+						break;
+
+						case \view\NavigationView::$actionSend:
+							$controller = new MailController($this->createSession);
+							return $controller->doMail();
+						break;
+
+				// SPELA QUIZ
+				case \view\NavigationView::$actionPlay:
+					$controller = new GameController($this->playSession);
+					// Om PlaySessionen är satt.
+					if ($this->playSession->playSessionsIsset()) {
+						return $controller->playGame();
+					}
+					return $controller->setupGame();
+					break;
+
+				default:
+					return \view\NavigationView::showStart();
+					break;
+			}
+			/*// Om en CreateSession är satt.
 			if ($this->createSession->createSessionIsset()) {
 
 				switch (\view\NavigationView::getUrlAction()){
@@ -69,15 +125,19 @@ class NavigationController{
 
 
 					case \view\NavigationView::$actionAddTitle:
-							$controller = new TitleController($this->createSession);
+							$controller = new CreateController($this->createSession);
 							return $controller->doTitle();
+						break;
+
+					case \view\NavigationView::$actionAddCreator:
+							return $controller->doCreator();
 						break;
 
 					default:
 
 						return \view\NavigationView::showStart();
 						break;
-				}
+				}*/
 
 		} catch (Exception $e) {
 			echo $e;

@@ -13,7 +13,6 @@ class QuestionView{
 	private $i;
 	private $quizRepository;
 	private $errorMessage;
-	private $errorOldMessage;
 
 	private static $question = 'question';
 	private static $questionId = 'questionId';
@@ -68,7 +67,6 @@ class QuestionView{
 		if($this->updateQuestion()){
 			$updatedquestion = trim($_POST[self::$question]);
 			if (empty($updatedquestion)) {
-				//$this->errorOldMessage = "<p id='error_old_question'>Du kan inte lämna frågan tom! :O</p>";
 				return null;
 			}
 			return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer], $_POST[self::$questionId]);		
@@ -82,7 +80,7 @@ class QuestionView{
 
 
 	public function getQuizToDelete(){
-		return new \model\Quiz($this->quizId, $this->getTitle());		
+		return new \model\Quiz($this->quizId, "delete", "delete@this.com");		
 	}
 
 
@@ -91,10 +89,10 @@ class QuestionView{
 	}
 
 
-	public function show(\model\Questions $questions){
+	public function show(){
 
+		$questions = $this->quizRepository->getQuestionsById($this->quizId);
 		$errorMessage = $this->errorMessage;
-		$errorOldMessage = $this->errorOldMessage;
 
 		$ret = "
 					<h1 id='tiny_header'>qisus.</h1>

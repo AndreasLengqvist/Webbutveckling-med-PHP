@@ -10,11 +10,13 @@ class NavigationView{
 	public static $player = 'player';
 
 	public static $actionHome = 'start';
-	public static $actionAddTitle = 'skapa';
-	public static $actionAddQuestions = 'skapa/frågor';
-	public static $actionAddPlayers = 'skapa/spelare';
-	public static $actionMailQuiz = 'skicka';
-	public static $actionPlay = 'spela';
+	public static $actionCreate = 'create';
+	public static $actionCreateTitle = 'create/title';
+	public static $actionCreateCreator = 'create/owner';
+	public static $actionCreateQuestions = 'create/questions';
+	public static $actionCreatePlayers = 'create/players';
+	public static $actionSend = 'send';
+	public static $actionPlay = 'play';
 
 
 
@@ -42,22 +44,32 @@ class NavigationView{
 
 
 	public static function RedirectHome() {
-		header('Location:  /' . \Config::$ROOT_PATH . '/');
+		header('Location:  /' . \Config::$ROOT_PATH . '');
+	}
+
+	
+	public static function RedirectToCreateTitle() {
+		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionCreateTitle);
 	}
 
 
-	public static function RedirectToQuestionView() {
-		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionAddQuestions);
+	public static function RedirectToCreateCreator() {
+		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionCreateCreator);
+	}
+
+
+	public static function RedirectToCreateQuestions() {
+		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionCreateQuestions);
 	}
 
 
 	public static function RedirectToPlayerView() {
-		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionAddPlayers);
+		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionCreatePlayers);
 	}
 
 
-	public static function RedirectToMailView() {
-		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionMailQuiz);
+	public static function RedirectToSend() {
+		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionSend);
 	}
 
 
@@ -72,7 +84,7 @@ class NavigationView{
 					<div id='center_wrap'>
 						<h2 id='home_h2'>Skapa quiz!</h2>
 						<h3 id='arrow'>↓</h3>
-						<a id='navbutton' href='?" . self::$action . '=' . self::$actionAddTitle . "'>Start</a>
+						<a id='navbutton' href='?" . self::$action . '=' . self::$actionCreateTitle . "'>Start</a>
 						
 						<div id='info_div'>
 							<p>Välkommen till qisus.</p>

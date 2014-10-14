@@ -2,8 +2,6 @@
 
 namespace model;
 
-require_once("QuizRepository.php");
-
 
 class Adresses{
 

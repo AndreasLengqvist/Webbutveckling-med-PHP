@@ -20,27 +20,28 @@ class PlayerController{
 
 
 	public function doPlayer(){
-		$quizId = $this->createSession->getCreateSession();
-		$questions = $this->quizRepository->getQuestionsById($quizId);
 
 	// Hanterar indata.
 		try {
 
+			$quizId = $this->createSession->getCreateSession();
+			$questions = $this->quizRepository->getQuestionsById($quizId);
+
 			// Om användaren försöker komma vidare genom att ändra i URL:en.
 			if(!$questions->getQuestions()){
-				\view\NavigationView::RedirectToQuestionView();
+				\view\NavigationView::RedirectToCreateQuestions();
 			}
 
 
 			// Tillbaks till QuestionView.
 			if($this->playerView->backToQuestions()){
-				\view\NavigationView::RedirectToQuestionView();
+				\view\NavigationView::RedirectToCreateQuestions();
 			}
 
 
 			// Fortsätt till SendView.
 			if($this->playerView->finished()){
-				\view\NavigationView::RedirectToMailView();
+				\view\NavigationView::RedirectToSend();
 			}
 
 
@@ -63,6 +64,6 @@ class PlayerController{
 		}
 
 	// Generar utdata.
-		return $this->playerView->show($this->quizRepository->getAdressesById($quizId));
+		return $this->playerView->show();
 	}
 }

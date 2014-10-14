@@ -3,7 +3,6 @@
 namespace controller;
 
 require_once('src/view/MailView.php');
-require_once('src/view/SentView.php');
 require_once("src/model/QuizRepository.php");
 
 
@@ -17,7 +16,6 @@ class MailController{
 		$this->session = $session;
 		$this->quizRepository = new \model\QuizRepository();
 		$this->mailView = new \view\MailView($this->session->getCreateSession(), $this->quizRepository);
-		$this->sentView = new \view\SentView();
 	}
 
 
@@ -52,7 +50,7 @@ class MailController{
 					
 				}
 				$this->session->unSetCreateSession();
-				return $this->sentView->show();
+				return $this->mailView->showSent();
 			}
 
 		} catch (\Exception $e) {

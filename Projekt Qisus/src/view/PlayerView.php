@@ -49,12 +49,11 @@ class PlayerView{
 
 	public function getAdressData(){
 		if($this->submitAdress()){
-			$adress = trim($_POST[self::$adress]);
-			if (empty($adress)) {
-				$this->errorMessage = "<p id='error_message'>Du har glömt att skriva in en mailadress! ;)</p>";
-				return null;
-			}
+			try {
 				return new \model\Adress($this->quizId, $_POST[self::$adress], NULL);
+			} catch (\Exception $e) {
+				$this->errorMessage = "<p id='error_message'>" . $e->getMessage() . "</p>";
+			}
 		}
 	}
 
@@ -64,8 +63,9 @@ class PlayerView{
 	}
 
 
-	public function show(\model\Adresses $adresses){
+	public function show(){
 
+		$adresses = $this->quizRepository->getAdressesById($this->quizId);
 		$errorMessage = $this->errorMessage;
 
 		$ret = "

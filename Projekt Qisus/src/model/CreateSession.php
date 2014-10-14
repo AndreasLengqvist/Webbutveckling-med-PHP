@@ -6,26 +6,47 @@ namespace model;
 class CreateSession{
 
 
-	private $session = "CreateSession";
+	private $createSession = "CreateSession";
+	private $titleSession = "titleSession";
 
 
 
 	public function createSessionIsset(){
-		return isset($_SESSION[$this->session]);
+		return isset($_SESSION[$this->createSession]);
+	}
+
+	public function titleSessionIsset(){
+		return isset($_SESSION[$this->titleSession]);
 	}
 
 
 	public function setCreateSession($session){
-		$_SESSION[$this->session] = $session;		
+		$_SESSION[$this->createSession] = $session;		
+	}
+
+	public function setTitleSession($session){
+		$_SESSION[$this->titleSession] = $session;		
 	}
 
 
 	public function getCreateSession(){
-		return $_SESSION[$this->session];
+		if ($this->createSessionIsset()) {
+			return $_SESSION[$this->createSession];
+		}
+	}
+
+	public function getTitleSession(){
+		if ($this->titleSessionIsset()) {
+			return $_SESSION[$this->titleSession];
+		}
 	}
 
 
+	public function unSetTitleSession(){
+		unset($_SESSION[$this->titleSession]);
+	}
+
 	public function unSetCreateSession(){
-		unset($_SESSION[$this->session]);
+		unset($_SESSION[$this->createSession]);
 	}
 }

@@ -17,6 +17,7 @@ class QuizRepository extends Repository{
 	
 	private static $quizId = "quizid";
 	private static $title = "title";
+	private static $creator = "creator";
 	private static $questionId = "questionId";
 	private static $question = "question";
 	private static $answer = "answer";
@@ -35,9 +36,9 @@ class QuizRepository extends Repository{
 		try{
 			$db = $this->connection();
 
-        	$sql = "INSERT INTO $this->dbTable (" . self::$quizId . ", " . self::$title . ") VALUES (?, ?)";
+        	$sql = "INSERT INTO $this->dbTable (" . self::$quizId . ", " . self::$title . ", " . self::$creator . ") VALUES (?, ?, ?)";
 
-			$params = array($quiz->getQuizId(), $quiz->getTitle());
+			$params = array($quiz->getQuizId(), $quiz->getTitle(), $quiz->getCreator());
 
 			$query = $db->prepare($sql);
 		
