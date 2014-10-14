@@ -51,7 +51,7 @@ class PlayerView{
 		if($this->submitAdress()){
 			$adress = trim($_POST[self::$adress]);
 			if (empty($adress)) {
-				$this->errorMessage = "<p id='error_new_question'>Du har glömt att skriva in en mailadress! ;)</p>";
+				$this->errorMessage = "<p id='error_message'>Du har glömt att skriva in en mailadress! ;)</p>";
 				return null;
 			}
 				return new \model\Adress($this->quizId, $_POST[self::$adress], NULL);
@@ -74,7 +74,7 @@ class PlayerView{
 					<div>
 						<form method='post'>
 							<div>
-								<label for='address_input' id='question_label'>Här skriver du in spelarens mailadress..</label>
+								<label for='address_input' id='player_label'>Skriv in dina spelares mailadresser..</label>
 					        </div>
 								<input id='address_input' type='text' name='" . self::$adress . "'>
 							
@@ -99,7 +99,7 @@ class PlayerView{
 
 		if(!$adresses->getAdresses()){
 			$ret .= "
-						<h4>Inga spelare tillagda.</h4>
+						<p>Inga spelare tillagda.</p>
 					";
 		}
 
@@ -108,11 +108,11 @@ class PlayerView{
 			$this->i++;
 
 			$ret .= "
-					<div class='old_question_div'>
+					<div class='saved_div'>
 					<h3 class='question_number'>" . $this->i . "</h3>
 						<form method='post'>
-							<input type='hidden' name='" . self::$adressId . "' value='" . $adress->getAdressId() . "'><br>
-							<label for='question_input" . $this->i . "'>" . $adress->getAdress() . "</label><br>
+							<input type='hidden' name='" . self::$adressId . "' value='" . $adress->getAdressId() . "'>
+							<label for='question_input" . $this->i . "'>" . $adress->getAdress() . "</label>
 		    				<input class='deleteButton' type='submit' value='Ta bort' name='" . self::$deleteAdress . "'>
 						</form>
 					</div>

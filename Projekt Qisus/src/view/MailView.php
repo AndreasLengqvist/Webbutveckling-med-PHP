@@ -54,7 +54,7 @@ class MailView{
 		$ret  ="		<html><body>";
 		$ret .="		<h2>" . $title . "</h2>";
 		$ret .="		<p>" . $this->getMessage() . "</p>";
-		$ret .="		<a href=http://alengqvist.com'/?'" . NavigationView::$game . '=' . $this->quizId . "&" . NavigationView::$player . "=" . $adressId . "/>Spela " . $title  . "</a>";
+		$ret .="		<a href=http://alengqvist.com/?" . NavigationView::$action . "=" . NavigationView::$actionPlay . "&" . NavigationView::$game . '=' . $this->quizId . "&" . NavigationView::$player . "=" . $adressId . ">Spela " . $title  . "</a>";
 	    $ret .="	</body></html>";
 	   	return $ret;
 	}

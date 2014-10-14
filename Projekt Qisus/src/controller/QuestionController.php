@@ -12,15 +12,15 @@ class QuestionController{
 
 
 
-	public function __construct(\model\Session $createSession){
+	public function __construct(\model\CreateSession $createSession){
 		$this->createSession = $createSession;
 		$this->quizRepository = new \model\QuizRepository();
-		$this->questionView = new \view\QuestionView($this->createSession->getSession(), $this->quizRepository);
+		$this->questionView = new \view\QuestionView($this->createSession->getCreateSession(), $this->quizRepository);
 	}
 
 
 	public function doQuestion(){
-		$quizId = $this->createSession->getSession();
+		$quizId = $this->createSession->getCreateSession();
 		
 		// Hanterar indata.
 			try {
@@ -53,7 +53,7 @@ class QuestionController{
 						}
 					}
 					$this->quizRepository->deleteQuiz($this->questionView->getQuizToDelete());
-					$this->createSession->unSetSession();
+					$this->createSession->unSetCreateSession();
 					\view\NavigationView::RedirectHome();
 				}
 

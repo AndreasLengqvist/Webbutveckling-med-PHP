@@ -138,7 +138,7 @@ class QuestionView{
 		
 		if(!$questions->getQuestions()){
 			$ret .= "
-						<h4>Inga frågor tillagda.</h4>
+						<p>Inga frågor tillagda.</p>
 					";
 		}
 
@@ -147,10 +147,10 @@ class QuestionView{
 			$this->i++;
 
 			$ret .= "
-					<div class='old_question_div'>
+					<div class='saved_div'>
 					<h3 class='question_number'>" . $this->i . "</h3>
 						<form method='post'>
-							<input type='hidden' name='" . self::$questionId . "' value='" . $question->getQuestionId() . "'><br>
+							<input type='hidden' name='" . self::$questionId . "' value='" . $question->getQuestionId() . "'>
 							<label for='question_input" . $this->i . "'>Fråga " . $this->i . "</label><br>
 					        <textarea id='question_input" . $this->i . "' rows='8' cols='50' name='" . self::$question . "'>" . $question->getQuestion() . "</textarea><br>
 			        ";
@@ -159,7 +159,7 @@ class QuestionView{
 								            <input type='radio' id='true" . $this->i . "' name='" . self::$answer . "' value='true' checked>
 										    <label class='old' for='true" . $this->i . "'>Sant</label>
 										    <input type='radio' id='false" . $this->i . "' name='" . self::$answer . "'value='false'>
-										    <label class='old' for='false" . $this->i . "'>Falskt</label><br>
+										    <label class='old' for='false" . $this->i . "'>Falskt</label>
 										";   							
 							}
 							else{
@@ -167,13 +167,14 @@ class QuestionView{
 								            <input type='radio' id='true" . $this->i . "' name='" . self::$answer . "' value='true'>
 										    <label class='old' for='true" . $this->i . "'>Sant</label>
 										    <input type='radio' id='false" . $this->i . "' name='" . self::$answer . "'value='false' checked>
-										    <label class='old' for='false" . $this->i . "'>Falskt</label><br>
+										    <label class='old' for='false" . $this->i . "'>Falskt</label>
 										";   
 							}	
 			$ret .= "     	
-
-		    				<input class='updateButton' type='submit' value='Uppdatera' name='" . self::$update_question . "'>
-		    				<input class='deleteButton' type='submit' value='Ta bort' name='" . self::$delete_question . "'>
+							<div>
+		    					<input class='updateButton' type='submit' value='Uppdatera' name='" . self::$update_question . "'>
+		    					<input class='deleteButton' type='submit' value='Ta bort' name='" . self::$delete_question . "'>
+							</div>
 						</form>
 					</div>
 					";

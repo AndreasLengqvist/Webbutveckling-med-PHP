@@ -13,16 +13,16 @@ class MailController{
 
 
 
-	public function __construct(\model\Session $session){
+	public function __construct(\model\CreateSession $session){
 		$this->session = $session;
 		$this->quizRepository = new \model\QuizRepository();
-		$this->mailView = new \view\MailView($this->session->getSession(), $this->quizRepository);
+		$this->mailView = new \view\MailView($this->session->getCreateSession(), $this->quizRepository);
 		$this->sentView = new \view\SentView();
 	}
 
 
 	public function doMail(){
-		$quizId = $this->session->getSession();
+		$quizId = $this->session->getCreateSession();
 		$adresses = $this->quizRepository->getAdressesById($quizId);
 
 	// Hanterar indata.
@@ -51,7 +51,7 @@ class MailController{
 					mail($to, $title, $message, $header);
 					
 				}
-				$this->session->unSetSession();
+				$this->session->unSetCreateSession();
 				return $this->sentView->show();
 			}
 

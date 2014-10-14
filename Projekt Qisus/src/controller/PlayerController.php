@@ -12,15 +12,15 @@ class PlayerController{
 
 
 
-	public function __construct(\model\Session $createSession){
+	public function __construct(\model\CreateSession $createSession){
 		$this->createSession = $createSession;
 		$this->quizRepository = new \model\QuizRepository();
-		$this->playerView = new \view\PlayerView($this->createSession->getSession(), $this->quizRepository);
+		$this->playerView = new \view\PlayerView($this->createSession->getCreateSession(), $this->quizRepository);
 	}
 
 
 	public function doPlayer(){
-		$quizId = $this->createSession->getSession();
+		$quizId = $this->createSession->getCreateSession();
 		$questions = $this->quizRepository->getQuestionsById($quizId);
 
 	// Hanterar indata.

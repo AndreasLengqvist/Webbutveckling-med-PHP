@@ -3,7 +3,7 @@
 namespace controller;
 
 require_once("src/model/QuizRepository.php");
-require_once("src/model/Session.php");
+require_once("src/model/CreateSession.php");
 require_once("src/model/PlaySession.php");
 require_once('src/view/NavigationView.php');
 require_once('TitleController.php');
@@ -22,7 +22,7 @@ class NavigationController{
 
 	public function __construct(){
 		$this->quizRepository = new \model\QuizRepository();
-		$this->createSession = new \model\Session();
+		$this->createSession = new \model\CreateSession();
 		$this->playSession = new \model\PlaySession();
 	}
 
@@ -33,7 +33,7 @@ class NavigationController{
 		try {
 
 			// Om en CreateSession är satt.
-			if ($this->createSession->sessionIsset()) {
+			if ($this->createSession->createSessionIsset()) {
 
 				switch (\view\NavigationView::getUrlAction()){
 

@@ -75,8 +75,8 @@ class NavigationView{
 						<a id='navbutton' href='?" . self::$action . '=' . self::$actionAddTitle . "'>Start</a>
 						
 						<div id='info_div'>
-							<p class='info'>Välkommen till qisus.</p>
-							<p class='info'>Verktyget som gör det lekande lätt att skapa enkla quiz för just dina behov!</p>
+							<p>Välkommen till qisus.</p>
+							<p>Verktyget som gör det lekande lätt att skapa enkla quiz för just dina behov!</p>
 						</div>
 					</div>
 				";

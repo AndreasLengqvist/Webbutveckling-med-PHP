@@ -8,7 +8,6 @@ require_once("NavigationView.php");
 
 class TitleView{
 
-	private $session;
 	private $errorMessage;
 	private static $title = 'title';
 	private static $submit = 'submit';
@@ -25,7 +24,7 @@ class TitleView{
 		if($this->submitTitle()){
 			$title = trim($_POST[self::$title]);
 			if (empty($title)) {
-				$this->errorMessage = "<p id='error_title'>Ditt quiz måste heta något! ;)</p>";
+				$this->errorMessage = "<p id='error_message'>Ditt quiz måste heta något! ;)</p>";
 				return null;
 			}
 			return new \model\Quiz(NULL, $title);
@@ -46,11 +45,13 @@ class TitleView{
 							<div>
 								<label id='title_label' for='title_input'>Vad ska quizet heta?</label>
 							</div>
+							<div>
 								<input id='title_input' type='text' name='" . self::$title . "'>
+							</div>
 
 								$errorMessage
 
-		    				<div id='title_buttons_div'>
+		    				<div>
 								<input class='continueButton' type='submit' value='Fortsätt →' name='" . self::$submit . "'>
 							</div>
 						</form>
