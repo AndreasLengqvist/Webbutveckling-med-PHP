@@ -65,10 +65,12 @@ class NavigationController{
 				// SPELA QUIZ
 				case \view\NavigationView::$actionPlay:
 					$controller = new GameController($this->playSession);
-					if ($this->playSession->playSessionsIsset()) {
-						return $controller->playGame();
-					}
 					return $controller->setupGame();
+					break;
+
+				case \view\NavigationView::$actionPlaying:
+					$controller = new GameController($this->playSession);
+					return $controller->playGame();
 					break;
 
 				default:

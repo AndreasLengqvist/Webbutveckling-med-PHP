@@ -17,6 +17,7 @@ class NavigationView{
 	public static $actionCreatePlayers = 'create/players';
 	public static $actionSend = 'send';
 	public static $actionPlay = 'play';
+	public static $actionPlaying = 'playing';
 
 
 
@@ -74,7 +75,7 @@ class NavigationView{
 
 
 	public static function RedirectToGameView() {
-		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionPlay);
+		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionPlaying);
 	}
 
 	public static function showStart(){

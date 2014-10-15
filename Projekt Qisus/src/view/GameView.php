@@ -32,9 +32,11 @@ class GameView{
 		return isset($_POST[self::$play]);
 	}
 
+
 	public function send(){
 		return isset($_POST[self::$send]);
 	}
+
 
 	public function getSetupData(){
 		if($this->play()){
@@ -49,12 +51,12 @@ class GameView{
 		}
 	}
 
+
 	public function getAnswers(\model\Questions $questions){
 		if ($this->send()) {
 
 			foreach ($questions->getQuestions() as $question) {
 				$answer = $question->getQuestionId();
-
 
 					if (empty($_POST[$answer])) {
 						$answers[$answer] = null;
@@ -64,11 +66,52 @@ class GameView{
 					else{
 						$answers[$answer] = $_POST[$answer];
 						$this->session->setAnswerSession($answers);
-
 					}
 				}
 			}
 	}
+
+
+	public function renderTitle($player, $title){
+		return "Resultat på " . $title . " - ". $player;
+	}
+
+
+	public function renderHeader($player){
+		$headers = "From: " . strip_tags($player) . "\r\n";
+		$headers .= "MIME-Version: 1.0" . "\r\n";
+		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+	   	return $headers;
+	}
+
+
+	public function renderMessage($gameId, $player, $title, \model\Questions $questions, $answers){
+
+		$ret  ="		<html><body>";
+		$ret .="		<h2>" . $title . "</h2>";
+		$ret .="		<h3>Resultat från " . $player ."</h3>";
+
+		foreach ($questions->getQuestions() as $question) {
+
+				$this->q++;
+				$questionId =$question->getQuestionId();
+
+				$ret .= "<h4>Fråga " . $this->q . "</h4>";
+				$ret .= "<p>" . $question->getQuestion() . "</p>";
+				$ret .= "<p> Rätt svar: " . $question->getAnswer() . "</p>";
+
+			foreach ($answers as $qId => $answer) {
+
+				if ($qId === $questionId) {
+					$ret .= "<p> Svarade: " . $answer . "</p>";
+				}
+			}
+		}
+
+	    $ret .="		</body></html>";
+	   	return $ret;
+	}
+
 
 	public function showSetup(){
 
@@ -94,8 +137,10 @@ class GameView{
 		return $ret;
 	}
 
-	public function showQuestions(\model\Questions $questions, $gameId , $playerId){
+	public function showQuestions(\model\Questions $questions){
 
+		$gameId = $this->session->getGameSession();
+		$playerId = $this->session->getPlayerSession();
 		$errorMessage = $this->errorMessage;
 
 
@@ -178,6 +223,22 @@ class GameView{
 							<p class='info'>Dina svar kommer då skickas till skaparen av quizet och det är också denne som presenterar resultatet.</p>
 						</div>
 					";
+		return $ret;
+	}
+
+
+	public function showSent($owner){
+
+		$ret = "
+					<h1 id='tiny_header'>qisus.</h1>
+					<h1 id='big_header'>qisus.</h1>
+					<div id='center_wrap'>
+						<h2 id='home_h2'>Dina svar skickades! :D</h2>
+						<p class='info'>Dina svar kommer nu skickas till " . $owner . ", det är också denne som presenterar ditt eventuella resultat.</p>
+						<p class='info'>Tack för att du spelade qisus.</p>
+					</div>
+				";
+
 		return $ret;
 	}
 }

@@ -28,6 +28,10 @@ class GameController{
 	// Hanterar indata.
 		try {
 
+			if ($this->playSession->playSessionsIsset()) {
+				return $this->playGame();
+			}
+
 			$game = $this->gameView->getSetupData();
 
 			// När spelaren trycker på spela.
@@ -50,6 +54,10 @@ class GameController{
 
 	// Hanterar indata.
 		try {
+			
+			if (!$this->playSession->playSessionsIsset()) {
+				return $this->setupGame();
+			}
 
 			// Fuskförebyggande - om spelaren försöker ladda samma spel från en annan webbläsare/dator.
 			if (!$this->playSession->checkPlayerAgent($this->useragent->getUserAgent())) {
@@ -59,9 +67,27 @@ class GameController{
 
 			$gameId = $this->playSession->getGameSession();
 			$playerId = $this->playSession->getPlayerSession();
-		 	$questions = $this->quizRepository->getQuestionsById($gameId);
+			$questions = $this->quizRepository->getQuestionsById($gameId);
 
 			$this->gameView->getAnswers($questions);
+
+			if($this->playSession->answerSessionIsset()){
+				$answers = $this->playSession->getAnswersSession();
+
+				if (!in_array(null, $answers)){
+					$titleToRender = $this->quizRepository->getTitleById($gameId);
+					$player = $this->quizRepository->getAdressById($playerId);
+					$to = $this->quizRepository->getCreatorById($gameId);
+					$title = $this->gameView->renderTitle($player, $titleToRender);
+					$message = $this->gameView->renderMessage($gameId, $player, $titleToRender, $questions, $answers);
+					$header = $this->gameView->renderHeader($player);
+					mail($to, $title, $message, $header);
+
+					$this->playSession->unSetPlaySessions();
+					
+					return $this->gameView->showSent($to);
+				}
+			}
 
 
 
@@ -72,6 +98,6 @@ class GameController{
 		}
 
 	//Generar utdata.
-		return $this->gameView->showQuestions($questions, $gameId, $playerId);
+		return $this->gameView->showQuestions($questions);
 	}
 }

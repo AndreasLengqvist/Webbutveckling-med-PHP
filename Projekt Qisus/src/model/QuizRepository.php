@@ -195,6 +195,29 @@ class QuizRepository extends Repository{
 	}
 
 
+	public function getCreatorById($id){
+		$this->dbTable = "quiz";
+
+		try{
+			$db = $this->connection();
+
+        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::$quizId . " = ?";
+
+			$params = array($id);
+
+			$query = $db->prepare($sql);
+
+			$query->execute($params);
+
+			$result = $query->fetch();
+
+			return $result[self::$creator];
+
+		} catch (\Exception $e) {
+			die("An error occured in the database!");
+		}
+	}
+
 	public function getAdressById($id){
 		$this->dbTable = "mail";
 

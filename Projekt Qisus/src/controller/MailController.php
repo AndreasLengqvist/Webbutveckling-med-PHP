@@ -45,7 +45,7 @@ class MailController{
 					$to = $adress->getAdress();
 					$title = $this->mailView->getTitle();
 					$message = $this->mailView->renderMessage($adress->getAdressId());
-					$header = $this->mailView->renderHeader();
+					$header = $this->mailView->renderHeader($quizId);
 					mail($to, $title, $message, $header);
 					
 				}
