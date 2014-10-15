@@ -102,7 +102,7 @@ class QuestionView{
 						<div id='new_question_div'>
 							<form method='post'>
 								<div>
-									<label for='question_input' id='question_label'>Ny fråga?</label>
+									<label for='question_input' id='question_label'>Skapa fråga..</label>
 						        </div>
 						        <div>
 						        	<textarea id='question_input' rows='8' name='" . self::$question . "'></textarea>

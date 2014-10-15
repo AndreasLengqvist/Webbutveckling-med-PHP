@@ -24,6 +24,10 @@ class QuestionController{
 		// Hanterar indata.
 			try {
 
+				if (!$this->createSession->createSessionIsset()) {
+					\view\NavigationView::RedirectHome();
+				}
+
 				$quizId = $this->createSession->getCreateSession();
 
 				// Fortsätt till MailView.

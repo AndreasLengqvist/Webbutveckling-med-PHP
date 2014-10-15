@@ -21,7 +21,12 @@ class CreateController{
 
 	public function doTitle(){
 
-		// Hanterar indata.		
+		// Hanterar indata.	
+
+				if ($this->createSession->createSessionIsset()) {
+					\view\NavigationView::RedirectToCreateQuestions();
+				}		
+				
 				$title = $this->createView->getTitle();
 
 				// Om titeln är satt.
@@ -39,6 +44,14 @@ class CreateController{
 
 		// Hanterar indata.
 			try {
+
+				if(!$this->createSession->titleSessionIsset()){
+					\view\NavigationView::RedirectHome();
+				}
+
+				if ($this->createSession->createSessionIsset()) {
+					\view\NavigationView::RedirectToCreateQuestions();
+				}
 
 				if($this->createView->back()){
 					\view\NavigationView::RedirectToCreateTitle();

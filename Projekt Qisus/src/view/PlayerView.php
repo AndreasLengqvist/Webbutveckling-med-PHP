@@ -59,7 +59,7 @@ class PlayerView{
 
 
 	public function getAdressToDelete(){
-		return new \model\Adress($this->quizId, "", $_POST[self::$adressId]);		
+		return new \model\Adress($this->quizId, "delete@this.adress", $_POST[self::$adressId]);		
 	}
 
 

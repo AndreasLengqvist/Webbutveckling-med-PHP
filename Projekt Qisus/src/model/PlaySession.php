@@ -9,11 +9,16 @@ class PlaySession{
 	private $gameSession = "gameSession";
 	private $playerSession = "playerSession";
 	private $userAgent = "userAgent";
+	private $answers = "answers";
 
 
 
 	public function playSessionsIsset(){
 		return isset($_SESSION[$this->gameSession]) and isset($_SESSION[$this->playerSession]) and isset($_SESSION[$this->userAgent]);
+	}
+
+	public function answerSessionIsset(){
+		return isset($_SESSION[$this->answers]);
 	}
 
 
@@ -30,6 +35,10 @@ class PlaySession{
 		$_SESSION[$this->userAgent] = $userAgent;		
 	}
 
+	public function setAnswerSession($answers){
+		$_SESSION[$this->answers] = $answers;		
+	}
+
 
 	public function getPlayerSession(){
 		return $_SESSION[$this->playerSession];
@@ -38,6 +47,10 @@ class PlaySession{
 
 	public function getGameSession(){
 		return $_SESSION[$this->gameSession];
+	}
+
+	public function getAnswersSession(){
+		return $_SESSION[$this->answers];
 	}
 
 

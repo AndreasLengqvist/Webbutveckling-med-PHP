@@ -19,7 +19,7 @@ class GameController{
 		$this->playSession = $playSession;
 		$this->useragent = new \UserAgent();
 		$this->quizRepository = new \model\QuizRepository();
-		$this->gameView = new \view\GameView($this->quizRepository);
+		$this->gameView = new \view\GameView($this->playSession, $this->quizRepository);
 	}
 
 
@@ -59,6 +59,12 @@ class GameController{
 
 			$gameId = $this->playSession->getGameSession();
 			$playerId = $this->playSession->getPlayerSession();
+		 	$questions = $this->quizRepository->getQuestionsById($gameId);
+
+			$this->gameView->getAnswers($questions);
+
+
+
 
 		} catch (\Exception $e) {
 			echo $e;
@@ -66,6 +72,6 @@ class GameController{
 		}
 
 	//Generar utdata.
-		return $this->gameView->showQuestions($this->quizRepository->getQuestionsById($gameId), $gameId, $playerId);
+		return $this->gameView->showQuestions($questions, $gameId, $playerId);
 	}
 }

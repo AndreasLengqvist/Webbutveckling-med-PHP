@@ -9,7 +9,8 @@ require_once("src/model/QuizRepository.php");
 
 class GameView{
 
-	private $i;
+	private $q;
+	private $a;
 	private $quizRepository;
 	private $errorMessage;
 
@@ -21,8 +22,9 @@ class GameView{
 
 
 
-	public function __construct(\model\QuizRepository $quizRepository){
+	public function __construct(\model\PlaySession $session, \model\QuizRepository $quizRepository){
 		$this->quizRepository = $quizRepository;
+		$this->session = $session;
 	}
 
 
@@ -31,7 +33,7 @@ class GameView{
 	}
 
 	public function send(){
-		return isset($_POST[self::$play]);
+		return isset($_POST[self::$send]);
 	}
 
 	public function getSetupData(){
@@ -45,6 +47,27 @@ class GameView{
 			}
 			return null;
 		}
+	}
+
+	public function getAnswers(\model\Questions $questions){
+		if ($this->send()) {
+
+			foreach ($questions->getQuestions() as $question) {
+				$answer = $question->getQuestionId();
+
+
+					if (empty($_POST[$answer])) {
+						$answers[$answer] = null;
+						$this->session->setAnswerSession($answers);
+						$this->errorMessage = "<p id='error_message'>Du måste svara på alla frågorna!</p>";
+					}
+					else{
+						$answers[$answer] = $_POST[$answer];
+						$this->session->setAnswerSession($answers);
+
+					}
+				}
+			}
 	}
 
 	public function showSetup(){
@@ -72,36 +95,82 @@ class GameView{
 	}
 
 	public function showQuestions(\model\Questions $questions, $gameId , $playerId){
+
+		$errorMessage = $this->errorMessage;
+
+
 		$ret = "	
-					<h1 id='tiny_header_left'>
-						" . $this->quizRepository->getAdressById($playerId) . "
-					</h1>
 					<h1 id='tiny_header'>qisus.</h1>
 					<h2 id='title'>
 						" . $this->quizRepository->getTitleById($gameId) . "
 					</h2>
+
+					$errorMessage
+
+					<form method='post'>
 			   ";
 
 			foreach ($questions->getQuestions() as $question) {
 
-				$this->i++;
+				$this->q++;
+				$questionId =$question->getQuestionId();
 
 				$ret .= "
 						<div class='saved_div'>
-						<h3 class='question_number'>" . $this->i . "</h3>
+						<h3 class='question_number'>" . $this->q . "</h3>
 							<form method='post'>
-								<input type='hidden' name='" . self::$questionId . "' value='" . $question->getQuestionId() . "'>
-						        <p id='question_text' class='question" . $this->i . "'>" . $question->getQuestion() . "</p>
-					            <input type='radio' id='true" . $this->i . "' name='" . self::$answer . "' value='true' checked>
-							    <label class='old' for='true" . $this->i . "'>Sant</label>
-							    <input type='radio' id='false" . $this->i . "' name='" . self::$answer . "'value='false'>
-							    <label class='old' for='false" . $this->i . "'>Falskt</label>
-							</form>
-						</div>
+						        <p id='question_text' class='question" . $this->q . "'>" . $question->getQuestion() . "</p>
+
+				";
+
+				if ($this->session->answerSessionIsset()) {
+
+					foreach ($this->session->getAnswersSession() as $qId => $answer) {
+						
+						if ($qId === $questionId) {
+						
+							if ($answer === "true") {
+								$ret .= "
+								            <input type='radio' id='true" . $this->q . "' name='" . $questionId . "' value='true' checked>
+										    <label class='old' for='true" . $this->q . "'>Sant</label>
+										    <input type='radio' id='false" . $this->q . "' name='" . $questionId . "'value='false'>
+										    <label class='old' for='false" . $this->q . "'>Falskt</label>
+										";
+							}
+							if ($answer === "false") {
+								$ret .= "
+								            <input type='radio' id='true" . $this->q . "' name='" . $questionId . "' value='true'>
+										    <label class='old' for='true" . $this->q . "'>Sant</label>
+										    <input type='radio' id='false" . $this->q . "' name='" . $questionId . "'value='false' checked>
+										    <label class='old' for='false" . $this->q . "'>Falskt</label>
+										";
+							}
+							if($answer === null)  {
+								$ret .= "
+								            <input type='radio' id='true" . $this->q . "' name='" . $questionId . "' value='true'>
+										    <label class='old' for='true" . $this->q . "'>Sant</label>
+										    <input type='radio' id='false" . $this->q . "' name='" . $questionId . "'value='false'>
+										    <label class='old' for='false" . $this->q . "'>Falskt</label>
+										";
+							}
+						}
+					}
+				}
+				else{
+					$ret .= "
+				            <input type='radio' id='true" . $this->q . "' name='" . $questionId . "' value='true'>
+						    <label class='old' for='true" . $this->q . "'>Sant</label>
+						    <input type='radio' id='false" . $this->q . "' name='" . $questionId . "'value='false'>
+						    <label class='old' for='false" . $this->q . "'>Falskt</label>
 						";
+
+				}
+			$ret .= "
+						</div>
+					";
 			}
 			$ret .= "	
-						<form method='post'>
+							$errorMessage
 							<input class='sendButton' type='submit' value='Skicka in' name='" . self::$send . "'>
 						</form>
 						<div id='info_div'>
