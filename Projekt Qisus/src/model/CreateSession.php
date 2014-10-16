@@ -41,12 +41,8 @@ class CreateSession{
 		}
 	}
 
-
-	public function unSetTitleSession(){
-		unset($_SESSION[$this->titleSession]);
-	}
-
 	public function unSetCreateSession(){
+		unset($_SESSION[$this->titleSession]);
 		unset($_SESSION[$this->createSession]);
 	}
 }

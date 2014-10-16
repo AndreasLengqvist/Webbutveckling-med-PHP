@@ -3,33 +3,35 @@
 namespace controller;
 
 require_once("src/model/QuizRepository.php");
+require_once("src/model/CreateSession.php");
 require_once('src/view/CreateView.php');
 
 
 class CreateController{
 
-	private $session;
+	private $createSession;
+	private $createView;
 
 
 
-	public function __construct(\model\CreateSession $createSession){
-		$this->createSession = $createSession;
+	public function __construct(){
+		$this->createSession = new \model\CreateSession();
 		$this->createView = new \view\CreateView($this->createSession);
-		$this->quizRepository = new \model\QuizRepository();
 	}
 
 
 	public function doTitle(){
 
 		// Hanterar indata.	
-
-				if ($this->createSession->createSessionIsset()) {
-					\view\NavigationView::RedirectToCreateQuestions();
-				}		
 				
+				// Redirects för olika URL-tillstånd.
+					if ($this->createSession->createSessionIsset()) {
+						\view\NavigationView::RedirectToCreateQuestions();
+					}		
+				
+
 				$title = $this->createView->getTitle();
 
-				// Om titeln är satt.
 				if(isset($title)){
 					$this->createSession->setTitleSession($title);
 					\view\NavigationView::RedirectToCreateCreator();
@@ -45,31 +47,30 @@ class CreateController{
 		// Hanterar indata.
 			try {
 
-				if(!$this->createSession->titleSessionIsset()){
-					\view\NavigationView::RedirectHome();
-				}
+				// Redirects för olika tillstånd.
+					if(!$this->createSession->titleSessionIsset()){
+						\view\NavigationView::RedirectHome();
+					}
 
-				if ($this->createSession->createSessionIsset()) {
-					\view\NavigationView::RedirectToCreateQuestions();
-				}
+					if ($this->createSession->createSessionIsset()) {
+						\view\NavigationView::RedirectToCreateQuestions();
+					}
 
-				if($this->createView->back()){
-					\view\NavigationView::RedirectToCreateTitle();
-				}
+					if($this->createView->back()){
+						\view\NavigationView::RedirectToCreateTitle();
+					}
 
-				$quiz = $this->createView->getQuizData($this->createSession->getTitleSession());
 
-				// Om Quiz-objektet finns.
-				if($quiz and $quiz->isValid()){
+				$quiz = $this->createView->getQuizData();
 
-					// Hämta ett Quiz-objekt och skapa quizet i databasen.
-					$this->quizRepository->createQuiz($quiz);
-
-					// Sätt sessionen och skicka användaren till frågeskaparen.
-					$this->createSession->setCreateSession($quiz->getQuizId());
-					$this->createSession->unSetTitleSession();
-					\view\NavigationView::RedirectToCreateQuestions();
-				}
+				// Lägger till Quizet i databasen.
+					if($quiz and $quiz->isValid()){
+						$this->quizRepository = new \model\QuizRepository();
+						$this->quizRepository->createQuiz($quiz);
+						$this->createSession->setCreateSession($quiz->getQuizId());
+						\view\NavigationView::RedirectToCreateQuestions();
+					}
+				
 			} catch (\Exception $e) {
 				echo $e;
 				die();

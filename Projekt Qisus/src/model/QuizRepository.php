@@ -2,11 +2,11 @@
 
 namespace model;
 
-require_once("Repository.php");
-require_once("Question.php");
-require_once("Questions.php");
-require_once("Adress.php");
-require_once("Adresses.php");
+require_once("src/model/Repository.php");
+require_once("src/model/Question.php");
+require_once("src/model/Questions.php");
+require_once("src/model/Adress.php");
+require_once("src/model/Adresses.php");
 
 
 class QuizRepository extends Repository{

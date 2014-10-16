@@ -3,13 +3,16 @@
 namespace view;
 
 require_once("src/model/Quiz.php");
-require_once("NavigationView.php");
 
 
 class CreateView{
 
-	private $errorMessage;
 	private $session;
+
+	private $errorMessage;
+
+	const regEx = '/[^a-z0-9\-_\.]/i';
+
 	private static $title = 'title';
 	private static $creator = 'creator';
 	private static $submitTitle = 'submitTitle';
@@ -22,6 +25,9 @@ class CreateView{
 		$this->session = $session;
 	}
 
+	public static function back(){
+		return isset($_POST[self::$back]);
+	}
 
 	public function submitTitle(){
 		return isset($_POST[self::$submitTitle]);
@@ -31,14 +37,14 @@ class CreateView{
 		return isset($_POST[self::$submitCreator]);
 	}
 
-	public static function back(){
-		return isset($_POST[self::$back]);
-	}
-
 
 	public function getTitle(){
 		if($this->submitTitle()){
 			$title = trim($_POST[self::$title]);
+
+			if(preg_match(self::regEx, $title)){
+				$title = preg_replace(self::regEx, "", $title);
+			}
 			if (empty($title)) {
 				$this->errorMessage = "<p id='error_message'>Ditt quiz måste heta något! ;)</p>";
 				return null;
@@ -48,11 +54,10 @@ class CreateView{
 	}
 
 
-	public function getQuizData($title){
+	public function getQuizData(){
 		if($this->submitCreator()){
-
 			try {
-				return new \model\Quiz(NULL, $title, $_POST[self::$creator]);
+				return new \model\Quiz(NULL, $this->session->getTitleSession(), $_POST[self::$creator]);
 			} catch (\Exception $e) {
 				$this->errorMessage = "<p id='error_message'>" . $e->getMessage() . "</p>";
 			}
@@ -106,12 +111,13 @@ class CreateView{
 								<label id='title_label' for='title_input'>Skriv in din email..</label>
 							</div>
 							<div>
-								<input id='title_input' type='text' maxlength='255' name=' " . self::$creator . "'>
+								<input id='title_input' type='email' maxlength='255' name=' " . self::$creator . "'>
 							</div>
 
 								$errorMessage
 
-		    				<div>
+		    				<div id='submitbuttons'>
+								<input class='hiddenButton' type='submit' value='Fortsätt →' name='" . self::$submitCreator . "'>
 								<input class='backButton' type='submit' value='← Tillbaka' name='" . self::$back . "'>
 								<input class='continueButton' type='submit' value='Fortsätt →' name='" . self::$submitCreator . "'>
 							</div>

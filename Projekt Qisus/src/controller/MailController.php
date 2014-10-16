@@ -2,56 +2,58 @@
 
 namespace controller;
 
-require_once('src/view/MailView.php');
 require_once("src/model/QuizRepository.php");
+require_once("src/model/CreateSession.php");
+require_once('src/view/MailView.php');
 
 
 class MailController{
 
-	private $session;
+	private $createSession;
+	private $quizRepository;
+	private $mailView;
 
 
 
-	public function __construct(\model\CreateSession $session){
-		$this->session = $session;
+	public function __construct(){
+		$this->createSession = new \model\CreateSession();
 		$this->quizRepository = new \model\QuizRepository();
-		$this->mailView = new \view\MailView($this->session->getCreateSession(), $this->quizRepository);
+		$this->mailView = new \view\MailView($this->createSession, $this->quizRepository);
 	}
 
 
 	public function doMail(){
-		$quizId = $this->session->getCreateSession();
-		$adresses = $this->quizRepository->getAdressesById($quizId);
 
 	// Hanterar indata.
 		try {
 
-			// Om användaren försöker komma vidare genom att ändra i URL:en.
-			if(!$adresses->getAdresses()){
-				\view\NavigationView::RedirectToPlayerView();
-			}
+			$quizId = $this->createSession->getCreateSession();
+			$adresses = $this->quizRepository->getAdressesById($quizId);
 
+			// Redirects för olika URL-tillstånd.
+				if(!$adresses->getAdresses()){
+					\view\NavigationView::RedirectToPlayerView();
+				}
 
-			// Tillbaks till QuestionView.
-			if($this->mailView->backToPlayers()){
-				\view\NavigationView::RedirectToPlayerView();
-			}
+				if($this->mailView->backToPlayers()){
+					\view\NavigationView::RedirectToPlayerView();
+				}
 
 
 			// Skicka quizet!
-			if($this->mailView->send()){
-				foreach ($adresses->getAdresses() as $adress) {
+				if($this->mailView->send()){
+					foreach ($adresses->getAdresses() as $adress) {
 
-					$to = $adress->getAdress();
-					$title = $this->mailView->getTitle();
-					$message = $this->mailView->renderMessage($adress->getAdressId());
-					$header = $this->mailView->renderHeader($quizId);
-					mail($to, $title, $message, $header);
-					
+						$to = $adress->getAdress();
+						$title = $this->mailView->getTitle();
+						$message = $this->mailView->renderMessage($adress->getAdressId());
+						$header = $this->mailView->renderHeader();
+						mail($to, $title, $message, $header);
+						
+					}
+					$this->createSession->unSetCreateSession();
+					return $this->mailView->showSent();
 				}
-				$this->session->unSetCreateSession();
-				return $this->mailView->showSent();
-			}
 
 		} catch (\Exception $e) {
 			echo $e;

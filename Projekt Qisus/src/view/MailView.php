@@ -8,6 +8,8 @@ require_once("NavigationView.php");
 class MailView{
 
 	private $session;
+
+	private $quizId;
 	private $errorMessage;
 
 	private static $title = 'title';
@@ -18,10 +20,14 @@ class MailView{
 
 
 
-	public function __construct($quizId, \model\QuizRepository $quizRepository){
-		$this->quizId = $quizId;
+
+	public function __construct(\model\CreateSession $session, \model\QuizRepository $quizRepository){
+		$this->session = $session;
 		$this->quizRepository = $quizRepository;
+
+		$this->quizId = $this->session->getCreateSession();
 	}
+
 
 	public function backToPlayers(){
 		return isset($_POST[self::$back]);
@@ -54,15 +60,15 @@ class MailView{
 		$ret  ="		<html><body>";
 		$ret .="		<h2>" . $title . "</h2>";
 		$ret .="		<p>" . $this->getMessage() . "</p>";
-		$ret .="		<a href=http://alengqvist.com/?" . NavigationView::$action . "=" . NavigationView::$actionPlay . "&" . NavigationView::$game . '=' . $this->quizId . "&" . NavigationView::$player . "=" . $adressId . ">Spela " . $title  . "</a>";
+		$ret .="		<a href=http://alengqvist.com/qisus/?" . NavigationView::$action . "=" . NavigationView::$actionPlay . "&" . NavigationView::$game . '=' . $this->quizId . "&" . NavigationView::$player . "=" . $adressId . ">Spela " . $title  . "</a>";
 	    $ret .="	</body></html>";
 	   	return $ret;
 	}
 
 
-	public function renderHeader($quizId){
-		$headers = "From: " . strip_tags($this->quizRepository->getCreatorById($quizId)) . "\r\n";
-		$headers  = "MIME-Version: 1.0" . "\r\n";
+	public function renderHeader(){
+		$headers = "From: qisus@alengqvist.com" . "\r\n";
+		$headers .= "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 	   	return $headers;
 	}
@@ -71,7 +77,6 @@ class MailView{
 	public function show(){
 
 		$errorMessage = $this->errorMessage;
-
 
 		$ret = "
 					<h1 id='tiny_header'>qisus.</h1>
@@ -101,7 +106,6 @@ class MailView{
 
 
 	public function showSent(){
-
 
 		$ret = "
 					<h1 id='tiny_header'>qisus.</h1>

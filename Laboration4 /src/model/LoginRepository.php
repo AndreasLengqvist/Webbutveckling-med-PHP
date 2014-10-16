@@ -2,7 +2,7 @@
 
 namespace model;
 
-require_once("Repository.php");
+require_once("src/model/Repository.php");
 
 
 class LoginRepository extends Repository{

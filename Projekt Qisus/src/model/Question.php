@@ -2,7 +2,7 @@
 
 namespace model;
 
-require_once("QuizRepository.php");
+require_once("src/model/QuizRepository.php");
 
 
 class Question{

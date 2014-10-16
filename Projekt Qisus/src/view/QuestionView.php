@@ -3,21 +3,21 @@
 namespace view;
 
 require_once("src/model/Question.php");
-require_once("NavigationView.php");
-require_once("src/model/QuizRepository.php");
 
 
 class QuestionView{
 
+	private $session;
+	private $quizRepository;
+
 	private $quizId;
 	private $i;
-	private $quizRepository;
 	private $errorMessage;
 
 	private static $question = 'question';
 	private static $questionId = 'questionId';
 	private static $answer = 'answer';
-	private static $question_addQuestion = 'question_addQuestion';
+	private static $add_question = 'add_question';
 	private static $finishedSubmit = 'finishedSubmit';
 	private static $restart = 'restart';
 	private static $delete_question = 'delete_question';
@@ -25,10 +25,13 @@ class QuestionView{
 
 
 
-	public function __construct($quizId, \model\QuizRepository $quizRepository){
-		$this->quizId = $quizId;
+	public function __construct(\model\CreateSession $session, \model\QuizRepository $quizRepository){
+		$this->session = $session;
 		$this->quizRepository = $quizRepository;
+
+		$this->quizId = $this->session->getCreateSession();
 	}
+
 
 	public function finished(){
 		return isset($_POST[self::$finishedSubmit]);
@@ -38,8 +41,8 @@ class QuestionView{
 		return isset($_POST[self::$restart]);
 	}
 
-	public function submitQuestion(){
-		return isset($_POST[self::$question_addQuestion]);
+	public function addQuestion(){
+		return isset($_POST[self::$add_question]);
 	}
 
 	public function updateQuestion(){
@@ -51,8 +54,8 @@ class QuestionView{
 	}
 
 
-	public function getQuestionData(){
-		if($this->submitQuestion()){
+	public function getAddData(){
+		if($this->addQuestion()){
 			$question = trim($_POST[self::$question]);
 			if (empty($question)) {
 				$this->errorMessage = "<p id='error_message'>Du har glömt att skriva en fråga! ;)</p>";
@@ -118,7 +121,7 @@ class QuestionView{
 								$errorMessage
 
 								<div>
-			    					<input class='addButton' type='submit' value='+ Lägg till fråga' name='" . self::$question_addQuestion . "'>  				
+			    					<input class='addButton' type='submit' value='+ Lägg till fråga' name='" . self::$add_question . "'>  				
    								</div>
 									<input class='backButton' type='submit' value='↺ Börja om' name='" . self::$restart . "'>
 					";

@@ -3,20 +3,22 @@
 namespace controller;
 
 require_once("common/UserAgent.php");
-require_once('src/view/GameView.php');
 require_once("src/model/QuizRepository.php");
 require_once("src/model/PlaySession.php");
+require_once('src/view/GameView.php');
 
 
 class GameController{
 
-	private $game;
-	private $player;
+	private $useragent;
+	private $playSession;
+	private $quizRepository;
+	private $gameView;
 
 
 
-	public function __construct(\model\PlaySession $playSession){
-		$this->playSession = $playSession;
+	public function __construct(){
+		$this->playSession = new \model\PlaySession();
 		$this->useragent = new \UserAgent();
 		$this->quizRepository = new \model\QuizRepository();
 		$this->gameView = new \view\GameView($this->playSession, $this->quizRepository);
@@ -28,13 +30,14 @@ class GameController{
 	// Hanterar indata.
 		try {
 
-			if ($this->playSession->playSessionsIsset()) {
-				return $this->playGame();
-			}
+			// Redirects för olika URL-tillstånd.
+				if ($this->playSession->playSessionsIsset()) {
+					\view\NavigationView::RedirectToGameView();
+				}
 
-			$game = $this->gameView->getSetupData();
 
 			// När spelaren trycker på spela.
+				$game = $this->gameView->getSetupData();
 				if ($game and $game->isValid()) {
 					$this->playSession->setPlaySessions($game->getGameId(), $game->getPlayerId(), $this->useragent->getUserAgent());
 					\view\NavigationView::RedirectToGameView();
@@ -80,7 +83,7 @@ class GameController{
 					$to = $this->quizRepository->getCreatorById($gameId);
 					$title = $this->gameView->renderTitle($player, $titleToRender);
 					$message = $this->gameView->renderMessage($gameId, $player, $titleToRender, $questions, $answers);
-					$header = $this->gameView->renderHeader($player);
+					$header = $this->gameView->renderHeader();
 					mail($to, $title, $message, $header);
 
 					$this->playSession->unSetPlaySessions();

@@ -3,15 +3,15 @@
 namespace view;
 
 require_once("src/model/Adress.php");
-require_once("NavigationView.php");
-require_once("src/model/QuizRepository.php");
 
 
 class PlayerView{
 
+	private $session;
+	private $quizRepository;
+
 	private $quizId;
 	private $i;
-	private $quizRepository;
 	private $errorMessage;
 
 	private static $message = 'message';
@@ -24,9 +24,11 @@ class PlayerView{
 
 
 
-	public function __construct($quizId, \model\QuizRepository $quizRepository){
-		$this->quizId = $quizId;
+	public function __construct(\model\CreateSession $session, \model\QuizRepository $quizRepository){
+		$this->session = $session;
 		$this->quizRepository = $quizRepository;
+
+		$this->quizId = $this->session->getCreateSession();
 	}
 
 
@@ -76,7 +78,7 @@ class PlayerView{
 							<div>
 								<label for='address_input' id='player_label'>Skriv in dina spelares mailadresser..</label>
 					        </div>
-								<input id='address_input' type='text' name='" . self::$adress . "'>
+								<input id='address_input' type='email' name='" . self::$adress . "'>
 							
 							$errorMessage
 
@@ -112,7 +114,7 @@ class PlayerView{
 					<h3 class='question_number'>" . $this->i . "</h3>
 						<form method='post'>
 							<input type='hidden' name='" . self::$adressId . "' value='" . $adress->getAdressId() . "'>
-							<label for='question_input" . $this->i . "'>" . $adress->getAdress() . "</label>
+							<p class='player_text'>" . $adress->getAdress() . "</p>
 		    				<input class='deleteButton' type='submit' value='Ta bort' name='" . self::$deleteAdress . "'>
 						</form>
 					</div>

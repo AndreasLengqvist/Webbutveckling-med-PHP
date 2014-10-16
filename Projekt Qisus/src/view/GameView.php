@@ -3,7 +3,7 @@
 namespace view;
 
 require_once("src/model/Game.php");
-require_once("NavigationView.php");
+require_once("src/view/NavigationView.php");
 require_once("src/model/QuizRepository.php");
 
 
@@ -77,8 +77,8 @@ class GameView{
 	}
 
 
-	public function renderHeader($player){
-		$headers = "From: " . strip_tags($player) . "\r\n";
+	public function renderHeader(){
+		$headers = "From: qisus@alengqvist.com" . "\r\n";
 		$headers .= "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 	   	return $headers;
@@ -136,6 +136,7 @@ class GameView{
 				";
 		return $ret;
 	}
+
 
 	public function showQuestions(\model\Questions $questions){
 

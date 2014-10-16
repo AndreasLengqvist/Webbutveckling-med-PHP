@@ -2,20 +2,23 @@
 
 namespace controller;
 
-require_once('src/view/PlayerView.php');
 require_once("src/model/QuizRepository.php");
+require_once("src/model/CreateSession.php");
+require_once('src/view/PlayerView.php');
 
 
 class PlayerController{
 
-	private $session;
+	private $createSession;
+	private $quizRepository;
+	private $playerView;
 
 
 
-	public function __construct(\model\CreateSession $createSession){
-		$this->createSession = $createSession;
+	public function __construct(){
+		$this->createSession = new \model\CreateSession();
 		$this->quizRepository = new \model\QuizRepository();
-		$this->playerView = new \view\PlayerView($this->createSession->getCreateSession(), $this->quizRepository);
+		$this->playerView = new \view\PlayerView($this->createSession, $this->quizRepository);
 	}
 
 
@@ -24,25 +27,19 @@ class PlayerController{
 	// Hanterar indata.
 		try {
 
-			$quizId = $this->createSession->getCreateSession();
-			$questions = $this->quizRepository->getQuestionsById($quizId);
+			// Redirects för olika URL-tillstånd.
+				$questions = $this->quizRepository->getQuestionsById($this->createSession->getCreateSession());
+				if(!$questions->getQuestions()){
+					\view\NavigationView::RedirectToCreateQuestions();
+				}
 
-			// Om användaren försöker komma vidare genom att ändra i URL:en.
-			if(!$questions->getQuestions()){
-				\view\NavigationView::RedirectToCreateQuestions();
-			}
+				if($this->playerView->backToQuestions()){
+					\view\NavigationView::RedirectToCreateQuestions();
+				}
 
-
-			// Tillbaks till QuestionView.
-			if($this->playerView->backToQuestions()){
-				\view\NavigationView::RedirectToCreateQuestions();
-			}
-
-
-			// Fortsätt till SendView.
-			if($this->playerView->finished()){
-				\view\NavigationView::RedirectToSend();
-			}
+				if($this->playerView->finished()){
+					\view\NavigationView::RedirectToSend();
+				}
 
 
 			// LÄGG TILL ADRESS - Om Adress-objektet är validerat och satt.
