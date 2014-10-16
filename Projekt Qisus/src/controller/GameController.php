@@ -58,18 +58,20 @@ class GameController{
 	// Hanterar indata.
 		try {
 			
-			if (!$this->playSession->playSessionsIsset()) {
-				return $this->setupGame();
-			}
+			// Redirects för olika URL-tillstånd.
+				if (!$this->playSession->playSessionsIsset()) {
+				\view\NavigationView::RedirectToSetupView();
+				}
 
 			// Fuskförebyggande - om spelaren försöker ladda samma spel från en annan webbläsare/dator.
-			if (!$this->playSession->checkPlayerAgent($this->useragent->getUserAgent())) {
-				$this->playSession->unSetPlaySessions();
-				\view\NavigationView::RedirectToGameView();
-			}
+				if (!$this->playSession->checkPlayerAgent($this->useragent->getUserAgent())) {
+					$this->playSession->unSetPlaySessions();
+					\view\NavigationView::RedirectToSetupView();
+				}
 
 			$gameId = $this->playSession->getGameSession();
 			$playerId = $this->playSession->getPlayerSession();
+
 			$questions = $this->quizRepository->getQuestionsById($gameId);
 
 			$this->gameView->getAnswers($questions);
@@ -78,6 +80,7 @@ class GameController{
 				$answers = $this->playSession->getAnswersSession();
 
 				if (!in_array(null, $answers)){
+
 					$titleToRender = $this->quizRepository->getTitleById($gameId);
 					$player = $this->quizRepository->getAdressById($playerId);
 					$to = $this->quizRepository->getCreatorById($gameId);
@@ -87,7 +90,8 @@ class GameController{
 					mail($to, $title, $message, $header);
 
 					$this->playSession->unSetPlaySessions();
-					
+					$this->quizRepository->deleteAdress(new\model\Adress("delete", $player, $playerId));
+
 					return $this->gameView->showSent($to);
 				}
 			}

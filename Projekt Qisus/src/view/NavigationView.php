@@ -74,6 +74,11 @@ class NavigationView{
 	}
 
 
+	public static function RedirectToSetupView() {
+		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionPlay);
+	}
+
+
 	public static function RedirectToGameView() {
 		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionPlaying);
 	}
