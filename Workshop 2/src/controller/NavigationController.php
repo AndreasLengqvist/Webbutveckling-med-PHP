@@ -2,12 +2,11 @@
 
 namespace controller;
 
-require_once('src/controller/CreateController.php');
-require_once('src/controller/QuestionController.php');
-require_once('src/controller/PlayerController.php');
-require_once('src/controller/MailController.php');
-require_once('src/controller/GameController.php');
+require_once('src/controller/BoatController.php');
+require_once('src/controller/MemberController.php');
+require_once('src/controller/ListController.php');
 require_once('src/view/NavigationView.php');
+
 
 
 class NavigationController{
@@ -23,45 +22,45 @@ class NavigationController{
 
 
 				// Lista kompakt.
-				case \view\NavigationView::$actionShowCompact:
-					return \view\NavigationView::showStart();
+				case \view\NavigationView::actionShowCompact:
+					$controller = new ListController();
+					return $controller->showCompact();
 				break;
 
 				// Lista detaljerad.
-				case \view\NavigationView::$actionShowDetailed:
-					$controller = new GameController();
-					return $controller->setupGame();
+				case \view\NavigationView::actionShowDetailed:
+					$controller = new ListController();
+					return $controller->showDetailed();
 				break;
 
-
 				// Visa medlem.
-				case \view\NavigationView::$actionShowMember
+				case \view\NavigationView::actionShowMember:
 					$controller = new MemberController();
 					return $controller->showMember();
 				break;
 				
 				// Skapa ny medlem.
-				case \view\NavigationView::$actionCreateMember
+				case \view\NavigationView::actionCreateMember:
 					$controller = new MemberController();
-					return $controller->doMember();
+					return $controller->createMember();
 				break;
 
 				// Ändra medlem.
-				case \view\NavigationView::$actionEditMember:
+				case \view\NavigationView::actionEditMember:
 					$controller = new MemberController();
-					return $controller->doMember();
+					return $controller->editMember();
 				break;
 
 				// Skapa båt.
-				case \view\NavigationView::$actionCreateBoat:
+				case \view\NavigationView::actionCreateBoat:
 					$controller = new BoatControllr();
-					return $controller->doQuestion();
+					return $controller->createBoat();
 				break;
 
 				// Editera båt.
-				case \view\NavigationView::$actionEditBoat:
+				case \view\NavigationView::actionEditBoat:
 					$controller = new BoatController();
-					return $controller->doPlayer();
+					return $controller->editBoat();
 				break;
 
 
