@@ -12,7 +12,6 @@ class Game{
 
 
 
-	// Sätter gameId och playerId.
 	public function __construct($gameId, $playerId){
 		$this->quizRepository = new QuizRepository();
 		if ($this->quizRepository->getTitleById($gameId) === NULL or $this->quizRepository->getAdressById($playerId) === NULL) {

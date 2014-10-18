@@ -14,8 +14,14 @@ class Question{
 
 
 
-	// Sätter frågan och svaret och slumpar fram ett unikt ID för frågan.
 	public function __construct($quizId, $question, $answer, $questionId = NULL){
+
+		$question = trim($question);
+
+		if (empty($question)) {
+			throw new \Exception("Du har glömt att skriva en fråga! ;)");
+		}
+
 		$this->quizId = $quizId;
 		$this->question = $question;
 		$this->answer = $answer;

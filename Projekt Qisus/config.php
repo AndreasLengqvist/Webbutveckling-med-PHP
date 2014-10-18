@@ -3,9 +3,12 @@
 
 class Config{
 
-	public static $DB_USERNAME = 'al223bn';
-	public static $DB_PASSWORD = 'lenkan88';
-	public static $DB_CONNECTION = 'mysql:host=localhost;dbname=Qisus';
+	const DB_USERNAME = 'al223bn';
+	const DB_PASSWORD = 'lenkan88';
+	const DB_CONNECTION = 'mysql:host=localhost;dbname=Qisus';
 
-	public static $ROOT_PATH = 'Webbutveckling-med-PHP/Projekt%20Qisus';
+	const ROOT_PATH = 'Webbutveckling-med-PHP/Projekt%20Qisus';
+
+	const DEBUG = true;
+	const ERROR_LOG = 'errors.log';
 }

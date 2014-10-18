@@ -3,40 +3,29 @@
 namespace model;
 
 require_once("src/model/Repository.php");
-require_once("src/model/Question.php");
-require_once("src/model/Questions.php");
-require_once("src/model/Adress.php");
-require_once("src/model/Adresses.php");
 
 
 class QuizRepository extends Repository{
 
-	private $db;
-	private $questions;
-	private $adresses;
+	protected $dbTable;
 	
-	private static $quizId = "quizid";
-	private static $title = "title";
-	private static $creator = "creator";
-	private static $questionId = "questionId";
-	private static $question = "question";
-	private static $answer = "answer";
-	private static $adress = "adress";
-	private static $adressId = "adressId";
+	const quizId = "quizid";
+	const title = "title";
+	const creator = "creator";
+
+
 
 	public function __construct(){
-		$this->questions = new Questions();
-		$this->adresses = new Adresses();
+		$this->dbTable = "quiz";
 	}
 
 
 	public function createQuiz(Quiz $quiz){
-		$this->dbTable = "quiz";
 
 		try{
 			$db = $this->connection();
 
-        	$sql = "INSERT INTO $this->dbTable (" . self::$quizId . ", " . self::$title . ", " . self::$creator . ") VALUES (?, ?, ?)";
+        	$sql = "INSERT INTO $this->dbTable (" . self::quizId . ", " . self::title . ", " . self::creator . ") VALUES (?, ?, ?)";
 
 			$params = array($quiz->getQuizId(), $quiz->getTitle(), $quiz->getCreator());
 
@@ -45,139 +34,45 @@ class QuizRepository extends Repository{
 			$query->execute($params);
 
 		} catch (\Exception $e) {
-			echo $e;
-			die("An error occured in the database!");
+			if (Config::DEBUG) {
+				echo $e;
+			} else{
+				\view\NavigationView::RedirectToErrorPage();
+				die();
+			}
 		}
 	}
 
-		public function deleteQuiz(Quiz $quiz) {
-			$this->dbTable = "quiz";
-					
-			try{
-				$db = $this -> connection();
 
-				$sql = "DELETE FROM $this->dbTable
-						WHERE " . self::$quizId . " = ?";
-				$params = array($quiz -> getQuizId());
-
-				$query = $db -> prepare($sql);
-				$query -> execute($params);
-
-			} catch (\Exception $e) {
-				echo $e;
-				die("An error occured in the database!");
-			}
-		}
-
-
-
-	public function addQuestion(Question $question){
-		$this->dbTable = "question";
-
+	public function deleteQuiz($quizId) {
+				
 		try{
-			$db = $this->connection();
+			$db = $this -> connection();
 
-        	$sql = "INSERT INTO $this->dbTable (" . self::$quizId . ", " . self::$question .", " . self::$answer . ", " . self::$questionId . ") VALUES (?, ?, ?, ?)";
+			$sql = "DELETE FROM $this->dbTable
+					WHERE " . self::quizId . " = ?";
+			$params = array($quizId);
 
-			$params = array($question->getQuizId(), $question->getQuestion(), $question->getAnswer(), $question->getQuestionId());
-			$query = $db->prepare($sql);
-		
-			$query->execute($params);
+			$query = $db -> prepare($sql);
+			$query -> execute($params);
 
 		} catch (\Exception $e) {
-			echo $e;
-			die("An error occured in the database!");
+			if (Config::DEBUG) {
+				echo $e;
+			} else{
+				\view\NavigationView::RedirectToErrorPage();
+				die();
+			}
 		}
 	}
-
-
-		public function updateQuestion(Question $question) {
-			$this->dbTable = "question";
-					
-
-			try{
-				$db = $this -> connection();
-
-				$sql = "UPDATE $this->dbTable SET " . self::$quizId . "=?, " . self::$question . "=?, " . self::$answer . "=? WHERE " . self::$questionId ."=?";
-
-				$params = array($question->getQuizId(), $question->getQuestion(), $question->getAnswer(), $question->getQuestionId());
-
-				$query = $db -> prepare($sql);
-				$query -> execute($params);
-
-			} catch (\Exception $e) {
-				echo $e;
-				die("An error occured in the database!");
-			}
-		}
-
-
-		public function deleteQuestion(Question $question) {
-			$this->dbTable = "question";
-					
-			try{
-				$db = $this->connection();
-
-				$sql = "DELETE FROM $this->dbTable
-						WHERE " . self::$questionId . " = ?";
-				$params = array($question->getQuestionId());
-
-				$query = $db->prepare($sql);
-				$query->execute($params);
-
-			} catch (\Exception $e) {
-				echo $e;
-				die("An error occured in the database!");
-			}
-		}
-
-
-	public function addAdress(Adress $adress){
-		$this->dbTable = "mail";
-
-		try{
-			$db = $this->connection();
-
-        	$sql = "INSERT INTO $this->dbTable (" . self::$quizId . ", " . self::$adress .", " . self::$adressId . ") VALUES (?, ?, ?)";
-
-			$params = array($adress->getQuizId(), $adress->getAdress(), $adress->getAdressId());
-			$query = $db->prepare($sql);
-		
-			$query->execute($params);
-
-		} catch (\Exception $e) {
-			echo $e;
-			die("An error occured in the database!");
-		}
-	}
-	
-		public function deleteAdress(Adress $adress) {
-			$this->dbTable = "mail";
-					
-			try{
-				$db = $this->connection();
-
-				$sql = "DELETE FROM $this->dbTable
-						WHERE " . self::$adressId . " = ?";
-				$params = array($adress->getAdressId());
-
-				$query = $db->prepare($sql);
-				$query->execute($params);
-
-			} catch (\Exception $e) {
-				echo $e;
-				die("An error occured in the database!");
-			}
-		}
 
 
 	public function getTitleById($id){
-		$this->dbTable = "quiz";
 
 		try{
 			$db = $this->connection();
 
-        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::$quizId . " = ?";
+        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::quizId . " = ?";
 
 			$params = array($id);
 
@@ -187,21 +82,25 @@ class QuizRepository extends Repository{
 
 			$result = $query->fetch();
 
-			return $result[self::$title];
+			return $result[self::title];
 
 		} catch (\Exception $e) {
-			die("An error occured in the database!");
+			if (Config::DEBUG) {
+				echo $e;
+			} else{
+				\view\NavigationView::RedirectToErrorPage();
+				die();
+			}
 		}
 	}
 
 
 	public function getCreatorById($id){
-		$this->dbTable = "quiz";
 
 		try{
 			$db = $this->connection();
 
-        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::$quizId . " = ?";
+        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::quizId . " = ?";
 
 			$params = array($id);
 
@@ -211,87 +110,15 @@ class QuizRepository extends Repository{
 
 			$result = $query->fetch();
 
-			return $result[self::$creator];
+			return $result[self::creator];
 
 		} catch (\Exception $e) {
-			die("An error occured in the database!");
-		}
-	}
-
-	public function getAdressById($id){
-		$this->dbTable = "mail";
-
-		try{
-			$db = $this->connection();
-
-        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::$adressId . " = ?";
-
-			$params = array($id);
-
-			$query = $db->prepare($sql);
-
-			$query->execute($params);
-
-			$result = $query->fetch();
-
-			return $result[self::$adress];
-
-		} catch (\Exception $e) {
-			die("An error occured in the database!");
-		}
-	}
-
-
-	public function getQuestionsById($id){
-		$this->dbTable = "question";
-		
-		try {
-			$db = $this->connection();
-
-			$sql = "SELECT * FROM $this->dbTable WHERE " . self::$quizId . " = ?";
-			$params = array($id);
-
-			$query = $db->prepare($sql);
-			$query->execute($params);
-			foreach ($query->fetchAll() as $q) {
-				$qu = $q[self::$question];
-				$a = $q[self::$answer];
-				$qId = $q[self::$questionId];
-
-				$question = new Question($id, $qu, $a, $qId);
-
-				$this->questions->addQuestions($question);
+			if (Config::DEBUG) {
+				echo $e;
+			} else{
+				\view\NavigationView::RedirectToErrorPage();
+				die();
 			}
-			return $this->questions;
-		} catch (\PDOException $e) {
-			die('Error while connection to database.');
 		}
 	}
-
-
-	public function getAdressesById($id){
-		$this->dbTable = "mail";
-		
-		try {
-			$db = $this->connection();
-
-			$sql = "SELECT * FROM $this->dbTable WHERE " . self::$quizId . " = ?";
-			$params = array($id);
-
-			$query = $db->prepare($sql);
-			$query->execute($params);
-			foreach ($query->fetchAll() as $q) {
-				$a = $q[self::$adress];
-				$aId = $q[self::$adressId];
-
-				$adress = new Adress($id, $a, $aId);
-
-				$this->adresses->addAdresses($adress);
-			}
-			return $this->adresses;
-		} catch (\PDOException $e) {
-			die('Error while connection to database.');
-		}
-	}
-
 }

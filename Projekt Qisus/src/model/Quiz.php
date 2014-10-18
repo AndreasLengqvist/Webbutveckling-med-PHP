@@ -11,7 +11,6 @@ class Quiz{
 
 
 
-	// Sätter titeln och slumpar fram ett unikt ID för quizet.
 	public function __construct($quizId = NULL, $title, $creator){
 
 		$creator = trim($creator);

@@ -2,6 +2,8 @@
 
 namespace view;
 
+require_once("./config.php");
+
 
 class NavigationView{
 
@@ -45,42 +47,42 @@ class NavigationView{
 
 
 	public static function RedirectHome() {
-		header('Location:  /' . \Config::$ROOT_PATH . '');
+		header('Location:  /' . \Config::ROOT_PATH . '');
 	}
 
 	
 	public static function RedirectToCreateTitle() {
-		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionCreateTitle);
+		header('Location:  /' . \Config::ROOT_PATH . '/?' . self::$action.'='.self::$actionCreateTitle);
 	}
 
 
 	public static function RedirectToCreateCreator() {
-		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionCreateCreator);
+		header('Location:  /' . \Config::ROOT_PATH . '/?' . self::$action.'='.self::$actionCreateCreator);
 	}
 
 
 	public static function RedirectToCreateQuestions() {
-		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionCreateQuestions);
+		header('Location:  /' . \Config::ROOT_PATH . '/?' . self::$action.'='.self::$actionCreateQuestions);
 	}
 
 
 	public static function RedirectToPlayerView() {
-		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionCreatePlayers);
+		header('Location:  /' . \Config::ROOT_PATH . '/?' . self::$action.'='.self::$actionCreatePlayers);
 	}
 
 
 	public static function RedirectToSend() {
-		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionSend);
+		header('Location:  /' . \Config::ROOT_PATH . '/?' . self::$action.'='.self::$actionSend);
 	}
 
 
 	public static function RedirectToSetupView() {
-		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionPlay);
+		header('Location:  /' . \Config::ROOT_PATH . '/?' . self::$action.'='.self::$actionPlay);
 	}
 
 
 	public static function RedirectToGameView() {
-		header('Location:  /' . \Config::$ROOT_PATH . '/?' . self::$action.'='.self::$actionPlaying);
+		header('Location:  /' . \Config::ROOT_PATH . '/?' . self::$action.'='.self::$actionPlaying);
 	}
 
 	public static function showStart(){

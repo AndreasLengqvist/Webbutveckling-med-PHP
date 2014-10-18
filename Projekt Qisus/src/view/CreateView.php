@@ -7,17 +7,18 @@ require_once("src/model/Quiz.php");
 
 class CreateView{
 
-	private $session;
+	private $session;					// Instans av CreateSession.
 
 	private $errorMessage;
 
-	const regEx = '/[^a-z0-9\-_\.]/i';
-
+	// Statiska medlemsvariabler för att motverka strängberoenden.
 	private static $title = 'title';
 	private static $creator = 'creator';
 	private static $submitTitle = 'submitTitle';
 	private static $submitCreator = 'submitCreator';
 	private static $back = 'back';
+
+	const regEx = '/[^a-z0-9\-_\.]/i';		// Reguljärt uttryck för att ta bort "elaka" tecken.
 
 
 
@@ -25,6 +26,10 @@ class CreateView{
 		$this->session = $session;
 	}
 
+
+/**
+  * Submit-funktioner.
+  */
 	public static function back(){
 		return isset($_POST[self::$back]);
 	}
@@ -38,8 +43,15 @@ class CreateView{
 	}
 
 
+/**
+  * Returnerar en titel.
+  * Tar även bort "elaka" tecken.
+  *
+  * @return string Returns String title.
+  */
 	public function getTitle(){
 		if($this->submitTitle()){
+
 			$title = trim($_POST[self::$title]);
 
 			if(preg_match(self::regEx, $title)){
@@ -54,6 +66,11 @@ class CreateView{
 	}
 
 
+/**
+  * Instansierar och retunerar ett nytt Quiz-objekt.
+  *
+  * @return object Returns Object Question.
+  */
 	public function getQuizData(){
 		if($this->submitCreator()){
 			try {
@@ -65,10 +82,17 @@ class CreateView{
 	}
 
 
+/**
+  * Visar titelskaparen där man skriver in titeln och finns en titel lagrad visas den.
+  *
+  * @return string Returns String HTML.
+  */
 	public function showCreateTitle(){
 
 		$errorMessage = $this->errorMessage;
+
 		$title = "";
+		
 		if ($this->session->titleSessionIsset()) {
 			$title = $this->session->getTitleSession();
 		}
@@ -98,6 +122,11 @@ class CreateView{
 	}
 
 
+/**
+  * Visar quizskaparen där man skriver in sin mailadress.
+  *
+  * @return string Returns String HTML.
+  */
 	public function showCreateCreator(){
 
 		$errorMessage = $this->errorMessage;

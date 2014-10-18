@@ -4,21 +4,21 @@ namespace controller;
 
 require_once("src/model/QuizRepository.php");
 require_once("src/model/CreateSession.php");
-require_once('src/view/PlayerView.php');
+require_once('src/view/AdressView.php');
 
 
-class PlayerController{
+class AdressController{
 
 	private $createSession;
 	private $quizRepository;
-	private $playerView;
+	private $adressView;
 
 
 
 	public function __construct(){
 		$this->createSession = new \model\CreateSession();
 		$this->quizRepository = new \model\QuizRepository();
-		$this->playerView = new \view\PlayerView($this->createSession, $this->quizRepository);
+		$this->adressView = new \view\AdressView($this->createSession, $this->quizRepository);
 	}
 
 
@@ -33,25 +33,25 @@ class PlayerController{
 					\view\NavigationView::RedirectToCreateQuestions();
 				}
 
-				if($this->playerView->backToQuestions()){
+				if($this->adressView->backToQuestions()){
 					\view\NavigationView::RedirectToCreateQuestions();
 				}
 
-				if($this->playerView->finished()){
+				if($this->adressView->finished()){
 					\view\NavigationView::RedirectToSend();
 				}
 
 
 			// LÄGG TILL ADRESS - Om Adress-objektet är validerat och satt.
-			$adress = $this->playerView->getAdressData();
+			$adress = $this->adressView->getAdressData();
 			if($adress and $adress->isValid()){
 				$this->quizRepository->addAdress($adress);
 			}
 
 
 				// TA BORT ADRESS.
-				if($this->playerView->deleteAdress()){
-					$adress = $this->playerView->getAdressToDelete();
+				if($this->adressView->deleteAdress()){
+					$adress = $this->adressView->getAdressToDelete();
 					$this->quizRepository->deleteAdress($adress);
 				}
 
@@ -61,6 +61,6 @@ class PlayerController{
 		}
 
 	// Generar utdata.
-		return $this->playerView->show();
+		return $this->adressView->show();
 	}
 }

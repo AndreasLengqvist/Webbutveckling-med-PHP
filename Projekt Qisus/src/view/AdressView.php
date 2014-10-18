@@ -5,7 +5,7 @@ namespace view;
 require_once("src/model/Adress.php");
 
 
-class PlayerView{
+class AdressView{
 
 	private $session;
 	private $quizRepository;

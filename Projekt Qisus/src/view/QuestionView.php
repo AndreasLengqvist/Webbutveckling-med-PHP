@@ -7,32 +7,36 @@ require_once("src/model/Question.php");
 
 class QuestionView{
 
-	private $session;
-	private $quizRepository;
+	private $questionRepository;		// Instans av QuestionRepository.
+	private $quizRepository;			// Instans av QuizRepository.
+	private $session;					// Instans av CreateSession.
 
 	private $quizId;
 	private $i;
 	private $errorMessage;
 
+	// Statiska medlemsvariabler för att motverka strängberoenden.
 	private static $question = 'question';
 	private static $questionId = 'questionId';
 	private static $answer = 'answer';
-	private static $add_question = 'add_question';
+	private static $addQuestion = 'addQuestion';
 	private static $finishedSubmit = 'finishedSubmit';
 	private static $restart = 'restart';
-	private static $delete_question = 'delete_question';
-	private static $update_question = 'update_question';
+	private static $deleteQuestion = 'deleteQuestion';
+	private static $updateQuestion = 'updateQuestion';
 
 
 
-	public function __construct(\model\CreateSession $session, \model\QuizRepository $quizRepository){
+	public function __construct($session, $questionRepository, $quizRepository, $quizId){
 		$this->session = $session;
+		$this->questionRepository = $questionRepository;
 		$this->quizRepository = $quizRepository;
-
-		$this->quizId = $this->session->getCreateSession();
+		$this->quizId = $quizId;
 	}
 
-
+/**
+  * Submit-funktioner.
+  */
 	public function finished(){
 		return isset($_POST[self::$finishedSubmit]);
 	}
@@ -42,64 +46,71 @@ class QuestionView{
 	}
 
 	public function addQuestion(){
-		return isset($_POST[self::$add_question]);
+		return isset($_POST[self::$addQuestion]);
 	}
 
 	public function updateQuestion(){
-		return isset($_POST[self::$update_question]);
+		return isset($_POST[self::$updateQuestion]);
 	}
 
 	public function deleteQuestion(){
-		return isset($_POST[self::$delete_question]);
+		return isset($_POST[self::$deleteQuestion]);
 	}
 
-
-	public function getAddData(){
+/**
+  * Instansierar och retunerar ett nytt Question-objekt.
+  *
+  * @return object Returns Object Question.
+  */
+	public function getQuestionToCreate(){
 		if($this->addQuestion()){
-			$question = trim($_POST[self::$question]);
-			if (empty($question)) {
-				$this->errorMessage = "<p id='error_message'>Du har glömt att skriva en fråga! ;)</p>";
-				return null;
+			try {
+				return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer], NULL);
+			} catch (\Exception $e) {
+				$this->errorMessage = "<p id='error_message'>" . $e->getMessage() . "</p>";
 			}
-			return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer], NULL);
 		}
 	}
 
-
-	public function getUpdatedData(){
+/**
+  * Instansierar och retunerar ett nytt Question-objekt för uppdatering.
+  *
+  * @return object Returns Object Question.
+  */
+	public function getQuestionToUpdate(){
 		if($this->updateQuestion()){
-			$updatedquestion = trim($_POST[self::$question]);
-			if (empty($updatedquestion)) {
-				return null;
+			try {
+				return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer], $_POST[self::$questionId]);		
+			} catch (\Exception $e) {
+				$this->errorMessage = "<p id='error_message'>" . $e->getMessage() . "</p>";
 			}
-			return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer], $_POST[self::$questionId]);		
 		}
 	}
 
 
+/**
+  * Instansierar och retunerar ett Question-objekt för borttagning.
+  *
+  * @return object Returns Object Question.
+  */
 	public function getQuestionToDelete(){
 		return new \model\Question($this->quizId, $_POST[self::$question], $_POST[self::$answer], $_POST[self::$questionId]);		
 	}
 
 
-	public function getQuizToDelete(){
-		return new \model\Quiz($this->quizId, "delete", "delete@this.com");		
-	}
-
-
-	public function getTitle(){
-		return $this->quizRepository->getTitleById($this->quizId);
-	}
-
-
-	public function show(){
-
-		$questions = $this->quizRepository->getQuestionsById($this->quizId);
+/**
+  * Visar frågeskaparen och listar alla skapade frågor med rätt svar och sån skit.
+  *
+  * @param $questions Array of Question-objects.
+  *
+  * @return string Returns String HTML.
+  */
+	public function show($questions){
 		$errorMessage = $this->errorMessage;
 
 		$ret = "
 					<h1 id='tiny_header'>qisus.</h1>
-					<h2 id='title'>" . $this->getTitle() . "</h2>";
+					<h2 id='title'>" . $this->session->getTitleSession() . "</h2>";
 
 			$ret .= "
 						<div id='new_question_div'>
@@ -121,12 +132,12 @@ class QuestionView{
 								$errorMessage
 
 								<div>
-			    					<input class='addButton' type='submit' value='+ Lägg till fråga' name='" . self::$add_question . "'>  				
+			    					<input class='addButton' type='submit' value='+ Lägg till fråga' name='" . self::$addQuestion . "'>  				
    								</div>
 									<input class='backButton' type='submit' value='↺ Börja om' name='" . self::$restart . "'>
 					";
 							
-   				if ($questions->getQuestions()) {
+   				if (!empty($questions)) {
 				    $ret .= "
 			    					<input class='continueButton' type='submit' value='Fortsätt →' name='" . self::$finishedSubmit . "'>
 			    				</div>	
@@ -137,13 +148,13 @@ class QuestionView{
 					";
 				}
 		
-		if(!$questions->getQuestions()){
+		if(empty($questions)){
 			$ret .= "
 						<p>Inga frågor tillagda.</p>
 					";
 		}
 
-		foreach ($questions->getQuestions() as $question) {
+		foreach ($questions as $question) {
 
 			$this->i++;
 
@@ -173,8 +184,8 @@ class QuestionView{
 							}	
 			$ret .= "     	
 							<div>
-		    					<input class='updateButton' type='submit' value='Uppdatera' name='" . self::$update_question . "'>
-		    					<input class='deleteButton' type='submit' value='Ta bort' name='" . self::$delete_question . "'>
+		    					<input class='updateButton' type='submit' value='Uppdatera' name='" . self::$updateQuestion . "'>
+		    					<input class='deleteButton' type='submit' value='Ta bort' name='" . self::$deleteQuestion . "'>
 							</div>
 						</form>
 					</div>
