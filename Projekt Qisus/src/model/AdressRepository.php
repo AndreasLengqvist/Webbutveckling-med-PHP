@@ -45,7 +45,10 @@ class AdressRepository extends Repository{
 			$query->execute($params);
 
 		} catch (\Exception $e) {
-			if (Config::DEBUG) {
+
+			error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+		
+			if (\Config::DEBUG) {
 				echo $e;
 			} else{
 				\view\NavigationView::RedirectToErrorPage();
@@ -68,7 +71,10 @@ class AdressRepository extends Repository{
 			$query->execute($params);
 
 		} catch (\Exception $e) {
-			if (Config::DEBUG) {
+
+			error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+
+			if (\Config::DEBUG) {
 				echo $e;
 			} else{
 				\view\NavigationView::RedirectToErrorPage();
@@ -83,7 +89,7 @@ class AdressRepository extends Repository{
 		try{
 			$db = $this->connection();
 
-        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::$adressId . " = ?";
+        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::adressId . " = ?";
 
 			$params = array($id);
 
@@ -96,7 +102,10 @@ class AdressRepository extends Repository{
 			return $result[self::adress];
 
 		} catch (\Exception $e) {
-			if (Config::DEBUG) {
+
+			error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+
+			if (\Config::DEBUG) {
 				echo $e;
 			} else{
 				\view\NavigationView::RedirectToErrorPage();
@@ -126,7 +135,10 @@ class AdressRepository extends Repository{
 			}
 			return $this->adresses;
 		} catch (\PDOException $e) {
-			if (Config::DEBUG) {
+
+			error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+
+			if (\Config::DEBUG) {
 				echo $e;
 			} else{
 				\view\NavigationView::RedirectToErrorPage();

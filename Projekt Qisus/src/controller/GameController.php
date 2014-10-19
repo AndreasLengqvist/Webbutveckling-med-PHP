@@ -2,109 +2,141 @@
 
 namespace controller;
 
-require_once("common/UserAgent.php");
 require_once("src/model/QuizRepository.php");
-require_once("src/model/PlaySession.php");
+require_once("src/model/QuestionRepository.php");
+require_once("src/model/AdressRepository.php");
+require_once("src/model/PlayModel.php");
+require_once("src/model/CreateModel.php");
 require_once('src/view/GameView.php');
 
 
+/**
+* Kontroller för att ladda och spela ett quiz.
+*/
 class GameController{
 
-	private $useragent;
-	private $playSession;
-	private $quizRepository;
-	private $gameView;
+	private $playModel;				// Instans av PlayModel();
+	private $quizRepository;		// Instans av QuizRepository();
+	private $questionRepository;	// Instans av QuestionRepository();
+	private $adressRepository;		// Instans av AdressRepository();	
+	private $gameView;				// Instans av GameView();
 
 
 
+/**
+  * Instansiserar alla nödvändiga modeller och vyer.
+  */
 	public function __construct(){
-		$this->playSession = new \model\PlaySession();
-		$this->useragent = new \UserAgent();
+		$this->playModel = new \model\PlayModel();
 		$this->quizRepository = new \model\QuizRepository();
-		$this->gameView = new \view\GameView($this->playSession, $this->quizRepository);
+		$this->questionRepository = new \model\QuestionRepository();
+		$this->adressRepository = new \model\AdressRepository();
+
+		$this->gameView = new \view\GameView($this->playModel, $this->questionRepository, $this->quizRepository);
 	}
 
 
+/**
+  * REDIRECT-SETUP-funktion.
+  *
+  * @return String HTML
+  */
 	public function setupGame(){
-	
-	// Hanterar indata.
-		try {
 
-			// Redirects för olika URL-tillstånd.
-				if ($this->playSession->playSessionsIsset()) {
-					\view\NavigationView::RedirectToGameView();
-				}
+		// Redirects för olika URL-tillstånd.
+			if ($this->playModel->playSessionsIsset()) {
+				\view\NavigationView::RedirectToGameView();
+			}
 
 
-			// När spelaren trycker på spela.
-				$game = $this->gameView->getSetupData();
-				if ($game and $game->isValid()) {
-					$this->playSession->setPlaySessions($game->getGameId(), $game->getPlayerId(), $this->useragent->getUserAgent());
-					\view\NavigationView::RedirectToGameView();
-				}
+		// SETUP.
+			$game = $this->gameView->getSetupData();
+			if ($game and $game->isValid()) {
+				$quiz = $game->getQuiz();
+				$quizId = $game->getQuizId();
+				$player = $game->getPlayer();
+				$playerId = $game->getPlayerId();
 
-		} catch (\Exception $e) {
-			echo $e;
-			die();
-		}
+				$this->playModel->setPlaySessions($quiz, $quizId, $player);
+				\view\NavigationView::RedirectToGameView();
+			}
 
-	// Generar utdata.
-		return $this->gameView->showSetup();
+
+		// UTDATA.
+			return $this->gameView->showSetup();
 	}
 
 
+/**
+  * REDIRECT-READ-PLAY-SEND-funktion.
+  *
+  * @return String HTML
+  */
 	public function playGame(){
 
-	// Hanterar indata.
-		try {
-			
-			// Redirects för olika URL-tillstånd.
-				if (!$this->playSession->playSessionsIsset()) {
+
+		// Redirects för olika URL-tillstånd.
+			if (!$this->playModel->playSessionsIsset()) {
 				\view\NavigationView::RedirectToSetupView();
-				}
+			}
 
-			// Fuskförebyggande - om spelaren försöker ladda samma spel från en annan webbläsare/dator.
-				if (!$this->playSession->checkPlayerAgent($this->useragent->getUserAgent())) {
-					$this->playSession->unSetPlaySessions();
-					\view\NavigationView::RedirectToSetupView();
-				}
 
-			$gameId = $this->playSession->getGameSession();
-			$playerId = $this->playSession->getPlayerSession();
+		// READ.
+			$quiz = $this->playModel->getQuizSession();
+			$quizId = $this->playModel->getQuizIdSession();
+			$questionsObj = $this->questionRepository->getQuestionsById($quizId);
+			$questions = $questionsObj->getQuestions();
 
-			$questions = $this->quizRepository->getQuestionsById($gameId);
 
+		// PLAY.
 			$this->gameView->getAnswers($questions);
 
-			if($this->playSession->answerSessionIsset()){
-				$answers = $this->playSession->getAnswersSession();
+
+		// SEND.
+			if($this->playModel->answerSessionIsset()){
+
+				$answers = $this->playModel->getAnswersSession();
 
 				if (!in_array(null, $answers)){
 
-					$titleToRender = $this->quizRepository->getTitleById($gameId);
-					$player = $this->quizRepository->getAdressById($playerId);
-					$to = $this->quizRepository->getCreatorById($gameId);
-					$title = $this->gameView->renderTitle($player, $titleToRender);
-					$message = $this->gameView->renderMessage($gameId, $player, $titleToRender, $questions, $answers);
-					$header = $this->gameView->renderHeader();
-					mail($to, $title, $message, $header);
+					try {
 
-					$this->playSession->unSetPlaySessions();
-					$this->quizRepository->deleteAdress(new\model\Adress("delete", $player, $playerId));
+						$player = $this->playModel->getPlayerSession();
 
-					return $this->gameView->showSent($to);
+						$to = $this->quizRepository->getCreatorById($quizId);
+						$title = $this->gameView->renderTitle($player, $quiz);
+						$message = $this->gameView->renderMessage($quiz, $player, $questions, $answers);
+						$header = $this->gameView->renderHeader();
+
+						mail($to, $title, $message, $header);
+
+						$this->playModel->unSetPlaySessions();
+						$this->adressRepository->deleteAdress(new\model\Adress("delete", $player, "id"));
+
+						if (!$this->adressRepository->getAdressesById($quizId)) {
+							$model = new \model\CreateModel();
+							$model->setCreateSession($quizId);
+							$model->resetQuiz();
+						}
+
+						return $this->gameView->showSent($to);
+
+					} catch (\Exception $e) {
+
+						error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+
+						if (\Config::DEBUG) {
+							echo $e;
+						} else{
+							\view\NavigationView::RedirectToErrorPage();
+							die();
+						}
+					}
 				}
 			}
 
 
-
-
-		} catch (\Exception $e) {
-			echo $e;
-			die();
-		}
-
-	//Generar utdata.
-		return $this->gameView->showQuestions($questions);
+		// UTDATA.
+			return $this->gameView->showQuestions($quiz, $questions);
 	}
 }

@@ -8,8 +8,6 @@ require_once("src/controller/NavigationController.php");
 $output = new  HTMLView();
 $navigation = new \controller\NavigationController();
 
-
-
 	$htmlBody = $navigation->doNavigation();
 
 $output->echoHTML($htmlBody);

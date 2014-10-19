@@ -2,65 +2,90 @@
 
 namespace controller;
 
-require_once("src/model/QuizRepository.php");
-require_once("src/model/CreateSession.php");
+require_once("src/model/AdressRepository.php");
+require_once("src/model/CreateModel.php");
 require_once('src/view/MailView.php');
 
 
+/**
+* Kontroller för att skicka ett quiz.
+*/
 class MailController{
 
-	private $createSession;
-	private $quizRepository;
-	private $mailView;
+	private $createModel;			// Instans av CreateModel();
+	private $adressRepository;		// Instans av AdressRepository();
+	private $mailView;				// Instans av MailView();
+
+	private $quizId;
 
 
 
+/**
+  * Instansiserar alla nödvändiga modeller och vyer.
+  * Hämtar även ut nödvändig data för att minska anrop i senare funktioner.
+  */
 	public function __construct(){
-		$this->createSession = new \model\CreateSession();
-		$this->quizRepository = new \model\QuizRepository();
-		$this->mailView = new \view\MailView($this->createSession, $this->quizRepository);
+		$this->createModel = new \model\CreateModel();
+		$this->adressRepository = new \model\AdressRepository();
+		
+		$this->quizId = $this->createModel->getCreateSession();
+
+		$this->mailView = new \view\MailView($this->createModel, $this->adressRepository, $this->quizId);
 	}
 
 
+/**
+  * REDIRECT-SEND-funktion.
+  *
+  * @return String HTML
+  */
 	public function doMail(){
 
-	// Hanterar indata.
-		try {
+			$adressesObj = $this->adressRepository->getAdressesById($this->quizId);
+			$adresses = $adressesObj->getAdresses();
 
-			$quizId = $this->createSession->getCreateSession();
-			$adresses = $this->quizRepository->getAdressesById($quizId);
+		// Redirects för olika URL-tillstånd.
+			if(!$adresses){
+				\view\NavigationView::RedirectToAdressView();
+			}
 
-			// Redirects för olika URL-tillstånd.
-				if(!$adresses->getAdresses()){
-					\view\NavigationView::RedirectToPlayerView();
-				}
-
-				if($this->mailView->backToPlayers()){
-					\view\NavigationView::RedirectToPlayerView();
-				}
+			if($this->mailView->backToPlayers()){
+				\view\NavigationView::RedirectToAdressView();
+			}
 
 
-			// Skicka quizet!
-				if($this->mailView->send()){
-					foreach ($adresses->getAdresses() as $adress) {
+		// SEND.
+			if($this->mailView->send()){
+				foreach ($adresses as $adress) {
+
+					try {
 
 						$to = $adress->getAdress();
-						$title = $this->mailView->getTitle();
-						$message = $this->mailView->renderMessage($adress->getAdressId());
+						$title = $this->createModel->getTitleSession();
+						$message = $this->mailView->renderMessage($adress->getAdressId(), $title);
 						$header = $this->mailView->renderHeader();
+
 						mail($to, $title, $message, $header);
-						
+
+					} catch (\Exception $e) {
+
+						error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+
+						if (\Config::DEBUG) {
+							echo $e;
+						} else{
+							\view\NavigationView::RedirectToErrorPage();
+							die();
+						}
 					}
-					$this->createSession->unSetCreateSession();
-					return $this->mailView->showSent();
 				}
+				
+				$this->createModel->unSetCreateSession();
+				return $this->mailView->showSent();
+			}
 
-		} catch (\Exception $e) {
-			echo $e;
-			die();
-		}
 
-	// Generar utdata.
-		return $this->mailView->show();
+		// UTDATA.
+			return $this->mailView->show();
 	}
 }

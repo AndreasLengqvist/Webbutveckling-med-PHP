@@ -36,7 +36,10 @@ class QuestionRepository extends Repository{
 			$query->execute($params);
 
 		} catch (\Exception $e) {
-			if (Config::DEBUG) {
+
+			error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+
+			if (\Config::DEBUG) {
 				echo $e;
 			} else{
 				\view\NavigationView::RedirectToErrorPage();
@@ -59,7 +62,10 @@ class QuestionRepository extends Repository{
 			$query -> execute($params);
 
 		} catch (\Exception $e) {
-			if (Config::DEBUG) {
+
+			error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+
+			if (\Config::DEBUG) {
 				echo $e;
 			} else{
 				\view\NavigationView::RedirectToErrorPage();
@@ -82,7 +88,10 @@ class QuestionRepository extends Repository{
 			$query->execute($params);
 
 		} catch (\Exception $e) {
-			if (Config::DEBUG) {
+
+			error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+
+			if (\Config::DEBUG) {
 				echo $e;
 			} else{
 				\view\NavigationView::RedirectToErrorPage();
@@ -115,8 +124,12 @@ class QuestionRepository extends Repository{
 				$questions->addQuestions($question);
 			}
 			return $questions;
+			
 		} catch (\PDOException $e) {
-			if (Config::DEBUG) {
+
+			error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+
+			if (\Config::DEBUG) {
 				echo $e;
 			} else{
 				\view\NavigationView::RedirectToErrorPage();

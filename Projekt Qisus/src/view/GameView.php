@@ -4,16 +4,20 @@ namespace view;
 
 require_once("src/model/Game.php");
 require_once("src/view/NavigationView.php");
-require_once("src/model/QuizRepository.php");
 
 
 class GameView{
 
+	private $model;					// Instans av PlayModel();
+	private $quizRepository;		// Instans av QuizRepository();
+	private $questionRepository;	// Instans av QuestionRepository();
+
 	private $q;
 	private $a;
-	private $quizRepository;
+	private $quizId;
 	private $errorMessage;
 
+	// Statiska medlemsvariabler för att motverka strängberoenden.
 	private static $question = 'question';
 	private static $questionId = 'questionId';
 	private static $answer = 'answer';
@@ -22,16 +26,19 @@ class GameView{
 
 
 
-	public function __construct(\model\PlaySession $session, \model\QuizRepository $quizRepository){
+	public function __construct(\model\PlayModel $model, \model\QuestionRepository $questionRepository, \model\QuizRepository $quizRepository){
+		$this->questionRepository = $questionRepository;
 		$this->quizRepository = $quizRepository;
-		$this->session = $session;
+		$this->model = $model;
 	}
 
 
+/**
+  * Submit-funktioner.
+  */
 	public function play(){
 		return isset($_POST[self::$play]);
 	}
-
 
 	public function send(){
 		return isset($_POST[self::$send]);
@@ -52,46 +59,46 @@ class GameView{
 	}
 
 
-	public function getAnswers(\model\Questions $questions){
+	public function getAnswers($questions){
 		if ($this->send()) {
 
-			foreach ($questions->getQuestions() as $question) {
+			foreach ($questions as $question) {
 				$answer = $question->getQuestionId();
 
 					if (empty($_POST[$answer])) {
 						$answers[$answer] = null;
-						$this->session->setAnswerSession($answers);
+						$this->model->setAnswerSession($answers);
 						$this->errorMessage = "<p id='error_message'>Du måste svara på alla frågorna!</p>";
 					}
 					else{
 						$answers[$answer] = $_POST[$answer];
-						$this->session->setAnswerSession($answers);
+						$this->model->setAnswerSession($answers);
 					}
 				}
 			}
 	}
 
 
-	public function renderTitle($player, $title){
-		return "Resultat på " . $title . " - ". $player;
+	public function renderTitle($player, $quiz){
+		return "Resultat på " . $quiz . " - ". $player;
 	}
 
 
 	public function renderHeader(){
-		$headers = "From: qisus@alengqvist.com" . "\r\n";
+		$headers = "From: " . \Config::POSTMASTER . "\r\n";
 		$headers .= "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 	   	return $headers;
 	}
 
 
-	public function renderMessage($gameId, $player, $title, \model\Questions $questions, $answers){
+	public function renderMessage($quiz, $player, $questions, $answers){
 
 		$ret  ="		<html><body>";
-		$ret .="		<h2>" . $title . "</h2>";
+		$ret .="		<h2>" . $quiz . "</h2>";
 		$ret .="		<h3>Resultat från " . $player ."</h3>";
 
-		foreach ($questions->getQuestions() as $question) {
+		foreach ($questions as $question) {
 
 				$this->q++;
 				$questionId =$question->getQuestionId();
@@ -138,17 +145,15 @@ class GameView{
 	}
 
 
-	public function showQuestions(\model\Questions $questions){
+	public function showQuestions($quiz, $questions){
 
-		$gameId = $this->session->getGameSession();
-		$playerId = $this->session->getPlayerSession();
-		$errorMessage = $this->errorMessage;
+			$errorMessage = $this->errorMessage;
 
 
 		$ret = "	
 					<h1 id='tiny_header'>qisus.</h1>
 					<h2 id='title'>
-						" . $this->quizRepository->getTitleById($gameId) . "
+						" . $quiz . "
 					</h2>
 
 					$errorMessage
@@ -156,10 +161,10 @@ class GameView{
 					<form method='post'>
 			   ";
 
-			foreach ($questions->getQuestions() as $question) {
+			foreach ($questions as $question) {
 
 				$this->q++;
-				$questionId =$question->getQuestionId();
+				$questionId = $question->getQuestionId();
 
 				$ret .= "
 						<div class='saved_div'>
@@ -169,9 +174,9 @@ class GameView{
 
 				";
 
-				if ($this->session->answerSessionIsset()) {
+				if ($this->model->answerSessionIsset()) {
 
-					foreach ($this->session->getAnswersSession() as $qId => $answer) {
+					foreach ($this->model->getAnswersSession() as $qId => $answer) {
 						
 						if ($qId === $questionId) {
 						

@@ -3,36 +3,49 @@
 namespace model;
 
 require_once("src/model/QuizRepository.php");
+require_once("src/model/AdressRepository.php");
 
 
 class Game{
 
-	private $gameId;
-	private $playerId;
+	private $quiz;
+	private $quizId;
+	private $player;
 
 
 
-	public function __construct($gameId, $playerId){
+	public function __construct($quizId, $playerId){
 		$this->quizRepository = new QuizRepository();
-		if ($this->quizRepository->getTitleById($gameId) === NULL or $this->quizRepository->getAdressById($playerId) === NULL) {
+		$this->adressRepository = new AdressRepository();
+
+		$quiz = $this->quizRepository->getTitleById($quizId);
+		$player = $this->adressRepository->getAdressById($playerId);
+
+		if ($quiz === NULL or $player === NULL) {
 			throw new \Exception();
 		}
-		$this->gameId = $gameId;
-		$this->playerId = $playerId;
+
+		$this->quiz = $quiz;
+		$this->player = $player;
+		$this->quizId = $quizId;
+	}
+
+	public function getQuiz(){
+		return $this->quiz;
 	}
 
 
-	public function getGameId(){
-		return $this->gameId;
+	public function getQuizId(){
+		return $this->quizId;
 	}
 
 
-	public function getPlayerId(){
-		return $this->playerId;
+	public function getPlayer(){
+		return $this->player;
 	}
 
 
 	public function isValid(){
-		return isset($this->gameId) and isset($this->playerId);
+		return isset($this->quiz) and isset($this->quizId) and isset($this->player);
 	}
 }

@@ -13,14 +13,8 @@ class Quiz{
 
 	public function __construct($quizId = NULL, $title, $creator){
 
-		$creator = trim($creator);
-
-		if (empty($creator)) {
-			throw new \Exception("Du måste ange en mailadress! :)");
-		}
-
     	if(!filter_var($creator, FILTER_VALIDATE_EMAIL)){
-    		throw new \Exception("Mailadressen är ogiltig! :O");
+    		throw new \Exception("Ogiltig mailadress.");
     	}
 
 		$this->title = $title;

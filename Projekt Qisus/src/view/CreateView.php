@@ -7,7 +7,7 @@ require_once("src/model/Quiz.php");
 
 class CreateView{
 
-	private $session;					// Instans av CreateSession.
+	private $model;					// Instans av CreateModel.
 
 	private $errorMessage;
 
@@ -22,8 +22,8 @@ class CreateView{
 
 
 
-	public function __construct(\model\CreateSession $session){
-		$this->session = $session;
+	public function __construct(\model\CreateModel $model){
+		$this->model = $model;
 	}
 
 
@@ -73,17 +73,25 @@ class CreateView{
   */
 	public function getQuizData(){
 		if($this->submitCreator()){
+
+			$creator = trim($_POST[self::$creator]);
+			
+			if (empty($creator)) {
+				$this->errorMessage = "<p id='error_message'>Du måste ange en mailadress! :)</p>";
+				return null;
+			}
+
 			try {
-				return new \model\Quiz(NULL, $this->session->getTitleSession(), $_POST[self::$creator]);
+				return new \model\Quiz(NULL, $this->model->getTitleSession(), $creator);
 			} catch (\Exception $e) {
-				$this->errorMessage = "<p id='error_message'>" . $e->getMessage() . "</p>";
+				$this->errorMessage = "<p id='error_message'>Mailadressen är ogiltig! :O</p>";
 			}
 		}
 	}
 
 
 /**
-  * Visar titelskaparen där man skriver in titeln och finns en titel lagrad visas den.
+  * Visar titelskaparen där man skriver in titeln och om det finns en titel lagrad visas den.
   *
   * @return string Returns String HTML.
   */
@@ -93,28 +101,28 @@ class CreateView{
 
 		$title = "";
 		
-		if ($this->session->titleSessionIsset()) {
-			$title = $this->session->getTitleSession();
+		if ($this->model->titleSessionIsset()) {
+			$title = $this->model->getTitleSession();
 		}
 
 		$ret = "
 					<h1 id='tiny_header'>qisus.</h1>
 					<h1 id='big_header'>qisus.</h1>
 					<div id='center_wrap'>
-						<form method='post'>
-							<div>
-								<label id='title_label' for='title_input'>Vad ska quizet heta?</label>
-							</div>
-							<div>
-								<input id='title_input' type='text' name='" . self::$title . "' value='$title'>
-							</div>
+					<form method='post'>
+					<div>
+					<label id='title_label' for='title_input'>Vad ska quizet heta?</label>
+					</div>
+					<div>
+					<input id='title_input' type='text' name='" . self::$title . "' value='$title'>
+					</div>
 
-								$errorMessage
-
-		    				<div>
-								<input class='continueButton' type='submit' value='Fortsätt →' name='" . self::$submitTitle . "'>
-							</div>
-						</form>
+					$errorMessage
+		    		
+		    		<div>
+		    		<input class='continueButton' type='submit' value='Fortsätt →' name='" . self::$submitTitle . "'>
+					</div>
+					</form>
 					</div>
 				";
 
@@ -135,22 +143,22 @@ class CreateView{
 					<h1 id='tiny_header'>qisus.</h1>
 					<h1 id='big_header'>qisus.</h1>
 					<div id='center_wrap'>
-						<form method='post'>
-							<div>
-								<label id='title_label' for='title_input'>Skriv in din email..</label>
-							</div>
-							<div>
-								<input id='title_input' type='email' maxlength='255' name=' " . self::$creator . "'>
-							</div>
+					<form method='post'>
+					<div>
+					<label id='title_label' for='title_input'>Skriv in din email..</label>
+					</div>
+					<div>
+					<input id='title_input' type='email' maxlength='255' name=' " . self::$creator . "'>
+					</div>
 
-								$errorMessage
+					$errorMessage
 
-		    				<div id='submitbuttons'>
-								<input class='hiddenButton' type='submit' value='Fortsätt →' name='" . self::$submitCreator . "'>
-								<input class='backButton' type='submit' value='← Tillbaka' name='" . self::$back . "'>
-								<input class='continueButton' type='submit' value='Fortsätt →' name='" . self::$submitCreator . "'>
-							</div>
-						</form>
+		    		<div id='submitbuttons'>
+					<input class='hiddenButton' type='submit' value='Fortsätt →' name='" . self::$submitCreator . "'>
+					<input class='backButton' type='submit' value='← Tillbaka' name='" . self::$back . "'>
+					<input class='continueButton' type='submit' value='Fortsätt →' name='" . self::$submitCreator . "'>
+					</div>
+					</form>
 					</div>
 				";
 

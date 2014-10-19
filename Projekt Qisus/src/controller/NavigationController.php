@@ -9,20 +9,22 @@ require_once('src/controller/MailController.php');
 require_once('src/controller/GameController.php');
 require_once('src/view/NavigationView.php');
 
-
+/**
+* Kontroller för att navigera bland de andra kontrollrarna (MASTER).
+*/
 class NavigationController{
 
 
 
 	public function doNavigation(){
 
-	// Hanterar navigering av alla kontrollrar.
+
 		try {
 
 			switch (\view\NavigationView::getUrlAction()) {
 
 
-				// SKAPA QUIZ
+				// SKAPA QUIZ.
 					case \view\NavigationView::$actionCreateTitle:
 						$controller = new CreateController();
 						return $controller->doTitle();
@@ -49,7 +51,7 @@ class NavigationController{
 					break;
 
 
-				// SPELA QUIZ
+				// SPELA QUIZ.
 					case \view\NavigationView::$actionPlay:
 						$controller = new GameController();
 						return $controller->setupGame();
@@ -60,15 +62,29 @@ class NavigationController{
 						return $controller->playGame();
 						break;
 
-				// DEFAULT
+
+				// ERROR.
+					case \view\NavigationView::$actionError:
+						return \view\NavigationView::showError();
+					break;
+
+
+				// DEFAULT.
 				default:
 					return \view\NavigationView::showStart();
 				break;
 			}
 
-		} catch (Exception $e) {
-			echo $e;
-			die();
+		} catch (\Exception $e) {
+
+			error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+		
+			if (\Config::DEBUG) {
+				echo $e;
+			} else{
+				\view\NavigationView::RedirectToErrorPage();
+				die();
+			}
 		}
 	}
 }

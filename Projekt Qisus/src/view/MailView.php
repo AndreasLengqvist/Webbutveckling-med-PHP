@@ -2,16 +2,16 @@
 
 namespace view;
 
-require_once("NavigationView.php");
-
 
 class MailView{
 
-	private $session;
+	private $model;					// Instans av CreateModel.
+	private $adressRepository;		// Instans av AdressRepository.
 
 	private $quizId;
 	private $errorMessage;
 
+	// Statiska medlemsvariabler för att motverka strängberoenden.
 	private static $title = 'title';
 	private static $message = 'message';
 	private static $send = 'send';
@@ -20,15 +20,17 @@ class MailView{
 
 
 
+	public function __construct(\model\CreateModel $model, \model\AdressRepository $adressRepository, $quizId){
+		$this->model = $model;
+		$this->adressRepository = $adressRepository;
 
-	public function __construct(\model\CreateSession $session, \model\QuizRepository $quizRepository){
-		$this->session = $session;
-		$this->quizRepository = $quizRepository;
-
-		$this->quizId = $this->session->getCreateSession();
+		$this->quizId = $quizId;
 	}
 
 
+/**
+  * Submit-funktioner.
+  */
 	public function backToPlayers(){
 		return isset($_POST[self::$back]);
 	}
@@ -38,25 +40,22 @@ class MailView{
 	}
 
 
-	public function getTitle(){
-		return $this->quizRepository->getTitleById($this->quizId);
-	}
-
-
+/**
+  * Hämtar det inmatade meddelandet.
+  *
+  * @return string Returns String message.
+  */
 	public function getMessage(){
-		if($this->send()){
-			$message = trim($_POST[self::$message]);
-			if (empty($message)) {
-				$this->errorMessage = "<p id='error_new_question'>Det kan vara bra för dina spelare att få veta vad det är du skickat dem :)</p>";
-				return null;
-			}
-			return $message;
-		}
+		return $_POST[self::$message];
 	}
 
 
-	public function renderMessage($adressId){
-		$title = $this->getTitle();
+/**
+  * Renderar message för mailet, googla mail() + php.
+  *
+  * @return string Returns String Message.
+  */
+	public function renderMessage($adressId, $title){
 		$ret  ="		<html><body>";
 		$ret .="		<h2>" . $title . "</h2>";
 		$ret .="		<p>" . $this->getMessage() . "</p>";
@@ -65,15 +64,24 @@ class MailView{
 	   	return $ret;
 	}
 
-
+/**
+  * Renderar headers för mailet, googla mail() + php.
+  *
+  * @return string Returns String headers.
+  */
 	public function renderHeader(){
-		$headers = "From: qisus@alengqvist.com" . "\r\n";
+		$headers = "From: " . \Config::POSTMASTER . "\r\n";
 		$headers .= "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 	   	return $headers;
 	}
 
 
+/**
+  * Visar mailskaparen.
+  *
+  * @return string Returns String HTML.
+  */
 	public function show(){
 
 		$errorMessage = $this->errorMessage;
@@ -104,7 +112,11 @@ class MailView{
 	}
 
 
-
+/**
+  * Visar att mail blivit skickat.
+  *
+  * @return string Returns String HTML.
+  */
 	public function showSent(){
 
 		$ret = "

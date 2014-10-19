@@ -14,15 +14,9 @@ class Adress{
 
 
 	public function __construct($quizId, $adress, $adressId = NULL){
-		
-		$adress = trim($adress);
-
-		if (empty($adress)) {
-			throw new \Exception("Du måste ange en mailadress! :)");
-		}
 
     	if(!filter_var($adress, FILTER_VALIDATE_EMAIL)){
-    		throw new \Exception("Mailadressen är ogiltig! :O");
+    		throw new \Exception("Mailadressen är ogiltig!");
     	}
 
 		$this->quizId = $quizId;

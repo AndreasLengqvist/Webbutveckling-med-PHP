@@ -2,65 +2,81 @@
 
 namespace controller;
 
-require_once("src/model/QuizRepository.php");
-require_once("src/model/CreateSession.php");
+require_once("src/model/QuestionRepository.php");
+require_once("src/model/AdressRepository.php");
+require_once("src/model/CreateModel.php");
 require_once('src/view/AdressView.php');
 
 
+/**
+* Kontroller för att skapa ett spelare/adresser.
+*/
 class AdressController{
 
-	private $createSession;
-	private $quizRepository;
-	private $adressView;
+	private $createModel;			// Instans av CreateModel();
+	private $questionRepository;	// Instans av QuestionRepository();
+	private $adressRepository;		// Instans av AdressRepository();
+	private $adressView;			// Instans av AdressView();
+
+	private $quizId;
 
 
 
+/**
+  * Instansiserar alla nödvändiga modeller och vyer.
+  */
 	public function __construct(){
-		$this->createSession = new \model\CreateSession();
-		$this->quizRepository = new \model\QuizRepository();
-		$this->adressView = new \view\AdressView($this->createSession, $this->quizRepository);
+		$this->createModel = new \model\CreateModel();
+		$this->questionRepository = new \model\QuestionRepository();
+		$this->adressRepository = new \model\AdressRepository();
+
+		$this->quizId = $this->createModel->getCreateSession();
+
+		$this->adressView = new \view\AdressView($this->adressRepository, $this->quizId);
 	}
 
 
+/**
+  * REDIRECT-CREATE-DELETE-funktion.
+  *
+  * @return String HTML
+  */
 	public function doPlayer(){
 
-	// Hanterar indata.
-		try {
 
-			// Redirects för olika URL-tillstånd.
-				$questions = $this->quizRepository->getQuestionsById($this->createSession->getCreateSession());
-				if(!$questions->getQuestions()){
-					\view\NavigationView::RedirectToCreateQuestions();
-				}
+		// Redirects för olika URL-tillstånd.
+			$questions = $this->questionRepository->getQuestionsById($this->quizId);
+			if(!$questions->getQuestions()){
+				\view\NavigationView::RedirectToQuestionView();
+			}
 
-				if($this->adressView->backToQuestions()){
-					\view\NavigationView::RedirectToCreateQuestions();
-				}
+			if($this->adressView->backToQuestions()){
+				\view\NavigationView::RedirectToQuestionView();
+			}
 
-				if($this->adressView->finished()){
-					\view\NavigationView::RedirectToSend();
-				}
-
-
-			// LÄGG TILL ADRESS - Om Adress-objektet är validerat och satt.
-			$adress = $this->adressView->getAdressData();
-			if($adress and $adress->isValid()){
-				$this->quizRepository->addAdress($adress);
+			if($this->adressView->finished()){
+				\view\NavigationView::RedirectToSend();
 			}
 
 
-				// TA BORT ADRESS.
-				if($this->adressView->deleteAdress()){
-					$adress = $this->adressView->getAdressToDelete();
-					$this->quizRepository->deleteAdress($adress);
-				}
+		// CREATE.
+			$adressToCreate = $this->adressView->getAdressToCreate();
 
-		} catch (\Exception $e) {
-			echo $e;
-			die();
-		}
+			if($adressToCreate and $adressToCreate->isValid()){
+				$this->adressRepository->addAdress($adressToCreate);
+				\view\NavigationView::RedirectToAdressView();
+			}
 
-	// Generar utdata.
-		return $this->adressView->show();
+
+		// DELETE.
+			if($this->adressView->deleteAdress()){
+				$adressToDelete = $this->adressView->getAdressToDelete();
+				$this->adressRepository->deleteAdress($adressToDelete);
+				\view\NavigationView::RedirectToAdressView();
+			}
+			
+
+		// UTDATA.
+			return $this->adressView->show();
 	}
 }

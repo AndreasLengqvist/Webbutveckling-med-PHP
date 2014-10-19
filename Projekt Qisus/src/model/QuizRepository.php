@@ -34,7 +34,10 @@ class QuizRepository extends Repository{
 			$query->execute($params);
 
 		} catch (\Exception $e) {
-			if (Config::DEBUG) {
+
+			error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+
+			if (\Config::DEBUG) {
 				echo $e;
 			} else{
 				\view\NavigationView::RedirectToErrorPage();
@@ -57,7 +60,10 @@ class QuizRepository extends Repository{
 			$query -> execute($params);
 
 		} catch (\Exception $e) {
-			if (Config::DEBUG) {
+
+			error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+
+			if (\Config::DEBUG) {
 				echo $e;
 			} else{
 				\view\NavigationView::RedirectToErrorPage();
@@ -85,7 +91,10 @@ class QuizRepository extends Repository{
 			return $result[self::title];
 
 		} catch (\Exception $e) {
-			if (Config::DEBUG) {
+
+			error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+
+			if (\Config::DEBUG) {
 				echo $e;
 			} else{
 				\view\NavigationView::RedirectToErrorPage();
@@ -113,7 +122,10 @@ class QuizRepository extends Repository{
 			return $result[self::creator];
 
 		} catch (\Exception $e) {
-			if (Config::DEBUG) {
+
+			error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
+
+			if (\Config::DEBUG) {
 				echo $e;
 			} else{
 				\view\NavigationView::RedirectToErrorPage();

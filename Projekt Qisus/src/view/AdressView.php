@@ -7,13 +7,13 @@ require_once("src/model/Adress.php");
 
 class AdressView{
 
-	private $session;
-	private $quizRepository;
+	private $adressRepository;				// Instans av AdressRepository.
 
 	private $quizId;
 	private $i;
 	private $errorMessage;
 
+	// Statiska medlemsvariabler för att motverka strängberoenden.
 	private static $message = 'message';
 	private static $adress = 'adress';
 	private static $adressId = 'adressId';
@@ -24,14 +24,15 @@ class AdressView{
 
 
 
-	public function __construct(\model\CreateSession $session, \model\QuizRepository $quizRepository){
-		$this->session = $session;
-		$this->quizRepository = $quizRepository;
-
-		$this->quizId = $this->session->getCreateSession();
+	public function __construct(\model\AdressRepository $adressRepository, $quizId){
+		$this->adressRepository = $adressRepository;
+		$this->quizId = $quizId;
 	}
 
 
+/**
+  * Submit-funktioner.
+  */
 	public function backToQuestions(){
 		return isset($_POST[self::$back]);
 	}
@@ -49,25 +50,49 @@ class AdressView{
 	}
 
 
-	public function getAdressData(){
+/**
+  * Instansierar och retunerar ett nytt Adress-objekt.
+  *
+  * @return object Returns Object Adress.
+  */
+	public function getAdressToCreate(){
 		if($this->submitAdress()){
+
+			$adress = trim($_POST[self::$adress]);
+			
+			if (empty($adress)) {
+				$this->errorMessage = "<p id='error_message'>Du måste ange en mailadress! :)</p>";
+				return null;
+			}
+
 			try {
-				return new \model\Adress($this->quizId, $_POST[self::$adress], NULL);
+				return new \model\Adress($this->quizId, $adress, NULL);
 			} catch (\Exception $e) {
-				$this->errorMessage = "<p id='error_message'>" . $e->getMessage() . "</p>";
+				$this->errorMessage = "<p id='error_message'>Mailadressen är ogiltig! :O</p>";
 			}
 		}
 	}
 
 
+/**
+  * Instansierar och retunerar ett Adress-objekt för borttagning.
+  *
+  * @return object Returns Object Adress.
+  */
 	public function getAdressToDelete(){
 		return new \model\Adress($this->quizId, "delete@this.adress", $_POST[self::$adressId]);		
 	}
 
 
+/**
+  * Visar adresskaparen och listar alla skapade adresser (spelare).
+  *
+  * @return string Returns String HTML.
+  */
 	public function show(){
 
-		$adresses = $this->quizRepository->getAdressesById($this->quizId);
+		$adressesObj = $this->adressRepository->getAdressesById($this->quizId);
+		$adresses = $adressesObj->getAdresses();
 		$errorMessage = $this->errorMessage;
 
 		$ret = "
@@ -88,7 +113,7 @@ class AdressView{
 								<input class='backButton' type='submit' value='← Tillbaka' name='" . self::$back . "'>
 				";
 						
-				if ($adresses->getAdresses()) {
+				if (!empty($adresses)) {
 			    $ret .= "
 		    					<input class='continueButton' type='submit' value='Fortsätt' name='" . self::$send . "'>
 		    				</div>	
@@ -99,13 +124,13 @@ class AdressView{
 				";
 			}
 
-		if(!$adresses->getAdresses()){
+		if(empty($adresses)){
 			$ret .= "
 						<p>Inga spelare tillagda.</p>
 					";
 		}
 
-		foreach ($adresses->getAdresses() as $adress) {
+		foreach ($adresses as $adress) {
 
 			$this->i++;
 

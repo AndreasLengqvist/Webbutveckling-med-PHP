@@ -3,7 +3,7 @@
 namespace controller;
 
 require_once("src/model/QuizRepository.php");
-require_once("src/model/CreateSession.php");
+require_once("src/model/CreateModel.php");
 require_once('src/view/CreateView.php');
 
 
@@ -12,7 +12,7 @@ require_once('src/view/CreateView.php');
 */
 class CreateController{
 
-	private $createSession;			// Instans av CreateSession();
+	private $createModel;			// Instans av CreateModel();
 	private $quizRepository;		// Instans av QuizRepository();
 	private $createView;			// Instans av CreateView();
 
@@ -22,27 +22,29 @@ class CreateController{
   * Instansiserar alla nödvändiga modeller och vyer.
   */
 	public function __construct(){
-		$this->createSession = new \model\CreateSession();
-		$this->createView = new \view\CreateView($this->createSession);
+		$this->createModel = new \model\CreateModel();
+		$this->createView = new \view\CreateView($this->createModel);
 	}
 
 
 /**
   * Funktion för att skapa en titel för quizet (sparas ner i en session).
+  *
+  * @return String HTML
   */
 	public function doTitle(){
 
 
 		// Redirects för olika URL-tillstånd.
-			if ($this->createSession->createSessionIsset()) {
-				\view\NavigationView::RedirectToCreateQuestions();
+			if ($this->createModel->createSessionIsset()) {
+				\view\NavigationView::RedirectToQuestionView();
 			}		
 		
 
 			$title = $this->createView->getTitle();
 
 			if(isset($title)){
-				$this->createSession->setTitleSession($title);
+				$this->createModel->setTitleSession($title);
 				\view\NavigationView::RedirectToCreateCreator();
 			}
 
@@ -52,18 +54,18 @@ class CreateController{
 
 
 /**
-  * Funktion för att skapa ett Quiz.
+  * REDIRECT-CREATE-funktion.
   */
 	public function doCreate(){
 
 
 		// Redirects för olika tillstånd.
-			if(!$this->createSession->titleSessionIsset()){
+			if(!$this->createModel->titleSessionIsset()){
 				\view\NavigationView::RedirectHome();
 			}
 
-			if ($this->createSession->createSessionIsset()) {
-				\view\NavigationView::RedirectToCreateQuestions();
+			if ($this->createModel->createSessionIsset()) {
+				\view\NavigationView::RedirectToQuestionView();
 			}
 
 			if($this->createView->back()){
@@ -72,17 +74,17 @@ class CreateController{
 
 
 
-		// CREATE QUIZ.
+		// CREATE.
 			$quiz = $this->createView->getQuizData();
 			if($quiz and $quiz->isValid()){
 				$this->quizRepository = new \model\QuizRepository();
 				$this->quizRepository->createQuiz($quiz);
-				$this->createSession->setCreateSession($quiz->getQuizId());
-				\view\NavigationView::RedirectToCreateQuestions();
+				$this->createModel->setCreateSession($quiz->getQuizId());
+				\view\NavigationView::RedirectToQuestionView();
 			}
 
 
-		// Utdata.
+		// UTDATA.
 			return $this->createView->showCreateCreator();
 		}
 }

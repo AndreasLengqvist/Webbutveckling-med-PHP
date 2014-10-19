@@ -8,7 +8,9 @@ class Config{
 	const DB_CONNECTION = 'mysql:host=localhost;dbname=Qisus';
 
 	const ROOT_PATH = 'Webbutveckling-med-PHP/Projekt%20Qisus';
+	const POSTMASTER = 'qisus@alengqvist.com';
 
-	const DEBUG = true;
+
+	const DEBUG = TRUE;
 	const ERROR_LOG = 'errors.log';
 }
