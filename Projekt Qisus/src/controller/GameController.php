@@ -6,7 +6,6 @@ require_once("src/model/QuizRepository.php");
 require_once("src/model/QuestionRepository.php");
 require_once("src/model/AdressRepository.php");
 require_once("src/model/PlayModel.php");
-require_once("src/model/CreateModel.php");
 require_once('src/view/GameView.php');
 
 
@@ -32,7 +31,7 @@ class GameController{
 		$this->questionRepository = new \model\QuestionRepository();
 		$this->adressRepository = new \model\AdressRepository();
 
-		$this->gameView = new \view\GameView($this->playModel, $this->questionRepository, $this->quizRepository);
+		$this->gameView = new \view\GameView($this->playModel);
 	}
 
 
@@ -52,12 +51,13 @@ class GameController{
 		// SETUP.
 			$game = $this->gameView->getSetupData();
 			if ($game and $game->isValid()) {
+
 				$quiz = $game->getQuiz();
 				$quizId = $game->getQuizId();
 				$player = $game->getPlayer();
 				$playerId = $game->getPlayerId();
 
-				$this->playModel->setPlaySessions($quiz, $quizId, $player);
+				$this->playModel->setPlaySessions($quiz, $quizId, $player, $playerId);
 				\view\NavigationView::RedirectToGameView();
 			}
 
@@ -110,16 +110,8 @@ class GameController{
 
 						mail($to, $title, $message, $header);
 
-						$this->playModel->unSetPlaySessions();
-						$this->adressRepository->deleteAdress(new\model\Adress("delete", $player, "id"));
-
-						if (!$this->adressRepository->getAdressesById($quizId)) {
-							$model = new \model\CreateModel();
-							$model->setCreateSession($quizId);
-							$model->resetQuiz();
-						}
-
-						return $this->gameView->showSent($to);
+					// Kontrollfunktion för att checka av om alla spelat klart quizet.	
+						$this->playModel->checkQuizStatus();
 
 					} catch (\Exception $e) {
 
@@ -132,6 +124,9 @@ class GameController{
 							die();
 						}
 					}
+
+					$this->playModel->unSetPlaySessions();
+					return $this->gameView->showSent($to);
 				}
 			}
 

@@ -9,8 +9,6 @@ require_once("src/view/NavigationView.php");
 class GameView{
 
 	private $model;					// Instans av PlayModel();
-	private $quizRepository;		// Instans av QuizRepository();
-	private $questionRepository;	// Instans av QuestionRepository();
 
 	private $q;
 	private $a;
@@ -26,9 +24,7 @@ class GameView{
 
 
 
-	public function __construct(\model\PlayModel $model, \model\QuestionRepository $questionRepository, \model\QuizRepository $quizRepository){
-		$this->questionRepository = $questionRepository;
-		$this->quizRepository = $quizRepository;
+	public function __construct(\model\PlayModel $model){
 		$this->model = $model;
 	}
 
@@ -45,6 +41,11 @@ class GameView{
 	}
 
 
+/**
+  * Instansierar och retunerar ett nytt Game-objekt med inladdad data från URL:en.
+  *
+  * @return object Returns Object Question.
+  */
 	public function getSetupData(){
 		if($this->play()){
 			try {
@@ -59,6 +60,14 @@ class GameView{
 	}
 
 
+/**
+  * Lösning för att kontrollera och läsa in användarens svar och spara ner 
+  * dessa till en Sessions-Array.
+  *
+  * @param array Array of questions.
+  *
+  *
+  */
 	public function getAnswers($questions){
 		if ($this->send()) {
 
@@ -79,11 +88,21 @@ class GameView{
 	}
 
 
+/**
+  * @param mixed Strings.
+  *
+  * @return string Returns HTML Rendered title.
+  */
 	public function renderTitle($player, $quiz){
 		return "Resultat på " . $quiz . " - ". $player;
 	}
 
 
+/**
+  * @param mixed Strings.
+  *
+  * @return string Returns HTML Rendered headers.
+  */
 	public function renderHeader(){
 		$headers = "From: " . \Config::POSTMASTER . "\r\n";
 		$headers .= "MIME-Version: 1.0" . "\r\n";
@@ -92,6 +111,11 @@ class GameView{
 	}
 
 
+/**
+  * @param mixed Strings.
+  *
+  * @return string Returns HTML Rendered message.
+  */
 	public function renderMessage($quiz, $player, $questions, $answers){
 
 		$ret  ="		<html><body>";
@@ -120,6 +144,11 @@ class GameView{
 	}
 
 
+/**
+  * Visar Setup-sidan för att ladda ett spel.
+  *
+  * @return string Returns String HTML.
+  */
 	public function showSetup(){
 
 		$errorMessage = $this->errorMessage;
@@ -145,6 +174,11 @@ class GameView{
 	}
 
 
+/**
+  * Visar spelet och listar frågorna som kan besvaras.
+  *
+  * @return string Returns String HTML.
+  */
 	public function showQuestions($quiz, $questions){
 
 			$errorMessage = $this->errorMessage;
@@ -233,6 +267,13 @@ class GameView{
 	}
 
 
+/**
+  * Visar att mail blivit skickat.
+  *
+  * @param string Owner.
+  *
+  * @return string Returns String HTML.
+  */
 	public function showSent($owner){
 
 		$ret = "

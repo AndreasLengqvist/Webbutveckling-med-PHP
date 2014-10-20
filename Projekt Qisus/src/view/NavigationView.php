@@ -24,8 +24,12 @@ class NavigationView{
 
 
 
-	// Kontrollerar vart användaren befinner sig genom att hämta aktuell action i URL:n.
-	public static function getUrlAction(){
+/**
+  * GET-funktion för att hämta en action i URL:en.
+  *
+  * @return string Returns String action.
+  */
+  	public static function getUrlAction(){
 		if (isset($_GET[self::$action])) {
 			return $_GET[self::$action];
 		}
@@ -33,6 +37,11 @@ class NavigationView{
 	}
 
 
+/**
+  * GET-funktion för att hämta ett quizId ur URL:en för laddning av Game.
+  *
+  * @return string Returns String quizId.
+  */
 	public static function getUrlGame(){
 		if (isset($_GET[self::$game])) {
 			return $_GET[self::$game];
@@ -40,13 +49,22 @@ class NavigationView{
 	}
 
 
+/**
+  * GET-funktion för att hämta ett playerId ur URL:en för laddning av Game.
+  *
+  * @return string Returns String playerId.
+  */
 	public static function getUrlPlayer(){
 		if (isset($_GET[self::$player])) {
 			return $_GET[self::$player];
 		}
 	}
 
-
+/**
+  * Statiska Redirect-funktioner.
+  *
+  * header(Locations: ).
+  */
 	public static function RedirectHome() {
 		header('Location:  /' . \Config::ROOT_PATH . '');
 	}
@@ -92,6 +110,11 @@ class NavigationView{
 	}
 
 
+/**
+  * Visar huvud-startsidan.
+  *
+  * @return string Returns String HTML.
+  */
 	public static function showStart(){
 		$ret = "
 					<h1 id='tiny_header'>qisus.</h1>
@@ -112,19 +135,24 @@ class NavigationView{
 	}
 
 
-		public static function showError(){
-		$ret = "
-					<h1 id='tiny_header'>qisus.</h1>
-					<h1 id='big_header'>error.</h1>
-					<div id='center_wrap'>
-						<h2 id='home_h2'>Ett fel inträffade!</h2>						
-						<div id='info_div'>
-							<p>Felet har noterats.</p>
-							<p>Gå tillbaka till startsidan och testa igen.</p>
-						</div>
+/**
+  * Visar Error-sidan.
+  *
+  * @return string Returns String HTML.
+  */
+	public static function showError(){
+	$ret = "
+				<h1 id='tiny_header'>qisus.</h1>
+				<h1 id='big_header'>error.</h1>
+				<div id='center_wrap'>
+					<h2 id='home_h2'>Ett fel inträffade!</h2>						
+					<div id='info_div'>
+						<p>Felet har noterats.</p>
+						<p>Gå tillbaka till startsidan och testa igen.</p>
 					</div>
-				";
-				
-		return $ret;
+				</div>
+			";
+			
+	return $ret;
 	}
 }

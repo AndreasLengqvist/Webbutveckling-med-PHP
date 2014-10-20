@@ -11,10 +11,11 @@ class QuestionRepository extends Repository{
 
 	protected $dbTable;
 	
-	const quizId = "quizid";
-	const questionId = "questionId";
-	const question = "question";
-	const answer = "answer";
+	// Statiska medlemsvariabler för att motverka strängberoenden.
+	private static $quizId = "quizid";
+	private static $questionId = "questionId";
+	private static $question = "question";
+	private static $answer = "answer";
 
 
 
@@ -28,7 +29,7 @@ class QuestionRepository extends Repository{
 		try{
 			$db = $this->connection();
 
-        	$sql = "INSERT INTO $this->dbTable (" . self::quizId . ", " . self::question .", " . self::answer . ", " . self::questionId . ") VALUES (?, ?, ?, ?)";
+        	$sql = "INSERT INTO $this->dbTable (" . self::$quizId . ", " . self::$question .", " . self::$answer . ", " . self::$questionId . ") VALUES (?, ?, ?, ?)";
 
 			$params = array($question->getQuizId(), $question->getQuestion(), $question->getAnswer(), $question->getQuestionId());
 			$query = $db->prepare($sql);
@@ -54,7 +55,7 @@ class QuestionRepository extends Repository{
 		try{
 			$db = $this -> connection();
 
-			$sql = "UPDATE $this->dbTable SET " . self::quizId . "=?, " . self::question . "=?, " . self::answer . "=? WHERE " . self::questionId ."=?";
+			$sql = "UPDATE $this->dbTable SET " . self::$quizId . "=?, " . self::$question . "=?, " . self::$answer . "=? WHERE " . self::$questionId ."=?";
 
 			$params = array($question->getQuizId(), $question->getQuestion(), $question->getAnswer(), $question->getQuestionId());
 
@@ -81,7 +82,7 @@ class QuestionRepository extends Repository{
 			$db = $this->connection();
 
 			$sql = "DELETE FROM $this->dbTable
-					WHERE " . self::questionId . " = ?";
+					WHERE " . self::$questionId . " = ?";
 			$params = array($question->getQuestionId());
 
 			$query = $db->prepare($sql);
@@ -108,16 +109,16 @@ class QuestionRepository extends Repository{
 		try {
 			$db = $this->connection();
 
-			$sql = "SELECT * FROM $this->dbTable WHERE " . self::quizId . " = ?";
+			$sql = "SELECT * FROM $this->dbTable WHERE " . self::$quizId . " = ?";
 			$params = array($id);
 
 			$query = $db->prepare($sql);
 			$query->execute($params);
 			foreach ($query->fetchAll() as $q) {
 				
-				$qu = $q[self::question];
-				$a = $q[self::answer];
-				$qId = $q[self::questionId];
+				$qu = $q[self::$question];
+				$a = $q[self::$answer];
+				$qId = $q[self::$questionId];
 
 				$question = new Question($id, $qu, $a, $qId);
 

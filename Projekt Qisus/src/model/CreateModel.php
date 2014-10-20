@@ -8,7 +8,7 @@ require_once("src/model/AdressRepository.php");
 
 class CreateModel{
 
-
+	// Sessionsvariabler.
 	private $createSession = "CreateSession";
 	private $titleSession = "TitleSession";
 
@@ -18,6 +18,7 @@ class CreateModel{
 		return isset($_SESSION[$this->createSession]);
 	}
 
+
 	public function titleSessionIsset(){
 		return isset($_SESSION[$this->titleSession]);
 	}
@@ -26,6 +27,7 @@ class CreateModel{
 	public function setCreateSession($session){
 		$_SESSION[$this->createSession] = $session;		
 	}
+
 
 	public function setTitleSession($session){
 		$_SESSION[$this->titleSession] = $session;		
@@ -37,6 +39,7 @@ class CreateModel{
 			return $_SESSION[$this->createSession];
 		}
 	}
+
 
 	public function getTitleSession(){
 		if ($this->titleSessionIsset()) {
@@ -51,6 +54,12 @@ class CreateModel{
 	}
 
 
+/**
+  * Funktion för att resetta ett quiz (alltså ta bort alla frågor, adresser som hör 
+  * till quizet och quizet) om det finns några lagrade.
+  * Används även om ett quiz är färdigspelat. (se. GameController & PlayModel)
+  *
+  */
 	public function resetQuiz(){
 
 		$questionRepository = new QuestionRepository();

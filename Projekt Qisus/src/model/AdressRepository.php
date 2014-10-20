@@ -15,14 +15,15 @@ class AdressRepository extends Repository{
 
 	private $adresses;
 	
-	const quizId = "quizid";
-	const title = "title";
-	const creator = "creator";
-	const questionId = "questionId";
-	const question = "question";
-	const answer = "answer";
-	const adress = "adress";
-	const adressId = "adressId";
+	// Statiska medlemsvariabler för att motverka strängberoenden.
+	private static $quizId = "quizid";
+	private static $title = "title";
+	private static $creator = "creator";
+	private static $questionId = "questionId";
+	private static $question = "question";
+	private static $answer = "answer";
+	private static $adress = "adress";
+	private static $adressId = "adressId";
 
 
 
@@ -37,7 +38,7 @@ class AdressRepository extends Repository{
 		try{
 			$db = $this->connection();
 
-        	$sql = "INSERT INTO $this->dbTable (" . self::quizId . ", " . self::adress .", " . self::adressId . ") VALUES (?, ?, ?)";
+        	$sql = "INSERT INTO $this->dbTable (" . self::$quizId . ", " . self::$adress .", " . self::$adressId . ") VALUES (?, ?, ?)";
 
 			$params = array($adress->getQuizId(), $adress->getAdress(), $adress->getAdressId());
 			$query = $db->prepare($sql);
@@ -64,7 +65,7 @@ class AdressRepository extends Repository{
 			$db = $this->connection();
 
 			$sql = "DELETE FROM $this->dbTable
-					WHERE " . self::adressId . " = ?";
+					WHERE " . self::$adressId . " = ?";
 			$params = array($adress->getAdressId());
 
 			$query = $db->prepare($sql);
@@ -89,7 +90,7 @@ class AdressRepository extends Repository{
 		try{
 			$db = $this->connection();
 
-        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::adressId . " = ?";
+        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::$adressId . " = ?";
 
 			$params = array($id);
 
@@ -99,7 +100,7 @@ class AdressRepository extends Repository{
 
 			$result = $query->fetch();
 
-			return $result[self::adress];
+			return $result[self::$adress];
 
 		} catch (\Exception $e) {
 
@@ -120,14 +121,14 @@ class AdressRepository extends Repository{
 		try {
 			$db = $this->connection();
 
-			$sql = "SELECT * FROM $this->dbTable WHERE " . self::quizId . " = ?";
+			$sql = "SELECT * FROM $this->dbTable WHERE " . self::$quizId . " = ?";
 			$params = array($id);
 
 			$query = $db->prepare($sql);
 			$query->execute($params);
 			foreach ($query->fetchAll() as $q) {
-				$a = $q[self::adress];
-				$aId = $q[self::adressId];
+				$a = $q[self::$adress];
+				$aId = $q[self::$adressId];
 
 				$adress = new Adress($id, $a, $aId);
 

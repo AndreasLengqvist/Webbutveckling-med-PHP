@@ -9,9 +9,10 @@ class QuizRepository extends Repository{
 
 	protected $dbTable;
 	
-	const quizId = "quizid";
-	const title = "title";
-	const creator = "creator";
+	// Statiska medlemsvariabler för att motverka strängberoenden.
+	private static $quizId = "quizid";
+	private static $title = "title";
+	private static $creator = "creator";
 
 
 
@@ -25,7 +26,7 @@ class QuizRepository extends Repository{
 		try{
 			$db = $this->connection();
 
-        	$sql = "INSERT INTO $this->dbTable (" . self::quizId . ", " . self::title . ", " . self::creator . ") VALUES (?, ?, ?)";
+        	$sql = "INSERT INTO $this->dbTable (" . self::$quizId . ", " . self::$title . ", " . self::$creator . ") VALUES (?, ?, ?)";
 
 			$params = array($quiz->getQuizId(), $quiz->getTitle(), $quiz->getCreator());
 
@@ -53,7 +54,7 @@ class QuizRepository extends Repository{
 			$db = $this -> connection();
 
 			$sql = "DELETE FROM $this->dbTable
-					WHERE " . self::quizId . " = ?";
+					WHERE " . self::$quizId . " = ?";
 			$params = array($quizId);
 
 			$query = $db -> prepare($sql);
@@ -78,7 +79,7 @@ class QuizRepository extends Repository{
 		try{
 			$db = $this->connection();
 
-        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::quizId . " = ?";
+        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::$quizId . " = ?";
 
 			$params = array($id);
 
@@ -88,7 +89,7 @@ class QuizRepository extends Repository{
 
 			$result = $query->fetch();
 
-			return $result[self::title];
+			return $result[self::$title];
 
 		} catch (\Exception $e) {
 
@@ -109,7 +110,7 @@ class QuizRepository extends Repository{
 		try{
 			$db = $this->connection();
 
-        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::quizId . " = ?";
+        	$sql = "SELECT * FROM $this->dbTable WHERE " . self::$quizId . " = ?";
 
 			$params = array($id);
 
@@ -119,7 +120,7 @@ class QuizRepository extends Repository{
 
 			$result = $query->fetch();
 
-			return $result[self::creator];
+			return $result[self::$creator];
 
 		} catch (\Exception $e) {
 
