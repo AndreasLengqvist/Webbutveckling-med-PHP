@@ -3,7 +3,7 @@
 namespace controller;
 
 require_once("src/model/QuestionRepository.php");
-require_once("src/model/CreateModel.php");
+require_once("src/model/QuizModel.php");
 require_once('src/view/QuestionView.php');
 
 
@@ -12,7 +12,7 @@ require_once('src/view/QuestionView.php');
 */
 class QuestionController{
 
-	private $createModel;			// Instans av CreateModel();
+	private $createModel;			// Instans av QuizModel();
 	private $questionRepository;	// Instans av QuestionRepository();
 	private $questionView;			// Instans av QuestionView();
 
@@ -22,7 +22,7 @@ class QuestionController{
   * Hämtar även ut nödvändig data för att minska anrop i senare funktioner.
   */
 	public function __construct(){
-		$this->createModel = new \model\CreateModel();
+		$this->createModel = new \model\QuizModel();
 		$this->questionRepository = new \model\QuestionRepository();
 		$this->questionView = new \view\QuestionView($this->createModel, $this->questionRepository);
 	}

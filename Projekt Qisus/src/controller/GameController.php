@@ -5,7 +5,7 @@ namespace controller;
 require_once("src/model/QuizRepository.php");
 require_once("src/model/QuestionRepository.php");
 require_once("src/model/AdressRepository.php");
-require_once("src/model/PlayModel.php");
+require_once("src/model/QuizModel.php");
 require_once('src/view/GameView.php');
 
 
@@ -26,7 +26,7 @@ class GameController{
   * Instansiserar alla nödvändiga modeller och vyer.
   */
 	public function __construct(){
-		$this->playModel = new \model\PlayModel();
+		$this->playModel = new \model\QuizModel();
 		$this->quizRepository = new \model\QuizRepository();
 		$this->questionRepository = new \model\QuestionRepository();
 		$this->adressRepository = new \model\AdressRepository();
@@ -110,9 +110,6 @@ class GameController{
 
 						mail($to, $title, $message, $header);
 
-					// Kontrollfunktion för att checka av om alla spelat klart quizet.	
-						$this->playModel->checkQuizStatus();
-
 					} catch (\Exception $e) {
 
 						error_log($e->getMessage() . "\n", 3, \Config::ERROR_LOG);
@@ -125,7 +122,7 @@ class GameController{
 						}
 					}
 
-					$this->playModel->unSetPlaySessions();
+					$this->playModel->checkQuizStatus();					
 					return $this->gameView->showSent($to);
 				}
 			}

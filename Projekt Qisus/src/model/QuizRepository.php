@@ -21,7 +21,7 @@ class QuizRepository extends Repository{
 	}
 
 
-	public function createQuiz(Quiz $quiz){
+	public function addQuiz(Quiz $quiz){
 
 		try{
 			$db = $this->connection();

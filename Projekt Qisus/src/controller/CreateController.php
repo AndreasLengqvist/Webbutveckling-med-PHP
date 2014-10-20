@@ -2,8 +2,7 @@
 
 namespace controller;
 
-require_once("src/model/QuizRepository.php");
-require_once("src/model/CreateModel.php");
+require_once("src/model/QuizModel.php");
 require_once('src/view/CreateView.php');
 
 
@@ -12,8 +11,7 @@ require_once('src/view/CreateView.php');
 */
 class CreateController{
 
-	private $createModel;			// Instans av CreateModel();
-	private $quizRepository;		// Instans av QuizRepository();
+	private $createModel;			// Instans av QuizModel();
 	private $createView;			// Instans av CreateView();
 
 
@@ -22,7 +20,7 @@ class CreateController{
   * Instansiserar alla nödvändiga modeller och vyer.
   */
 	public function __construct(){
-		$this->createModel = new \model\CreateModel();
+		$this->createModel = new \model\QuizModel();
 		$this->createView = new \view\CreateView($this->createModel);
 	}
 
@@ -73,13 +71,11 @@ class CreateController{
 			}
 
 
-
 		// CREATE.
-			$quiz = $this->createView->getQuizData();
+			$quiz = $this->createView->getQuizToCreate();
+
 			if($quiz and $quiz->isValid()){
-				$this->quizRepository = new \model\QuizRepository();
-				$this->quizRepository->createQuiz($quiz);
-				$this->createModel->setCreateSession($quiz->getQuizId());
+				$this->createModel->createQuiz($quiz);
 				\view\NavigationView::RedirectToQuestionView();
 			}
 

@@ -20,7 +20,7 @@ class MailView{
 
 
 
-	public function __construct(\model\CreateModel $model, \model\AdressRepository $adressRepository, $quizId){
+	public function __construct(\model\QuizModel $model, \model\AdressRepository $adressRepository, $quizId){
 		$this->model = $model;
 		$this->adressRepository = $adressRepository;
 

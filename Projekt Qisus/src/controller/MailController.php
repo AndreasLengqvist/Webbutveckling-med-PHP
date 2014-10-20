@@ -3,7 +3,7 @@
 namespace controller;
 
 require_once("src/model/AdressRepository.php");
-require_once("src/model/CreateModel.php");
+require_once("src/model/QuizModel.php");
 require_once('src/view/MailView.php');
 
 
@@ -12,7 +12,7 @@ require_once('src/view/MailView.php');
 */
 class MailController{
 
-	private $createModel;			// Instans av CreateModel();
+	private $createModel;			// Instans av QuizModel();
 	private $adressRepository;		// Instans av AdressRepository();
 	private $mailView;				// Instans av MailView();
 
@@ -25,7 +25,7 @@ class MailController{
   * Hämtar även ut nödvändig data för att minska anrop i senare funktioner.
   */
 	public function __construct(){
-		$this->createModel = new \model\CreateModel();
+		$this->createModel = new \model\QuizModel();
 		$this->adressRepository = new \model\AdressRepository();
 		
 		$this->quizId = $this->createModel->getCreateSession();

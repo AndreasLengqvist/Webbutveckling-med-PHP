@@ -22,7 +22,7 @@ class CreateView{
 
 
 
-	public function __construct(\model\CreateModel $model){
+	public function __construct(\model\QuizModel $model){
 		$this->model = $model;
 	}
 
@@ -71,7 +71,7 @@ class CreateView{
   *
   * @return object Returns Object Question.
   */
-	public function getQuizData(){
+	public function getQuizToCreate(){
 		if($this->submitCreator()){
 
 			$creator = trim($_POST[self::$creator]);

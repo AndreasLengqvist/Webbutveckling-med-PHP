@@ -24,7 +24,7 @@ class GameView{
 
 
 
-	public function __construct(\model\PlayModel $model){
+	public function __construct(\model\QuizModel $model){
 		$this->model = $model;
 	}
 

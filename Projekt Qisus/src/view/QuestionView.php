@@ -26,7 +26,7 @@ class QuestionView{
 
 
 
-	public function __construct(\model\CreateModel $model, \model\QuestionRepository $questionRepository){
+	public function __construct(\model\QuizModel $model, \model\QuestionRepository $questionRepository){
 		$this->questionRepository = $questionRepository;
 		$this->model = $model;
 		$this->quizId = $this->model->getCreateSession();

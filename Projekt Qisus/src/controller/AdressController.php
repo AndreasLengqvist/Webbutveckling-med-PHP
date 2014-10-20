@@ -4,7 +4,7 @@ namespace controller;
 
 require_once("src/model/QuestionRepository.php");
 require_once("src/model/AdressRepository.php");
-require_once("src/model/CreateModel.php");
+require_once("src/model/QuizModel.php");
 require_once('src/view/AdressView.php');
 
 
@@ -13,7 +13,7 @@ require_once('src/view/AdressView.php');
 */
 class AdressController{
 
-	private $createModel;			// Instans av CreateModel();
+	private $createModel;			// Instans av QuizModel();
 	private $questionRepository;	// Instans av QuestionRepository();
 	private $adressRepository;		// Instans av AdressRepository();
 	private $adressView;			// Instans av AdressView();
@@ -26,7 +26,7 @@ class AdressController{
   * Instansiserar alla nödvändiga modeller och vyer.
   */
 	public function __construct(){
-		$this->createModel = new \model\CreateModel();
+		$this->createModel = new \model\QuizModel();
 		$this->questionRepository = new \model\QuestionRepository();
 		$this->adressRepository = new \model\AdressRepository();
 
