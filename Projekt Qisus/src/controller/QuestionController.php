@@ -24,12 +24,12 @@ class QuestionController{
 	public function __construct(){
 		$this->createModel = new \model\QuizModel();
 		$this->questionRepository = new \model\QuestionRepository();
-		$this->questionView = new \view\QuestionView($this->createModel, $this->questionRepository);
+		$this->questionView = new \view\QuestionView($this->createModel);
 	}
 
 
 /**
-  * REDIRECT-RESTART-CUD-funktion.
+  * REDIRECT-RESTART-CRUD-funktion.
   *
   * @return String HTML
   */
@@ -51,6 +51,11 @@ class QuestionController{
 				$this->createModel->resetQuiz();
 				\view\NavigationView::RedirectHome();
 			}
+
+
+		// READ.
+			$questionsObj = $this->questionRepository->getQuestionsById($this->createModel->getCreateSession());
+			$questions = $questionsObj->getQuestions();
 
 
 		// CREATE.
@@ -80,6 +85,6 @@ class QuestionController{
 			
 
 		// UTDATA.
-			return $this->questionView->show();
+			return $this->questionView->show($questions);
 	}
 }

@@ -29,15 +29,14 @@ class AdressController{
 		$this->createModel = new \model\QuizModel();
 		$this->questionRepository = new \model\QuestionRepository();
 		$this->adressRepository = new \model\AdressRepository();
+		$this->adressView = new \view\AdressView($this->createModel);
 
 		$this->quizId = $this->createModel->getCreateSession();
-
-		$this->adressView = new \view\AdressView($this->adressRepository, $this->quizId);
 	}
 
 
 /**
-  * REDIRECT-CREATE-DELETE-funktion.
+  * REDIRECT-READ-CREATE-DELETE-funktion.
   *
   * @return String HTML
   */
@@ -59,6 +58,11 @@ class AdressController{
 			}
 
 
+		// READ.
+			$adressesObj = $this->adressRepository->getAdressesById($this->quizId);
+			$adresses = $adressesObj->getAdresses();
+
+
 		// CREATE.
 			$adressToCreate = $this->adressView->getAdressToCreate();
 
@@ -77,6 +81,6 @@ class AdressController{
 			
 
 		// UTDATA.
-			return $this->adressView->show();
+			return $this->adressView->show($adresses);
 	}
 }

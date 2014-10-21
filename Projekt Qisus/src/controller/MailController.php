@@ -26,11 +26,10 @@ class MailController{
   */
 	public function __construct(){
 		$this->createModel = new \model\QuizModel();
-		$this->adressRepository = new \model\AdressRepository();
-		
-		$this->quizId = $this->createModel->getCreateSession();
+		$this->adressRepository = new \model\AdressRepository();		
+		$this->mailView = new \view\MailView($this->createModel);
 
-		$this->mailView = new \view\MailView($this->createModel, $this->adressRepository, $this->quizId);
+		$this->quizId = $this->createModel->getCreateSession();
 	}
 
 

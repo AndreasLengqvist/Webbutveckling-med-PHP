@@ -6,7 +6,6 @@ namespace view;
 class MailView{
 
 	private $model;					// Instans av CreateModel.
-	private $adressRepository;		// Instans av AdressRepository.
 
 	private $quizId;
 	private $errorMessage;
@@ -20,11 +19,10 @@ class MailView{
 
 
 
-	public function __construct(\model\QuizModel $model, \model\AdressRepository $adressRepository, $quizId){
+	public function __construct(\model\QuizModel $model){
 		$this->model = $model;
-		$this->adressRepository = $adressRepository;
 
-		$this->quizId = $quizId;
+		$this->quizId = $this->model->getCreateSession();
 	}
 
 

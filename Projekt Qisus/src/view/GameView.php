@@ -64,7 +64,7 @@ class GameView{
   * Lösning för att kontrollera och läsa in användarens svar och spara ner 
   * dessa till en Sessions-Array.
   *
-  * @param array Array of questions.
+  * @param array Array of question-objects.
   *
   *
   */
@@ -176,6 +176,10 @@ class GameView{
 
 /**
   * Visar spelet och listar frågorna som kan besvaras.
+  *
+  * @param string String of quiz (title).
+  *
+  * @param array Array of question-objects.
   *
   * @return string Returns String HTML.
   */

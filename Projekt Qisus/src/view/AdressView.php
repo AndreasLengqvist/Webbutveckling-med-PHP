@@ -9,7 +9,6 @@ class AdressView{
 
 	private $adressRepository;				// Instans av AdressRepository.
 
-	private $quizId;
 	private $i;
 	private $errorMessage;
 
@@ -24,9 +23,9 @@ class AdressView{
 
 
 
-	public function __construct(\model\AdressRepository $adressRepository, $quizId){
-		$this->adressRepository = $adressRepository;
-		$this->quizId = $quizId;
+	public function __construct(\model\QuizModel $model){
+		$this->model = $model;
+		$this->quizId = $this->model->getCreateSession();
 	}
 
 
@@ -87,12 +86,12 @@ class AdressView{
 /**
   * Visar adresskaparen och listar alla skapade adresser (spelare).
   *
+  * @param array Array of adress-objects.
+  *
   * @return string Returns String HTML.
   */
-	public function show(){
+	public function show($adresses){
 
-		$adressesObj = $this->adressRepository->getAdressesById($this->quizId);
-		$adresses = $adressesObj->getAdresses();
 		$errorMessage = $this->errorMessage;
 
 		$ret = "
@@ -115,7 +114,7 @@ class AdressView{
 						
 				if (!empty($adresses)) {
 			    $ret .= "
-		    					<input class='continueButton' type='submit' value='Fortsätt' name='" . self::$send . "'>
+		    					<input class='continueButton' type='submit' value='Fortsätt →' name='" . self::$send . "'>
 		    				</div>	
 						";
 		$ret .= "

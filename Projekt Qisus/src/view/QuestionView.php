@@ -8,10 +8,9 @@ require_once("src/model/Question.php");
 class QuestionView{
 
 	private $model;					// Instans av CreateModel.
-	private $questionRepository;	// Instans av QuestionRepository.
 
-	private $quizId;
 	private $i;
+	private $quizId;
 	private $errorMessage;
 
 	// Statiska medlemsvariabler för att motverka strängberoenden.
@@ -26,8 +25,7 @@ class QuestionView{
 
 
 
-	public function __construct(\model\QuizModel $model, \model\QuestionRepository $questionRepository){
-		$this->questionRepository = $questionRepository;
+	public function __construct(\model\QuizModel $model){
 		$this->model = $model;
 		$this->quizId = $this->model->getCreateSession();
 	}
@@ -101,54 +99,52 @@ class QuestionView{
 /**
   * Visar frågeskaparen och listar alla skapade frågor med rätt svar och sånt skit.
   *
+  * @param array Array of question-objects.
+  *
   * @return string Returns String HTML.
   */
-	public function show(){
+	public function show($questions){
 
-		// READ.
-			$questionsObj = $this->questionRepository->getQuestionsById($this->quizId);
-			$questions = $questionsObj->getQuestions();
+		$errorMessage = $this->errorMessage;
 
-			$errorMessage = $this->errorMessage;
+			$ret = "
+						<h1 id='tiny_header'>qisus.</h1>
+						<h2 id='title'>" . $this->model->getTitleSession() . "</h2>
+						<div id='new_question_div'>
+						<form method='post'>
+						<div>
+						<label for='question_input' id='question_label'>Skapa fråga..</label>
+				        </div>
+				        <div>
+				        <textarea id='question_input' rows='8' name='" . self::$question . "'></textarea>
+			            </div>
+			            <div>
+			            <input type='radio' id='true' name='" . self::$answer . "' value='true' checked>
+						<label for='true'>Sant</label>
+						<input type='radio' id='false' name='" . self::$answer . "'value='false'>
+						<label for='false'>Falskt</label>
+						</div>
+						
+						$errorMessage
 
-				$ret = "
-							<h1 id='tiny_header'>qisus.</h1>
-							<h2 id='title'>" . $this->model->getTitleSession() . "</h2>
-							<div id='new_question_div'>
-							<form method='post'>
-							<div>
-							<label for='question_input' id='question_label'>Skapa fråga..</label>
-					        </div>
-					        <div>
-					        <textarea id='question_input' rows='8' name='" . self::$question . "'></textarea>
-				            </div>
-				            <div>
-				            <input type='radio' id='true' name='" . self::$answer . "' value='true' checked>
-							<label for='true'>Sant</label>
-							<input type='radio' id='false' name='" . self::$answer . "'value='false'>
-							<label for='false'>Falskt</label>
-							</div>
+						<div>
+	    				<input class='addButton' type='submit' value='+ Lägg till fråga' name='" . self::$addQuestion . "'>  				
+						</div>
+						<input class='backButton' type='submit' value='↺ Börja om' name='" . self::$restart . "'>
+					";
 							
-							$errorMessage
-
-							<div>
-		    				<input class='addButton' type='submit' value='+ Lägg till fråga' name='" . self::$addQuestion . "'>  				
-							</div>
-							<input class='backButton' type='submit' value='↺ Börja om' name='" . self::$restart . "'>
+			if (!empty($questions)) {
+		    	$ret .= "
+		    				<input class='continueButton' type='submit' value='Fortsätt →' name='" . self::$finishedSubmit . "'>
+		    				</div>	
 						";
-								
-				if (!empty($questions)) {
-			    	$ret .= "
-			    				<input class='continueButton' type='submit' value='Fortsätt →' name='" . self::$finishedSubmit . "'>
-			    				</div>	
-							";
 
-				$ret .= "
-							</form>
-							</div>
-						";
-					}
-			
+			$ret .= "
+						</form>
+						</div>
+					";
+				}
+		
 			if(empty($questions)){
 				$ret .= "
 							<p>Inga frågor tillagda.</p>
