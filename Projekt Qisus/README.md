@@ -71,7 +71,7 @@ ENGINE=InnoDB;
 ## Foreing keys
 Skapa nu relationen mellan de olika tabellerna genom att trycka dig in på question och mail.
 Tryck på "Relation view".
-Välj "quizId" som nu borde vara valbar eftersom den har ett index.
+Välj "quizId" som nu borde vara valbart eftersom den har ett index.
 Välj därefter i dropdown-listan `databasens namn`.`quiz`.`quizId`
 
 ##Ladda upp och konfigurera källkoden.
