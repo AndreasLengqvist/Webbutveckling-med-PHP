@@ -2,7 +2,8 @@ Webbapplikationen Qisus.
 ============
 
 Webbutveckling med PHP - Projekt
-Andreas Lengqvist - al223bn
+Andreas Lengqvist - al223bn  
+http://alengqvist.com/qisus
 
 #Installation
 
@@ -11,7 +12,7 @@ Lokal server eller webhotell med PHP och mysql förslagsvis phpMyAdmin.
 
 ##MySQL-databas
 ###Skapa användare
-OBS! (Om du sitter på ett webbhotell så kan det vara så att du redan blivit tilldelad en användare och då kan du hoppa över det här steget.)
+OBS! (Om du sitter på ett webbhotell så kan det vara så att du redan blivit tilldelad en användare och då kan du hoppa över det här steget.)`
 Skapa en användare i databasen. Byt ut "newuser" och "password mot de uppgifter du vill använda dig av.
 ```SQL
 CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';
