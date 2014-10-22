@@ -75,7 +75,7 @@ Välj "quizId" som nu borde vara valbart eftersom den har ett index.
 Välj därefter i dropdown-listan `databasens namn`.`quiz`.`quizId`
 
 ##Ladda upp och konfigurera källkoden.
-Gå in i filen config.php (\Projekt Qisus\config.php)
+Gå in i filen config.php (\config.php)
 Här finns generella inställningar för applikationen och de 4 inställningarna för databasåtkomst måste redigeras
 Ändra raderna för följande kod:
 ```PHP
