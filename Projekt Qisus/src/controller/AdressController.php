@@ -9,7 +9,7 @@ require_once('src/view/AdressView.php');
 
 
 /**
-* Kontroller för att skapa ett spelare/adresser.
+* Kontroller för att skapa spelare/adresser.
 */
 class AdressController{
 
@@ -23,7 +23,7 @@ class AdressController{
 
 
 /**
-  * Instansiserar alla nödvändiga modeller och vyer.
+  * Instansierar alla nödvändiga modeller och vyer.
   */
 	public function __construct(){
 		$this->createModel = new \model\QuizModel();

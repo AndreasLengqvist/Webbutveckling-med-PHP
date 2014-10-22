@@ -17,7 +17,7 @@ class CreateController{
 
 
 /**
-  * Instansiserar alla nödvändiga modeller och vyer.
+  * Instansierar alla nödvändiga modeller och vyer.
   */
 	public function __construct(){
 		$this->createModel = new \model\QuizModel();
@@ -26,7 +26,7 @@ class CreateController{
 
 
 /**
-  * Funktion för att skapa en titel för quizet (sparas ner i en session).
+  * Funktion för att skapa en titel för quizet (ID:t sparas ner i en session).
   *
   * @return String HTML
   */

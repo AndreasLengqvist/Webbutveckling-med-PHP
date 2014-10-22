@@ -8,7 +8,7 @@ require_once('src/view/QuestionView.php');
 
 
 /**
-* Kontroller för CRUD av frågor i ett quiz.
+* Kontroller för skapa frågor i ett quiz.
 */
 class QuestionController{
 
