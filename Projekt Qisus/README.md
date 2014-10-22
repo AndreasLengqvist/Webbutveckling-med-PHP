@@ -12,7 +12,11 @@ Lokal server eller webhotell med PHP och mysql förslagsvis phpMyAdmin.
 
 ##MySQL-databas
 ###Skapa användare
+<<<<<<< HEAD
 OBS! (Om du sitter på ett webbhotell så kan det vara så att du redan blivit tilldelad en användare och då kan du hoppa över det här steget.)`
+=======
+OBS! (Om du sitter på ett webbhotell så kan det vara så att du redan blivit tilldelad en användare och då kan du hoppa över det här steget.)  
+>>>>>>> FETCH_HEAD
 Skapa en användare i databasen. Byt ut "newuser" och "password mot de uppgifter du vill använda dig av.
 ```SQL
 CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';
@@ -72,11 +76,11 @@ ENGINE=InnoDB;
 ## Foreing keys
 Skapa nu relationen mellan de olika tabellerna genom att trycka dig in på question och mail.
 Tryck på "Relation view".
-Välj "quizId" som nu borde vara valbar eftersom den har ett index.
+Välj "quizId" som nu borde vara valbart eftersom den har ett index.
 Välj därefter i dropdown-listan `databasens namn`.`quiz`.`quizId`
 
 ##Ladda upp och konfigurera källkoden.
-Gå in i filen config.php (\Projekt Qisus\config.php)
+Gå in i filen config.php (\config.php)
 Här finns generella inställningar för applikationen och de 4 inställningarna för databasåtkomst måste redigeras
 Ändra raderna för följande kod:
 ```PHP
