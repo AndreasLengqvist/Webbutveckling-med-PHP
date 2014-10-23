@@ -3,7 +3,6 @@
 namespace view;
 
 require_once("src/model/Game.php");
-require_once("src/view/NavigationView.php");
 
 
 class GameView{

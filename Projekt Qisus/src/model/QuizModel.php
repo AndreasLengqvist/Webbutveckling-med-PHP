@@ -151,6 +151,38 @@ class QuizModel{
 		$this->setCreateSession($quiz->getQuizId());
 	}
 
+/**
+  * Funktioner för Questionhantering. (CRUD)
+  *
+  */
+	public function getQuestionsById($id){
+		return $this->questionRepository->getQuestionsById($id);
+	}
+	public function addQuestion(Question $question){
+		$this->questionRepository->addQuestion($question);
+	}
+	public function updateQuestion(Question $question){
+		$this->questionRepository->updateQuestion($question);
+	}
+	public function deleteQuestion(Question $question){
+		$this->questionRepository->deleteQuestion($question);
+	}
+
+
+/**
+  * Funktioner för Adresshantering. (CRD)
+  *
+  */
+	public function getAdressesById($id){
+		return $this->adressRepository->getAdressesById($id);
+	}
+	public function addAdress(Adress $adress){
+		$this->adressRepository->addAdress($adress);
+	}
+	public function deleteAdress(Adress $adress){
+		$this->adressRepository->deleteAdress($adress);
+	}
+
 
 /**
   * Funktion som gör det möjligt att checka av om quizet är färdigspelat. Genom att

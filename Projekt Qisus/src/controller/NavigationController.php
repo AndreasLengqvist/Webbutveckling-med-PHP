@@ -36,17 +36,17 @@ class NavigationController{
 					break;
 
 					case \view\NavigationView::$actionCreateQuestions:
-						$controller = new QuestionController();
+						$controller = new CreateController();
 						return $controller->doQuestion();
 					break;
 
 					case \view\NavigationView::$actionCreatePlayers:
-						$controller = new AdressController();
+						$controller = new CreateController();
 						return $controller->doPlayer();
 					break;
 
 					case \view\NavigationView::$actionSend:
-						$controller = new MailController();
+						$controller = new CreateController();
 						return $controller->doMail();
 					break;
 

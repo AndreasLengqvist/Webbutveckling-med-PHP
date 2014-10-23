@@ -10,8 +10,8 @@ class ListView{
 	private $memberRepository;
 
 
-	private static $goToMember = 'goToMember';
-	private static $memberId = 'memberId';
+	const goToMember = 'goToMember';
+	const memberId = 'memberId';
 	private static $creator = 'creator';
 	private static $submitTitle = 'submitTitle';
 	private static $submitCreator = 'submitCreator';
@@ -27,12 +27,12 @@ class ListView{
 
 
 	public function goToShowMember(){
-		return isset($_POST[self::$goToMember]);
+		return isset($_POST[self::goToMember]);
 	}
 
 
 	public function getMemberId(){
-		return $_POST[self::$memberId];
+		return $_POST[self::memberId];
 	}
 
 
@@ -66,8 +66,8 @@ class ListView{
 						<li>Medlem: " . $member->getFirstname() . " " . $member->getLastname() . "</li>
 						<li>Medlems-ID: " . $memberId . "</li>
 						<li>Antal båtar: " . $numberOfBoats . "</li>
-						<input type='hidden' value='" . $memberId . "' name='" . self::$memberId . "'>
-						<input type='submit' value='Visa medlem' name='" . self::$goToMember . "'>
+						<input type='hidden' value='" . $memberId . "' name='" . self::memberId . "'>
+						<input type='submit' value='Visa medlem' name='" . self::goToMember . "'>
 						</ul>
 						</form>
 						</div>
@@ -133,8 +133,8 @@ class ListView{
 			}
 
 			$ret .= "		
-						<input type='hidden' value='" . $memberId . "' name='" . self::$memberId . "'>
-						<input type='submit' value='Visa medlem' name='" . self::$goToMember . "'>
+						<input type='hidden' value='" . $memberId . "' name='" . self::memberId . "'>
+						<input type='submit' value='Visa medlem' name='" . self::goToMember . "'>
 						</ul>
 						</form>
 						</div>
