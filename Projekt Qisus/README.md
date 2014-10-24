@@ -83,9 +83,15 @@ Här finns generella inställningar för applikationen och de 4 inställningarna
 const DB_USERNAME = 'newuser';
 const DB_PASSWORD = 'password';
 const DB_CONNECTION = 'mysql:host=localhost;dbname=qisus';
+
+const ROOT_PATH = '';
+const POSTMASTER = 'qisus@alengqvist.com';
 ```
 DB_USERNAME är användarnamnet på användaren som skapades tidigare.
 DB_PASSWORD är lösenordet till den användaren som skapades tidigare.
 DB_CONNECTION är namnet på databasen och vilken host du använder dig av vanligtvis localhost eller '127.0.0.1'.
+  
+ROOT_PATH är den hemma-root som gäller för just din applikation. Ligger den inte i någon mappstruktur så räcker det med ''.  
+POSTMASTER är den mail som kommer stå för mailfunktionen. Vanligtvis behöver du skapa en ny mail på ditt webbhotell/server som står för detta.
 
 ###Ladda upp filerna / lägg dem i den katalog på webbservern som du önskar köra applikationen från.
