@@ -2,7 +2,9 @@
 
 namespace model;
 
-
+/**
+* Skapar en lista(array) av Question-objekt.
+*/
 class Questions{
 
 	private $questions;

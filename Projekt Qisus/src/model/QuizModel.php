@@ -142,13 +142,16 @@ class QuizModel{
 
 
 /**
-  * Funktion för att skapa ett quiz. Anropas från CreateController
-  * med det aktuella Quiz-objektet som in-parameter.
+  * Funktion för Quizhantering.
   *
   */
 	public function createQuiz(Quiz $quiz){
 		$this->quizRepository->addQuiz($quiz);
 		$this->setCreateSession($quiz->getQuizId());
+	}
+
+	public function getCreatorById($id){
+		return $this->quizRepository->getCreatorById($id);
 	}
 
 /**
@@ -211,7 +214,7 @@ class QuizModel{
 
 /**
   * Funktion för att resetta ett quiz (alltså ta bort alla frågor, adresser som hör 
-  * till quizet och quizet) om det finns några lagrade. (se. QuestionController)
+  * till quizet och quizet) om det finns några lagrade. (se. CreateController)
   * Används även om ett quiz är färdigspelat. (se. GameController)
   *
   */

@@ -2,9 +2,6 @@
 
 namespace controller;
 
-require_once("src/model/QuizRepository.php");
-require_once("src/model/QuestionRepository.php");
-require_once("src/model/AdressRepository.php");
 require_once("src/model/QuizModel.php");
 require_once('src/view/GameView.php');
 
@@ -15,9 +12,6 @@ require_once('src/view/GameView.php');
 class GameController{
 
 	private $playModel;				// Instans av PlayModel();
-	private $quizRepository;		// Instans av QuizRepository();
-	private $questionRepository;	// Instans av QuestionRepository();
-	private $adressRepository;		// Instans av AdressRepository();	
 	private $gameView;				// Instans av GameView();
 
 
@@ -27,9 +21,6 @@ class GameController{
   */
 	public function __construct(){
 		$this->playModel = new \model\QuizModel();
-		$this->quizRepository = new \model\QuizRepository();
-		$this->questionRepository = new \model\QuestionRepository();
-		$this->adressRepository = new \model\AdressRepository();
 
 		$this->gameView = new \view\GameView($this->playModel);
 	}
@@ -84,7 +75,7 @@ class GameController{
 		// READ.
 			$quiz = $this->playModel->getQuizSession();
 			$quizId = $this->playModel->getQuizIdSession();
-			$questionsObj = $this->questionRepository->getQuestionsById($quizId);
+			$questionsObj = $this->playModel->getQuestionsById($quizId);
 			$questions = $questionsObj->getQuestions();
 
 
@@ -103,7 +94,7 @@ class GameController{
 
 						$player = $this->playModel->getPlayerSession();
 
-						$to = $this->quizRepository->getCreatorById($quizId);
+						$to = $this->playModel->getCreatorById($quizId);
 						$title = $this->gameView->renderTitle($player, $quiz);
 						$message = $this->gameView->renderMessage($quiz, $player, $questions, $answers);
 						$header = $this->gameView->renderHeader();

@@ -18,9 +18,9 @@ class CreateController{
 
 	private $createModel;			// Instans av QuizModel();
 	private $createView;			// Instans av CreateView();
-	private $questionView;			// Instans av CreateView();
-	private $adressView;			// Instans av CreateView();
-	private $mailView;				// Instans av CreateView();
+	private $questionView;			// Instans av QuestionView();
+	private $adressView;			// Instans av AdressView();
+	private $mailView;				// Instans av MailView();
 
 	private $quizId;
 
@@ -30,6 +30,7 @@ class CreateController{
 	public function __construct(){
 		$this->createModel = new \model\QuizModel();
 
+		// Instanser av vyerna. Bör kanske ligga var för sig i varje funktion?
 		$this->createView = new \view\CreateView($this->createModel);
 		$this->questionView = new \view\QuestionView($this->createModel);
 		$this->adressView = new \view\AdressView($this->createModel);
@@ -39,7 +40,7 @@ class CreateController{
 
 
 /**
-  * Funktion för att skapa en titel för quizet (ID:t sparas ner i en session).
+  * Funktion för att skapa en titel för quizet.
   *
   * @return String HTML
   */

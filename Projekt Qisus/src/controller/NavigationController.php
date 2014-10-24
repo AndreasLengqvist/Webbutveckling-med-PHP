@@ -8,7 +8,7 @@ require_once('src/view/NavigationView.php');
 
 /**
 * Kontroller för att navigera bland de andra kontrollrarna (MASTER).
-*http://yuml.me/83daeef5
+* http://yuml.me/ebda40b3
 */
 class NavigationController{
 

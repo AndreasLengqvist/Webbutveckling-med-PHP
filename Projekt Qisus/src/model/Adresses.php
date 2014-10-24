@@ -2,7 +2,9 @@
 
 namespace model;
 
-
+/**
+* Skapar en lista(array) av Adress-objekt.
+*/
 class Adresses{
 
 	private $adresses;
