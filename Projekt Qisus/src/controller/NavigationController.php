@@ -3,14 +3,12 @@
 namespace controller;
 
 require_once('src/controller/CreateController.php');
-require_once('src/controller/QuestionController.php');
-require_once('src/controller/AdressController.php');
-require_once('src/controller/MailController.php');
 require_once('src/controller/GameController.php');
 require_once('src/view/NavigationView.php');
 
 /**
 * Kontroller för att navigera bland de andra kontrollrarna (MASTER).
+*http://yuml.me/83daeef5
 */
 class NavigationController{
 
