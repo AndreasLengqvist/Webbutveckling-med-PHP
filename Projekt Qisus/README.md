@@ -48,10 +48,10 @@ ENGINE=InnoDB;
 Skapa en tabell för frågor:
 ```SQL
 CREATE TABLE `question` (
-  `questionId` VARCHAR(255) NOT NULL DEFAULT '',
   `quizId` VARCHAR(255) NOT NULL DEFAULT '',
   `question` VARCHAR(3000) NOT NULL DEFAULT '',
   `answer` VARCHAR(255) NOT NULL DEFAULT '',
+  `questionId` VARCHAR(255) NOT NULL DEFAULT '',
   INDEX (quizId)
 )
 COLLATE='utf8_general_ci'
@@ -60,9 +60,9 @@ ENGINE=InnoDB;
 Skapa en tabell för spelare:
 ```SQL
 CREATE TABLE `mail` (
-  `adressId` VARCHAR(255) NOT NULL DEFAULT '',
   `quizId` VARCHAR(255) NOT NULL DEFAULT '',
   `adress` VARCHAR(3000) NOT NULL DEFAULT '',
+  `adressId` VARCHAR(255) NOT NULL DEFAULT '',
   INDEX (quizId)
 )
 COLLATE='utf8_general_ci'
@@ -86,6 +86,6 @@ const DB_CONNECTION = 'mysql:host=localhost;dbname=qisus';
 ```
 DB_USERNAME är användarnamnet på användaren som skapades tidigare.
 DB_PASSWORD är lösenordet till den användaren som skapades tidigare.
-DB_CONNECTION är namnet på databasen och vilken host du använder dig av vanligt vis localhost eller '127.0.0.1'.
+DB_CONNECTION är namnet på databasen och vilken host du använder dig av vanligtvis localhost eller '127.0.0.1'.
 
 ###Ladda upp filerna / lägg dem i den katalog på webbservern som du önskar köra applikationen från.
