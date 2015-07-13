@@ -5,3 +5,5 @@ Kursen i Webbutveckling med PHP syftade till att ge mig ett andra programmerings
 Programmeringsspråk: <b>PHP</b><br>
 Betygsskala: <b>3/4/5</b><br>
 Slutbetyg: <b>4</b>
+
+Slutprojekt: http://alengqvist.com/qisus/
